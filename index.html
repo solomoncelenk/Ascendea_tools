@@ -1,45 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ascendea Tools Hub</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      color: #333;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin: 10px 0;
-    }
-    a {
-      text-decoration: none;
-      color: #0066cc;
-      font-size: 18px;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+    body { font-family: Arial, sans-serif; margin: 40px; background:#fafafa; }
+    h1 { margin-bottom: 8px; }
+    #status { color:#555; margin: 6px 0 18px; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 10px 0; }
+    a { text-decoration: none; font-size: 18px; }
+    a:hover { text-decoration: underline; }
+    code { background:#eee; padding: 2px 6px; border-radius: 4px; }
   </style>
 </head>
 <body>
   <h1>Ascendea Tools</h1>
-  <p>Select a tool or dashboard below:</p>
-  <ul>
-    <li><a href="rep_velocity_dashboard.html">Rep Velocity Dashboard</a></li>
-    <li><a href="sales_velocity_scorecard.html">Sales Velocity Scorecard</a></li>
-    <li><a href="Recognition_Gap_Calculator.html">Recognition Gap Calculator</a></li>
-    <li><a href="Qwen_python_20250822_md6l.html">Qwen Python Tool (Aug 22)</a></li>
-    <li><a href="Qwen_python_20250815_vi0.html">Qwen Python Tool (Aug 15)</a></li>
-    <!-- Add more links here as you upload more HTML files -->
-  </ul>
+  <div id="status">Loading HTML tools…</div>
+  <ul id="list"></ul>
+
+  <script>
+    // CONFIG — set your GitHub handle and repo
+    const OWNER = "solomonclenk";
+    const REPO  = "Ascendea_tools";
+    const BRANCH = "main"; // change if you use a different default branch
+
+    // Use the Git Trees API to get ALL files (recursively)
+    const api = `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`;
+
+    async function loadFiles() {
+      const status = document.getElementById("status");
+      const list = document.getElementById("list");
+
+      try {
+        const res = await fetch(api, { headers: { "Accept": "application/vnd.github+json" } });
+        if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+        const data = await res.json();
+        if (!data.tree) throw new Error("No tree found");
+
+        // Find all .html files except index.html
+        const htmlFiles = data.tree
+          .filter(n => n.type === "blob" && n.path.toLowerCase().endsWith(".html"))
+          .filter(n => n.path.toLowerCase() !== "index.html")
+          .map(n => n.path)
+          .sort((a, b) => a.localeCompare(b));
+
+        if (htmlFiles.length === 0) {
+          status.textContent = "No additional HTML files found.";
+          return;
+        }
+
+        // Build links relative to the Pages site root
+        // On project pages, relative links like "./path/to/file.html" work correctly.
+        htmlFiles.forEach(p => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = p;       // relative link works on GitHub Pages
+          a.textContent = p;
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+
+        status.textContent = `Found ${htmlFiles.length} HTML file(s).`;
+      } catch (err) {
+        console.error(err);
+        status.innerHTML = `Could not load file list. You can still open files directly, e.g. <code>https://${OWNER}.github.io/${REPO}/your_file.html</code>`;
+      }
+    }
+
+    loadFiles();
+  </script>
 </body>
 </html>
