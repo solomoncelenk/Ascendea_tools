@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Initiative Leadership Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.7;
+      color: #333;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+    header h1 {
+      font-size: 32px;
+      margin: 0;
+    }
+    header p {
+      font-size: 18px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #2c3e50;
+      color: white;
+      padding: 14px 20px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header::after {
+      content: "−";
+      font-size: 20px;
+    }
+
+    .card-header.collapsed::after {
+      content: "+";
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .legitimacy {
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: inline-block;
+      margin: 5px 0;
+    }
+    .justice { background-color: #d9e8f5; color: #003366; }
+    .performance { background-color: #d9f0e8; color: #006633; }
+    .resonance { background-color: #fff2e6; color: #b35c00; }
+
+    ul {
+      padding-left: 20px;
+      margin: 12px 0;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .status-planned { background: #ccc; }
+    .status-in-progress { background: #ffc107; }
+    .status-complete { background: #28a745; }
+
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>The Four Building Blocks of Initiative Leadership</h1>
+      <p>Track, align, and lead with clarity and legitimacy</p>
+    </header>
+
+    <div class="dashboard">
+
+      <!-- Block 1 -->
+      <div class="card">
+        <div class="card-header" onclick="toggle(this)">1. Initiative Charter Design</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Purpose:</strong> Translate vision into a shared agreement.</li>
+            <li><strong>Focus:</strong> Define scope, roles, decision rights, and success metrics at the start.</li>
+            <li><strong>Value:</strong> Prevents drift by making expectations explicit and shared.</li>
+            <li><strong>Legitimacy Link:</strong> 
+              <span class="legitimacy justice">Justice — fair distribution of responsibility and transparent ownership</span>
+            </li>
+          </ul>
+          <div class="status">
+            <span class="status-dot status-complete"></span> <span>Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="card">
+        <div class="card-header" onclick="toggle(this)">2. Milestone Discipline</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Purpose:</strong> Break initiatives into steady, credible steps.</li>
+            <li><strong>Focus:</strong> Define 3–5 measurable milestones with clear owners and timelines.</li>
+            <li><strong>Value:</strong> Creates a rhythm of progress that stakeholders can trust.</li>
+            <li><strong>Legitimacy Link:</strong> 
+              <span class="legitimacy performance">Performance — consistency in delivery builds credibility</span>
+            </li>
+          </ul>
+          <div class="status">
+            <span class="status-dot status-in-progress"></span> <span>In Progress</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="card">
+        <div class="card-header" onclick="toggle(this)">3. Sequencing & Prioritization</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Purpose:</strong> Order work logically to prevent resource clashes and wasted effort.</li>
+            <li><strong>Focus:</strong> Map dependencies, identify critical paths, apply prioritization logic.</li>
+            <li><strong>Value:</strong> Ensures resources are allocated where they matter most.</li>
+            <li><strong>Legitimacy Link:</strong> 
+              <span class="legitimacy resonance">Resonance — progress feels coherent, not chaotic, because priorities are clear</span>
+            </li>
+          </ul>
+          <div class="status">
+            <span class="status-dot status-planned"></span> <span>Planned</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 4 -->
+      <div class="card">
+        <div class="card-header" onclick="toggle(this)">4. Accountability Assignments</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Purpose:</strong> Make responsibility visible and enforceable.</li>
+            <li><strong>Focus:</strong> Apply RACI/DACI models to every milestone and deliverable.</li>
+            <li><strong>Value:</strong> Prevents diffusion of responsibility and guarantees follow-through.</li>
+            <li><strong>Legitimacy Link:</strong> 
+              <span class="legitimacy justice">Justice — fairness in workload</span> + 
+              <span class="legitimacy performance">Performance — reliability in outcomes</span>
+            </li>
+          </ul>
+          <div class="status">
+            <span class="status-dot status-planned"></span> <span>Planned</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      Initiative Leadership Dashboard | Designed for clarity, alignment, and execution
+    </footer>
+
+  </div>
+
+  <script>
+    function toggle(header) {
+      const body = header.nextElementSibling;
+      body.style.display = body.style.display === "none" ? "block" : "none";
+      header.classList.toggle("collapsed");
+    }
+
+    // Default: expand all
+    document.querySelectorAll('.card-body').forEach(el => {
+      el.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
