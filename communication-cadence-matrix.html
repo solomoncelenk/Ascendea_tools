@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Communication Cadence Matrix</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.7;
+      color: #333;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9fb;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      text-align: center;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .matrix-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .matrix th {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .matrix td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .stakeholder-header {
+      background-color: #3498db;
+      color: white;
+      font-weight: bold;
+      padding: 15px;
+      text-align: center;
+    }
+    .cadence-cell {
+      background-color: #f0f8ff;
+      padding: 12px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .daily { background-color: #e6f4ea; color: #006633; }
+    .weekly { background-color: #d9e8f5; color: #003366; }
+    .monthly { background-color: #fff2e6; color: #b35c00; }
+    .quarterly { background-color: #e6e6fa; color: #5c33a3; }
+    .summary {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .summary p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Communication Cadence Matrix</h1>
+  <p class="subtitle">Maps update frequency (daily, weekly, monthly, quarterly) by stakeholder group. Provides predictability and builds trust.</p>
+
+  <!-- Communication Cadence Matrix -->
+  <div class="matrix-container">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th class="stakeholder-header">Stakeholder Group</th>
+          <th>Daily</th>
+          <th>Weekly</th>
+          <th>Monthly</th>
+          <th>Quarterly</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sponsor</strong></td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell monthly">✓</td>
+          <td class="cadence-cell quarterly">✓</td>
+        </tr>
+        <tr>
+          <td><strong>Core Team</strong></td>
+          <td class="cadence-cell daily">✓</td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell monthly">✓</td>
+          <td class="cadence-cell quarterly">✓</td>
+        </tr>
+        <tr>
+          <td><strong>Support Teams</strong></td>
+          <td class="cadence-cell">—</td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell monthly">✓</td>
+          <td class="cadence-cell quarterly">✓</td>
+        </tr>
+        <tr>
+          <td><strong>Product Managers</strong></td>
+          <td class="cadence-cell">—</td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell monthly">✓</td>
+          <td class="cadence-cell quarterly">✓</td>
+        </tr>
+        <tr>
+          <td><strong>External Partners</strong></td>
+          <td class="cadence-cell">—</td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell monthly">✓</td>
+          <td class="cadence-cell quarterly">✓</td>
+        </tr>
+        <tr>
+          <td><strong>Executive Leadership</strong></td>
+          <td class="cadence-cell">—</td>
+          <td class="cadence-cell weekly">✓</td>
+          <td class="cadence-cell monthly">✓</td>
+          <td class="cadence-cell quarterly">✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary Section -->
+  <div class="summary">
+    <p><strong>Purpose:</strong> Align communication frequency with stakeholder influence and need for information.</p>
+    <p><strong>Value:</strong> Builds trust through predictability, prevents overload, and ensures key players stay informed.</p>
+    <p><strong>Alignment to Project & Initiative Leadership:</strong> Supports disciplined rhythm, transparency, and accountability across teams.</p>
+  </div>
+
+</body>
+</html>
