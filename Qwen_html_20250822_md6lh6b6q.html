@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motivation Engine: Job Characteristics Model</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #12151B;
+      --bg-secondary: #161A22;
+      --bg-tertiary: #1B202A;
+      --text-primary: #FBF8EF;
+      --text-secondary: #D7DCE3;
+      --text-tertiary: #AEB6C2;
+      --accent: #00E4AB;
+      --neutral: #F2A900;
+      --risk: #F2003C;
+      --border: #393939;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--text-tertiary);
+      margin-bottom: 40px;
+    }
+
+    .microcopy {
+      text-align: center;
+      font-size: 1rem;
+      color: var(--text-tertiary);
+      max-width: 800px;
+      margin: 20px auto 40px;
+      padding: 16px;
+      background-color: var(--bg-tertiary);
+      border-radius: 10px;
+    }
+
+    .model-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .stage {
+      background-color: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .stage h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .stage h2::before {
+      content: "▸";
+      color: var(--accent);
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .factors {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .factor {
+      padding: 16px;
+      background-color: var(--bg-tertiary);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+    }
+
+    .factor h3 {
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .factor p {
+      font-size: 0.95rem;
+      color: var(--text-tertiary);
+    }
+
+    .arrow {
+      text-align: center;
+      font-size: 1.5rem;
+      color: var(--neutral);
+      margin: 10px 0;
+    }
+
+    .leadership {
+      background-color: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 14px;
+      margin-top: 30px;
+      border: 1px solid var(--border);
+    }
+
+    .leadership h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      color: var(--neutral);
+      margin-bottom: 16px;
+    }
+
+    .chart-container {
+      height: 300px;
+      margin: 30px 0;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Motivation Engine</h1>
+    <p class="subtitle">How Job Design Fuels Engagement, Performance & Satisfaction</p>
+
+    <p class="microcopy">
+      The Job Characteristics Model shows that well-designed jobs don’t just fill roles — they ignite motivation. 
+      By optimizing five core dimensions, leaders create the psychological conditions for peak performance.
+    </p>
+
+    <!-- Model Flow -->
+    <div class="model-flow">
+
+      <!-- Stage 1: Core Job Dimensions -->
+      <div class="stage">
+        <h2>Core Job Dimensions</h2>
+        <div class="factors">
+          <div class="factor">
+            <h3>Skill Variety</h3>
+            <p>Using diverse skills and talents increases engagement and reduces monotony.</p>
+          </div>
+          <div class="factor">
+            <h3>Task Identity</h3>
+            <p>Completing a whole, identifiable piece of work fosters ownership and pride.</p>
+          </div>
+          <div class="factor">
+            <h3>Task Significance</h3>
+            <p>Believing your work impacts others creates a deeper sense of purpose.</p>
+          </div>
+          <div class="factor">
+            <h3>Autonomy</h3>
+            <p>Freedom in how work is done increases responsibility and innovation.</p>
+          </div>
+          <div class="factor">
+            <h3>Feedback</h3>
+            <p>Clear, direct feedback enables learning and self-improvement.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">⬇️</div>
+
+      <!-- Stage 2: Psychological States -->
+      <div class="stage">
+        <h2>Psychological States</h2>
+        <div class="factors">
+          <div class="factor">
+            <h3>Experienced Meaningfulness</h3>
+            <p>"This work matters." Driven by skill variety, identity, and significance.</p>
+          </div>
+          <div class="factor">
+            <h3>Experienced Responsibility</h3>
+            <p>"I own this." Fueled by autonomy.</p>
+          </div>
+          <div class="factor">
+            <h3>Knowledge of Results</h3>
+            <p>"I know how I’m doing." Enabled by direct feedback.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">⬇️</div>
+
+      <!-- Stage 3: Outcomes -->
+      <div class="stage">
+        <h2>Work Outcomes</h2>
+        <div class="factors">
+          <div class="factor">
+            <h3>High Motivation</h3>
+            <p>Employees are energized and committed to their work.</p>
+          </div>
+          <div class="factor">
+            <h3>Strong Performance</h3>
+            <p>Quality, efficiency, and innovation improve.</p>
+          </div>
+          <div class="factor">
+            <h3>Job Satisfaction</h3>
+            <p>Employees feel fulfilled and less likely to leave.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Visualization -->
+    <div class="chart-container">
+      <canvas id="modelChart"></canvas>
+    </div>
+
+    <!-- Leadership Implication -->
+    <div class="leadership">
+      <h2>Leadership Implication</h2>
+      <p>
+        Leaders don’t just assign tasks — they design jobs. To unlock motivation:
+      </p>
+      <ul style="margin: 16px 0 16px 24px; color: var(--text-tertiary);">
+        <li>Combine tasks to increase <strong>task identity</strong> (e.g., own a project, not just a step).</li>
+        <li>Rotate roles or cross-train to boost <strong>skill variety</strong>.</li>
+        <li>Connect work to real users/clients to amplify <strong>task significance</strong>.</li>
+        <li>Delegate decision-making, not just execution, to grow <strong>autonomy</strong>.</li>
+        <li>Implement fast, clear feedback loops — both formal and informal.</li>
+      </ul>
+      <p style="margin-top: 16px;">
+        <strong>Great jobs create great performance — by design.</strong>
+      </p>
+    </div>
+
+    <footer>
+      Based on the Job Characteristics Model (Hackman & Oldham). Dashboard by Organizational Design Lab.
+    </footer>
+  </div>
+
+  <script>
+    // Chart: Core Dimensions → Outcomes
+    const ctx = document.getElementById('modelChart').getContext('2d');
+    const modelChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['Skill Variety', 'Task Identity', 'Task Significance', 'Autonomy', 'Feedback'],
+        datasets: [
+          {
+            label: 'Job Design Strength',
+            data: [8, 7, 9, 8, 6],
+            backgroundColor: 'rgba(0, 228, 171, 0.2)',
+            borderColor: '#00E4AB',
+            borderWidth: 2,
+            pointBackgroundColor: '#00E4AB'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            angleLines: { color: '#393939' },
+            grid: { color: '#393939' },
+            pointLabels: { color: '#D7DCE3', font: { size: 11 } },
+            suggestedMin: 0,
+            suggestedMax: 10,
+            ticks: { display: false }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: { color: '#D7DCE3' }
+          },
+          tooltip: {
+            backgroundColor: '#1B202A'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

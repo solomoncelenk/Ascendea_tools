@@ -1,0 +1,182 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recognition Gap Calculator</title>
+  <!-- Load Plotly.js for visualization -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script><style id="plotly.js-style-global"></style>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
+      margin: 0;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .result {
+      font-size: 1.2em;
+      margin: 20px 0;
+      padding: 15px;
+      background: #eef7ff;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      color: #2980b9;
+    }
+    .plot-container {
+      width: 100%;
+      height: 400px;
+      margin-top: 30px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+    .download-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #27ae60;
+      color: white;
+      text-align: center;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+      text-decoration: none;
+    }
+    .download-btn:hover {
+      background-color: #219a52;
+    }
+  </style>
+<style id="plotly.js-style-modebar-a020ba"></style></head>
+<body>
+  <div class="container">
+    <h1>🎯 Recognition Gap Calculator</h1>
+
+    <div class="form-group">
+      <label for="target">Target Recognition Events</label>
+      <input type="number" id="target" value="100" min="1" placeholder="e.g., 100">
+    </div>
+
+    <div class="form-group">
+      <label for="actual">Actual Recognition Events</label>
+      <input type="number" id="actual" value="75" min="0" placeholder="e.g., 75">
+    </div>
+
+    <div class="result" id="result" style="color: rgb(192, 57, 43);">Recognition Gap: 25.00%</div>
+
+    <div id="chart" class="plot-container js-plotly-plot"><div class="plot-container plotly"><div class="user-select-none svg-container" style="position: relative; width: 900px; height: 400px;"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="400" style="background: rgb(255, 255, 255);"><defs id="defs-a020ba"><g class="clips"></g><g class="gradients"></g></defs><g class="bglayer"></g><g class="draglayer"></g><g class="layer-below"><g class="imagelayer"></g><g class="shapelayer"></g></g><g class="cartesianlayer"></g><g class="polarlayer"></g><g class="ternarylayer"></g><g class="geolayer"></g><g class="funnelarealayer"></g><g class="pielayer"><g class="trace" stroke-linejoin="round" style="opacity: 1;"><g class="slice"><path class="surface" d="M384,200l0,-140a140,140 0 1 1 -140,140.00000000000003Z" style="pointer-events: all; stroke-width: 0; fill: rgb(31, 119, 180); fill-opacity: 1; stroke: rgb(68, 68, 68); stroke-opacity: 1;"></path><g class="slicetext"><text data-notex="1" class="slicetext" transform="translate(433.49747468305833,246.19766999555833)" text-anchor="middle" data-unformatted="Actual Recognition&lt;br&gt;75%" data-math="N" x="0" y="0" style="font-family: &quot;Open Sans&quot;, verdana, arial, sans-serif; font-size: 12px; fill: rgb(255, 255, 255); fill-opacity: 1; white-space: pre;"><tspan class="line" dy="0em" x="0" y="0">Actual Recognition</tspan><tspan class="line" dy="1.3em" x="0" y="0">75%</tspan></text></g></g><g class="slice"><path class="surface" d="M384,200l-140,2.251371709547291e-14a140,140 0 0 1 140,-140.00000000000003Z" style="pointer-events: all; stroke-width: 0; fill: rgb(255, 127, 14); fill-opacity: 1; stroke: rgb(68, 68, 68); stroke-opacity: 1;"></path><g class="slicetext"><text data-notex="1" class="slicetext" transform="translate(326.0101012677667,138.71029658026671)" text-anchor="middle" data-unformatted="Gap&lt;br&gt;25%" data-math="N" x="0" y="0" style="font-family: &quot;Open Sans&quot;, verdana, arial, sans-serif; font-size: 12px; fill: rgb(68, 68, 68); fill-opacity: 1; white-space: pre;"><tspan class="line" dy="0em" x="0" y="0">Gap</tspan><tspan class="line" dy="1.3em" x="0" y="0">25%</tspan></text></g></g></g></g><g class="treemaplayer"></g><g class="sunburstlayer"></g><g class="glimages"></g></svg><div class="gl-container"></div><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="400"><defs id="topdefs-a020ba"><g class="clips"></g><clipPath id="legenda020ba"><rect width="157" height="48" x="0" y="0"></rect></clipPath></defs><g class="indicatorlayer"></g><g class="layer-above"><g class="imagelayer"></g><g class="shapelayer"></g></g><g class="infolayer"><g class="legend" pointer-events="all" transform="translate(731.36,60)"><rect class="bg" shape-rendering="crispEdges" style="stroke: rgb(68, 68, 68); stroke-opacity: 1; fill: rgb(255, 255, 255); fill-opacity: 1; stroke-width: 0px;" width="157" height="48" x="0" y="0"></rect><g class="scrollbox" transform="" clip-path="url('#legenda020ba')"><g class="groups"><g class="traces" transform="translate(0,14.5)" style="opacity: 1;"><text class="legendtext" text-anchor="start" x="40" y="4.680000000000001" data-unformatted="Actual Recognition" data-math="N" style="font-family: &quot;Open Sans&quot;, verdana, arial, sans-serif; font-size: 12px; fill: rgb(68, 68, 68); fill-opacity: 1; white-space: pre;">Actual Recognition</text><g class="layers" style="opacity: 1;"><g class="legendfill"></g><g class="legendlines"></g><g class="legendsymbols"><g class="legendpoints"><path class="legendpie" d="M6,6H-6V-6H6Z" transform="translate(20,0)" style="stroke-width: 0; fill: rgb(31, 119, 180); fill-opacity: 1; stroke: rgb(68, 68, 68); stroke-opacity: 1;"></path></g></g></g><rect class="legendtoggle" pointer-events="all" x="0" y="-9.5" width="151.5" height="19" style="cursor: pointer; fill: rgb(0, 0, 0); fill-opacity: 0;"></rect></g><g class="traces" transform="translate(0,33.5)" style="opacity: 1;"><text class="legendtext" text-anchor="start" x="40" y="4.680000000000001" data-unformatted="Gap" data-math="N" style="font-family: &quot;Open Sans&quot;, verdana, arial, sans-serif; font-size: 12px; fill: rgb(68, 68, 68); fill-opacity: 1; white-space: pre;">Gap</text><g class="layers" style="opacity: 1;"><g class="legendfill"></g><g class="legendlines"></g><g class="legendsymbols"><g class="legendpoints"><path class="legendpie" d="M6,6H-6V-6H6Z" transform="translate(20,0)" style="stroke-width: 0; fill: rgb(255, 127, 14); fill-opacity: 1; stroke: rgb(68, 68, 68); stroke-opacity: 1;"></path></g></g></g><rect class="legendtoggle" pointer-events="all" x="0" y="-9.5" width="151.5" height="19" style="cursor: pointer; fill: rgb(0, 0, 0); fill-opacity: 0;"></rect></g></g></g><rect class="scrollbar" rx="20" ry="3" width="0" height="0" style="fill: rgb(128, 139, 164); fill-opacity: 1;" x="0" y="0"></rect></g><g class="g-gtitle"><text class="gtitle" x="450" y="30" text-anchor="middle" dy="0em" data-unformatted="Recognition Performance (75/100 events achieved)" data-math="N" style="font-family: &quot;Open Sans&quot;, verdana, arial, sans-serif; font-size: 17px; fill: rgb(68, 68, 68); opacity: 1; font-weight: normal; white-space: pre;">Recognition Performance (75/100 events achieved)</text></g></g><g class="menulayer"></g><g class="zoomlayer"></g></svg><div class="modebar-container" style="position: absolute; top: 0px; right: 0px; width: 100%;"><div id="modebar-a020ba" class="modebar modebar--hover ease-bg"><div class="modebar-group"><a rel="tooltip" class="modebar-btn" data-title="Download plot as a png" data-toggle="false" data-gravity="n"><svg viewBox="0 0 1000 1000" class="icon" height="1em" width="1em"><path d="m500 450c-83 0-150-67-150-150 0-83 67-150 150-150 83 0 150 67 150 150 0 83-67 150-150 150z m400 150h-120c-16 0-34 13-39 29l-31 93c-6 15-23 28-40 28h-340c-16 0-34-13-39-28l-31-94c-6-15-23-28-40-28h-120c-55 0-100-45-100-100v-450c0-55 45-100 100-100h800c55 0 100 45 100 100v450c0 55-45 100-100 100z m-400-550c-138 0-250 112-250 250 0 138 112 250 250 250 138 0 250-112 250-250 0-138-112-250-250-250z m365 380c-19 0-35 16-35 35 0 19 16 35 35 35 19 0 35-16 35-35 0-19-16-35-35-35z" transform="matrix(1 0 0 -1 0 850)"></path></svg></a></div><div class="modebar-group"><a rel="tooltip" class="modebar-btn active" data-title="Toggle show closest data on hover" data-attr="hovermode" data-val="closest" data-toggle="false" data-gravity="ne"><svg viewBox="0 0 1500 1000" class="icon" height="1em" width="1em"><path d="m375 725l0 0-375-375 375-374 0-1 1125 0 0 750-1125 0z" transform="matrix(1 0 0 -1 0 850)"></path></svg></a></div><div class="modebar-group"><a href="https://plotly.com/" target="_blank" data-title="Produced with Plotly" class="modebar-btn plotlyjsicon modebar-btn--logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 132" height="1em" width="1em"><defs><style>.cls-1 {fill: #3f4f75;} .cls-2 {fill: #80cfbe;} .cls-3 {fill: #fff;}</style></defs><title>plotly-logomark</title><g id="symbol"><rect class="cls-1" width="132" height="132" rx="6" ry="6"></rect><circle class="cls-2" cx="78" cy="54" r="6"></circle><circle class="cls-2" cx="102" cy="30" r="6"></circle><circle class="cls-2" cx="78" cy="30" r="6"></circle><circle class="cls-2" cx="54" cy="30" r="6"></circle><circle class="cls-2" cx="30" cy="30" r="6"></circle><circle class="cls-2" cx="30" cy="54" r="6"></circle><path class="cls-3" d="M30,72a6,6,0,0,0-6,6v24a6,6,0,0,0,12,0V78A6,6,0,0,0,30,72Z"></path><path class="cls-3" d="M78,72a6,6,0,0,0-6,6v24a6,6,0,0,0,12,0V78A6,6,0,0,0,78,72Z"></path><path class="cls-3" d="M54,48a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V54A6,6,0,0,0,54,48Z"></path><path class="cls-3" d="M102,48a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V54A6,6,0,0,0,102,48Z"></path></g></svg></a></div></div></div><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="400"><g class="hoverlayer"></g></svg></div></div></div>
+
+    <a href="#" class="download-btn" id="downloadBtn">💾 Download This Calculator (HTML)</a>
+
+    <footer>
+      Generated on: <span id="date">16/08/2025</span> | Formula: (Target - Actual) / Target
+    </footer>
+  </div>
+
+  <script>
+    // Set current date
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+
+    // Get elements
+    const targetInput = document.getElementById('target');
+    const actualInput = document.getElementById('actual');
+    const resultDiv = document.getElementById('result');
+    const chartDiv = document.getElementById('chart');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // Update calculation and chart
+    function updateCalculator() {
+      const target = parseFloat(targetInput.value) || 0;
+      const actual = parseFloat(actualInput.value) || 0;
+
+      // Validate: target must be >= 1
+      if (target < 1) {
+        resultDiv.textContent = "Target must be at least 1";
+        resultDiv.style.color = "red";
+        return;
+      }
+
+      // Calculate recognition gap
+      const gap = (target - actual) / target;
+      const gapPercent = (gap * 100).toFixed(2);
+
+      // Update result
+      resultDiv.textContent = `Recognition Gap: ${gapPercent}%`;
+      resultDiv.style.color = gap > 0 ? "#c0392b" : "#27ae60";
+
+      // Update chart
+      Plotly.newPlot(chartDiv, [{
+        labels: ['Actual Recognition', 'Gap'],
+        values: [actual, target - actual],
+        type: 'pie',
+        textinfo: 'label+percent',
+        insidetextorientation: 'horizontal',
+        marker: {
+          colors: ['#1f77b4', '#ff7f0e']
+        },
+        hovertemplate: '%{label}: %{value} events<br><extra></extra>'
+      }], {
+        title: `Recognition Performance (${actual}/${target} events achieved)`,
+        showlegend: true,
+        margin: { t: 60, b: 60, l: 50, r: 50 }
+      });
+    }
+
+    // Initial load
+    updateCalculator();
+
+    // Add event listeners
+    targetInput.addEventListener('input', updateCalculator);
+    actualInput.addEventListener('input', updateCalculator);
+
+    // Download HTML functionality
+    downloadBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const htmlContent = document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Recognition_Gap_Calculator.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script><svg id="js-plotly-tester" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; left: -10000px; top: -10000px; width: 9000px; height: 9000px; z-index: 1;"><path class="js-reference-point" d="M0,0H1V1H0Z" style="stroke-width: 0; fill: black;"></path></svg>
+
+</body></html>

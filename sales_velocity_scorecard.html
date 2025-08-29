@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sales Velocity Scorecard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f5fa;
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    h1 {
+      color: #1976D2;
+      margin: 0;
+      font-size: 28px;
+    }
+    .subtitle {
+      color: #666;
+      font-style: italic;
+      margin: 5px 0 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 16px;
+    }
+    th {
+      background-color: #1976D2;
+      color: white;
+      text-align: left;
+      padding: 14px;
+    }
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #eee;
+    }
+    tr:hover {
+      background-color: #f8f9fd;
+    }
+    .value {
+      font-weight: bold;
+      text-align: right;
+    }
+    .target {
+      color: #1976D2;
+    }
+    .status {
+      font-size: 1.4em;
+      text-align: center;
+    }
+    .good {
+      color: #2E7D32;
+    }
+    .warn {
+      color: #C62828;
+    }
+    .summary-box {
+      background: #e3f2fd;
+      border-left: 5px solid #1976D2;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 15px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #888;
+      font-size: 12px;
+    }
+    .highlight {
+      background-color: #fff3cd;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 Sales Velocity Scorecard</h1>
+      <p class="subtitle">Performance vs. Target | Updated Aug 15, 2025</p>
+    </header>
+
+    <table>
+      <thead>
+        <tr>
+          <th>KPI</th>
+          <th class="value">Current</th>
+          <th class="value target">Target</th>
+          <th class="status">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><strong>Velocity ($/day)</strong></td>
+          <td class="value">$11,847/day</td>
+          <td class="value target">$24000/day</td>
+          <td class="status warn">🟡</td>
+        </tr>
+    
+        <tr>
+          <td><strong>Win Rate (%)</strong></td>
+          <td class="value">34.0%</td>
+          <td class="value target">33%</td>
+          <td class="status good">🟢</td>
+        </tr>
+    
+        <tr>
+          <td><strong>Avg Deal Size ($)</strong></td>
+          <td class="value">22,222.0</td>
+          <td class="value target">20,500</td>
+          <td class="status good">🟢</td>
+        </tr>
+    
+        <tr>
+          <td><strong>Sales Cycle Length (days)</strong></td>
+          <td class="value">52.3</td>
+          <td class="value target">45</td>
+          <td class="status warn">🟡</td>
+        </tr>
+    
+      </tbody>
+    </table>
+
+    <div class="summary-box">
+      <strong>Insight:</strong> 
+      Sales Velocity = <span class="highlight">Opportunities × Win Rate × Avg Deal Size ÷ Cycle Length</span>. 
+      Improve any lever to increase revenue output.
+    </div>
+
+    <footer>
+      Powered by Python & Pandas • Sales Science Engine • Generated on 2025-08-15 09:35
+    </footer>
+  </div>
+</body>
+</html>
