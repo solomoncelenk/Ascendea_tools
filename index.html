@@ -12,7 +12,7 @@
     li { margin: 10px 0; }
     a { text-decoration: none; font-size: 18px; }
     a:hover { text-decoration: underline; }
-    code { background:#eee; padding: 2px 6px; border-radius: 4px; }
+    code { background:#eee; padding:2px 6px; border-radius:4px; }
   </style>
 </head>
 <body>
@@ -21,55 +21,63 @@
   <ul id="list"></ul>
 
   <script>
-    // CONFIG — set your GitHub handle and repo
-    const OWNER = "solomonclenk";
-    const REPO  = "Ascendea_tools";
-    const BRANCH = "main"; // change if you use a different default branch
+    const OWNER  = "solomonclenk";
+    const REPO   = "Ascendea_tools";   // note exact case
+    const BRANCH = "main";
 
-    // Use the Git Trees API to get ALL files (recursively)
-    const api = `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`;
+    const base = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+    const headers = { "Accept": "application/vnd.github+json" };
 
-    async function loadFiles() {
+    async function listDir(path="") {
+      const url = `${base}/${path}?ref=${encodeURIComponent(BRANCH)}`;
+      const res = await fetch(url, { headers });
+      if (!res.ok) throw new Error(`API ${res.status} on ${url}`);
+      return res.json();
+    }
+
+    async function crawl(path="") {
+      const entries = await listDir(path);
+      let files = [];
+      for (const e of entries) {
+        if (e.type === "dir") {
+          const sub = await crawl(e.path);
+          files = files.concat(sub);
+        } else if (e.type === "file") {
+          files.push(e.path);
+        }
+      }
+      return files;
+    }
+
+    (async function () {
       const status = document.getElementById("status");
       const list = document.getElementById("list");
-
       try {
-        const res = await fetch(api, { headers: { "Accept": "application/vnd.github+json" } });
-        if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
-        const data = await res.json();
-        if (!data.tree) throw new Error("No tree found");
+        let files = await crawl("");
+        files = files
+          .filter(p => p.toLowerCase().endsWith(".html"))
+          .filter(p => p.toLowerCase() !== "index.html")
+          .sort((a,b) => a.localeCompare(b));
 
-        // Find all .html files except index.html
-        const htmlFiles = data.tree
-          .filter(n => n.type === "blob" && n.path.toLowerCase().endsWith(".html"))
-          .filter(n => n.path.toLowerCase() !== "index.html")
-          .map(n => n.path)
-          .sort((a, b) => a.localeCompare(b));
-
-        if (htmlFiles.length === 0) {
+        if (files.length === 0) {
           status.textContent = "No additional HTML files found.";
           return;
         }
 
-        // Build links relative to the Pages site root
-        // On project pages, relative links like "./path/to/file.html" work correctly.
-        htmlFiles.forEach(p => {
+        files.forEach(p => {
           const li = document.createElement("li");
           const a = document.createElement("a");
-          a.href = p;       // relative link works on GitHub Pages
+          a.href = p;          // relative link works on project Pages
           a.textContent = p;
           li.appendChild(a);
           list.appendChild(li);
         });
-
-        status.textContent = `Found ${htmlFiles.length} HTML file(s).`;
+        status.textContent = `Found ${files.length} HTML file(s).`;
       } catch (err) {
         console.error(err);
         status.innerHTML = `Could not load file list. You can still open files directly, e.g. <code>https://${OWNER}.github.io/${REPO}/your_file.html</code>`;
       }
-    }
-
-    loadFiles();
+    })();
   </script>
 </body>
 </html>
