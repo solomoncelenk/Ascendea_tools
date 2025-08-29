@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agile WSJF Prioritization Framework</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9fb;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; margin-top: 30px; }
+    .grid-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .grid {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .grid-title {
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    .grid-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    .grid-table th {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px;
+      text-align: left;
+    }
+    .grid-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .value-cell {
+      background-color: #d9e8f5;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+    .size-cell {
+      background-color: #d9f0e8;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+    .sticky-note {
+      width: 40px;
+      height: 40px;
+      background-color: #fff700;
+      border: 1px solid #ffcc00;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 5px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .sticky-note:hover {
+      transform: scale(1.1);
+    }
+    .sticky-note::after {
+      content: "A";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+    .wsjf-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .wsjf-formula {
+      font-family: monospace;
+      font-size: 1.2em;
+      background-color: #f0f8ff;
+      padding: 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 10px 0;
+    }
+    .example {
+      background-color: #fff2e6;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Agile WSJF Prioritization Framework</h1>
+  <p><strong>Weighted Shortest Job First (WSJF)</strong> helps teams prioritize work by dividing <em>Value</em> by <em>Effort</em>. The higher the ratio, the higher the priority.</p>
+
+  <div class="grid-container">
+
+    <!-- Step 1: Cost of Delay Grid -->
+    <div class="grid">
+      <div class="grid-title">1. Assess Value using COD Grid</div>
+      <p><strong>Relative value and urgency</strong></p>
+      <table class="grid-table">
+        <thead>
+          <tr>
+            <th rowspan="2">Value</th>
+            <th colspan="3">Time Criticality</th>
+          </tr>
+          <tr>
+            <th>Whenever</th>
+            <th>Soon</th>
+            <th>ASAP!</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="2"><strong>Killer</strong></td>
+            <td class="value-cell">Medium (3)</td>
+            <td class="value-cell">High (5)</td>
+            <td class="value-cell">Very High (8)</td>
+          </tr>
+          <tr>
+            <td class="value-cell">Low (2)</td>
+            <td class="value-cell">Medium (3)</td>
+            <td class="value-cell">High (5)</td>
+          </tr>
+          <tr>
+            <td rowspan="2"><strong>"Meh"</strong></td>
+            <td class="value-cell">Very Low (1)</td>
+            <td class="value-cell">Low (1)</td>
+            <td class="value-cell">Medium (3)</td>
+          </tr>
+          <tr>
+            <td class="value-cell">Very Low (1)</td>
+            <td class="value-cell">Low (1)</td>
+            <td class="value-cell">Medium (3)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><small><strong>Cost of Delay (COD)</strong>: If delayed a week, this would cost us $x</small></p>
+    </div>
+
+    <!-- Step 2: Size Assessment Grid -->
+    <div class="grid">
+      <div class="grid-title">2. Assess Size</div>
+      <p><strong>Relative effort and complexity</strong></p>
+      <table class="grid-table">
+        <thead>
+          <tr>
+            <th>Extra Large (8)</th>
+            <th>Large (5)</th>
+            <th>Medium (3)</th>
+            <th>Small (2)</th>
+            <th>Extra Small (1)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="size-cell"><div class="sticky-note"></div></td>
+            <td class="size-cell"><div class="sticky-note"></div></td>
+            <td class="size-cell"><div class="sticky-note"></div></td>
+            <td class="size-cell"><div class="sticky-note"></div></td>
+            <td class="size-cell"><div class="sticky-note"></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- WSJF Calculation -->
+  <div class="wsjf-section">
+    <h2>3. Calculate WSJF Score</h2>
+    <div class="wsjf-formula">
+      WSJF = <strong>Cost of Delay</strong> ÷ <strong>Size</strong>
+    </div>
+    <p>Higher score = Higher priority</p>
+
+    <div class="example">
+      <strong>Example:</strong><br>
+      Feature A: COD = 8, Size = 2 → WSJF = 8 ÷ 2 = <strong>4.0</strong><br>
+      Feature B: COD = 5, Size = 5 → WSJF = 5 ÷ 5 = <strong>1.0</strong><br>
+      → Feature A has higher priority.
+    </div>
+
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMTUwIj48cGF0aCBkPSJNMTEuMSwxMmgtNS41YTIuMiwyLjIsMCwwLDAsLTQuNCwyLjJsLTEuOSwxLjk5YTIuMiwyLjIsMCwwLDAsMC40LDEuOTNsNy41LDEuOThhMi4yLDIuMiwwLDAsMCwwLjQsLTQuNDJINTEuNWMtMS44LDAtMy41LTAuNi00LjUsLTEuOWMtMS44LTEuOC0yLjEtNC40LTIuMS02LjRDMTcuOSw1LjEsMTkuOSwzLjcsMjAuMSwxLjVjMC4xLTEuOS0wLjUtMy40LTEuMy00LjJjLTEuNC0xLjctMy40LTIuMi01LjQtMi4yYy0yLjIsMC00LjMsMS40LTQuNSwzLjRjLTAuMSwxLjktMC42LDMuNC0xLjksNC4yYy0xLjgsMS44LTMuOCwyLjItNS40LDIuMi0xLjksMC0zLjUsMC42LTQuNSwxLjljLTEuOCwxLjgtMi4xLDQuNC0yLjEsNi40YzAuMywxLjcuMSwzLjUsMC41LDQuNWMwLjUsMS42LDEuMiwyLjIsMi41LDIuMmMxLjcsMCwyLjksLTEuMiwyLjksLTIuMmMwLjIsLTEuNywwLjUsMy40LDEuMyw0LjJjMS44LDEuOCwzLjMsMi4yLDUuNCwyLjJjMi4yLDAuMSw0LjMsLTEuNCw0LjUsLTMuNHoiIGZpbGw9IiM0MDQwNDQiIC8+PC9zdmc+" alt="Balance Scale" style="width: 100px; margin: 20px auto;">
+  </div>
+
+</body>
+</html>
