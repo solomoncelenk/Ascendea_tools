@@ -1,314 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sustainable Packaging Initiative Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        .dashboard {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #2c3e50, #4ca1af);
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .full-width {
-            grid-column: 1 / span 2;
-        }
-        .card-title {
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            border-bottom: 2px solid #4ca1af;
-            padding-bottom: 8px;
-        }
-        .gauge-container {
-            text-align: center;
-            position: relative;
-            height: 250px;
-        }
-        .gauge {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: conic-gradient(#4CAF50 0% 20%, #ddd 20% 100%);
-            margin: 0 auto;
-            position: relative;
-        }
-        .gauge-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 24px;
-        }
-        .role-item {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #4ca1af;
-        }
-        .role-title {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .rule-item {
-            background-color: #fff9e6;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #ffcc00;
-        }
-        .status-box {
-            background-color: #e8f5e9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            border-left: 4px solid #4CAF50;
-        }
-        .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-        .progress {
-            height: 100%;
-            background-color: #4CAF50;
-            border-radius: 5px;
-            width: 33.3%;
-        }
-        .download-btn {
-            display: block;
-            width: 200px;
-            margin: 30px auto;
-            padding: 12px;
-            background: linear-gradient(135deg, #2c3e50, #4ca1af);
-            color: white;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-        }
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            .full-width {
-                grid-column: 1;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ascendea Tools Hub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      text-decoration: none;
+      color: #0066cc;
+      font-size: 18px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <h1>Sustainable Packaging Initiative Dashboard</h1>
-            <p>Reduce packaging by 20% within 18 months</p>
-        </div>
-
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-title">Packaging Reduction Goal</div>
-                <div class="gauge-container">
-                    <div class="gauge">
-                        <div class="gauge-center">20%</div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <div style="display: inline-block; margin: 0 15px;">
-                        <div style="font-size: 14px;">Current</div>
-                        <div style="font-weight: bold; font-size: 18px;">100%</div>
-                    </div>
-                    <div style="display: inline-block; margin: 0 15px;">
-                        <div style="font-size: 14px;">Target</div>
-                        <div style="font-weight: bold; font-size: 18px;">80%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">18-Month Reduction Timeline</div>
-                <canvas id="timelineChart"></canvas>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Role Owners & Responsibilities</div>
-                <div class="role-item">
-                    <div class="role-title">R&D</div>
-                    <div>Owner: Dr. Chen</div>
-                    <div>Focus: Material innovation</div>
-                </div>
-                <div class="role-item">
-                    <div class="role-title">Sourcing</div>
-                    <div>Owner: Ms. Rodriguez</div>
-                    <div>Focus: Supplier partnerships</div>
-                </div>
-                <div class="role-item">
-                    <div class="role-title">Marketing</div>
-                    <div>Owner: Mr. Johnson</div>
-                    <div>Focus: Customer communication</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Rules of Conduct</div>
-                <div class="rule-item">
-                    <strong>Decision-making protocol:</strong><br>
-                    - R&D proposes alternatives<br>
-                    - Sourcing evaluates feasibility<br>
-                    - Marketing assesses customer impact<br>
-                    - Consensus required for major changes
-                </div>
-                <div class="rule-item">
-                    <strong>Meeting rhythm:</strong><br>
-                    - Weekly tactical (30 min)<br>
-                    - Monthly strategic (60 min)<br>
-                    - Quarterly review (90 min)
-                </div>
-                <div class="rule-item">
-                    <strong>Escalation process:</strong><br>
-                    - Department leads → Steering committee<br>
-                    - Documented rationale for all decisions
-                </div>
-            </div>
-
-            <div class="card full-width">
-                <div class="card-title">Monthly Scorecard Review</div>
-                <canvas id="progressChart" height="100"></canvas>
-                <div class="status-box">
-                    <strong>Status:</strong> 33.3% of timeline completed<br>
-                    <strong>Reduction achieved:</strong> 13%<br>
-                    <strong>On track:</strong> Yes
-                    <div class="progress-bar">
-                        <div class="progress"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <a href="#" class="download-btn" onclick="downloadDashboard()">Download Dashboard</a>
-    </div>
-
-    <script>
-        // Timeline Chart
-        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
-        const timelineChart = new Chart(timelineCtx, {
-            type: 'line',
-            data: {
-                labels: Array.from({length: 18}, (_, i) => `Month ${i+1}`),
-                datasets: [{
-                    label: 'Packaging Reduction Plan',
-                    data: [100, 98, 96, 94, 92, 90, 88, 87, 86, 85, 84, 83, 82, 81.5, 81, 80.5, 80, 80],
-                    borderColor: '#2c3e50',
-                    backgroundColor: 'rgba(44, 62, 80, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 75,
-                        max: 100,
-                        reverse: true,
-                        title: {
-                            display: true,
-                            text: 'Packaging (%)'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Progress Chart
-        const progressCtx = document.getElementById('progressChart').getContext('2d');
-        const progressChart = new Chart(progressCtx, {
-            type: 'line',
-            data: {
-                labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'],
-                datasets: [
-                    {
-                        label: 'Actual Progress',
-                        data: [100, 98, 95, 92, 89, 87],
-                        borderColor: '#4CAF50',
-                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                        fill: true,
-                        tension: 0.2
-                    },
-                    {
-                        label: 'Plan',
-                        data: [100, 98, 96, 94, 92, 90],
-                        borderColor: '#2c3e50',
-                        borderDash: [5, 5],
-                        fill: false,
-                        tension: 0.2
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 80,
-                        max: 100,
-                        reverse: true,
-                        title: {
-                            display: true,
-                            text: 'Packaging (%)'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Download functionality
-        function downloadDashboard() {
-            alert("To save this dashboard:\n\n1. Right-click anywhere on the page\n2. Select 'Save As'\n3. Choose a location and save the HTML file");
-        }
-    </script>
+  <h1>Ascendea Tools</h1>
+  <p>Select a tool or dashboard below:</p>
+  <ul>
+    <li><a href="rep_velocity_dashboard.html">Rep Velocity Dashboard</a></li>
+    <li><a href="sales_velocity_scorecard.html">Sales Velocity Scorecard</a></li>
+    <li><a href="Recognition_Gap_Calculator.html">Recognition Gap Calculator</a></li>
+    <li><a href="Qwen_python_20250822_md6l.html">Qwen Python Tool (Aug 22)</a></li>
+    <li><a href="Qwen_python_20250815_vi0.html">Qwen Python Tool (Aug 15)</a></li>
+    <!-- Add more links here as you upload more HTML files -->
+  </ul>
 </body>
 </html>
