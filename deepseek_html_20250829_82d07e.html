@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADKAR Change Management Model</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .model-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .adkar-flow {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            width: 180px;
+            padding: 25px 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            color: white;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .step-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .step-description {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .step-arrow {
+            font-size: 2rem;
+            color: #2c3e50;
+            align-self: center;
+            margin: 0 5px;
+        }
+        
+        .awareness { background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); }
+        .desire { background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%); }
+        .knowledge { background: linear-gradient(135deg, #f09819 0%, #edde5d 100%); }
+        .ability { background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%); }
+        .reinforcement { background: linear-gradient(135deg, #5d69be 0%, #c89feb 100%); }
+        
+        .explanation {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .explanation h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .explanation p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .application {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .application h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .application h3 i {
+            margin-right: 10px;
+            color: #5d69be;
+        }
+        
+        .application p {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 992px) {
+            .adkar-flow {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .step-arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .step {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ADKAR Change Management Model</h1>
+            <p class="subtitle">A structured approach to facilitating change at individual and organizational levels</p>
+        </header>
+        
+        <div class="model-container">
+            <div class="adkar-flow">
+                <div class="step awareness">
+                    <div class="step-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="step-title">Awareness</div>
+                    <div class="step-description">Understanding why change is necessary</div>
+                </div>
+                
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                
+                <div class="step desire">
+                    <div class="step-icon"><i class="fas fa-heart"></i></div>
+                    <div class="step-title">Desire</div>
+                    <div class="step-description">Personal motivation to support and participate in change</div>
+                </div>
+                
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                
+                <div class="step knowledge">
+                    <div class="step-icon"><i class="fas fa-book"></i></div>
+                    <div class="step-title">Knowledge</div>
+                    <div class="step-description">Understanding how to change and what to do</div>
+                </div>
+                
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                
+                <div class="step ability">
+                    <div class="step-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="step-title">Ability</div>
+                    <div class="step-description">Implementing new skills and behaviors</div>
+                </div>
+                
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                
+                <div class="step reinforcement">
+                    <div class="step-icon"><i class="fas fa-sync-alt"></i></div>
+                    <div class="step-title">Reinforcement</div>
+                    <div class="step-description">Sustaining the change long-term</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h2>About the ADKAR Model</h2>
+            <p>The ADKAR model is a goal-oriented change management framework developed by Jeff Hiatt. It guides individual and organizational change through five key elements: Awareness, Desire, Knowledge, Ability, and Reinforcement.</p>
+            <p>This model structures communication to move stakeholders from initial awareness of a change to full adoption and reinforcement. It's particularly effective for supporting behavioral change and building buy-in during organizational transformations.</p>
+            <p>Each element represents a milestone that individuals must achieve for change to be successful and lasting.</p>
+        </div>
+        
+        <div class="applications">
+            <div class="application">
+                <h3><i class="fas fa-comments"></i> Communication Planning</h3>
+                <p>ADKAR helps structure messages to address what people need to know at each stage of the change process, ensuring effective communication throughout the transformation.</p>
+            </div>
+            
+            <div class="application">
+                <h3><i class="fas fa-chart-line"></i> Change Resistance Management</h3>
+                <p>By identifying where individuals are stuck in the change process, leaders can provide targeted support to move them forward to the next stage.</p>
+            </div>
+            
+            <div class="application">
+                <h3><i class="fas fa-tasks"></i> Training & Development</h3>
+                <p>The model helps design training programs that address knowledge and ability gaps, ensuring employees have the skills needed to implement change.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>ADKAR Model Visualization | Created with HTML, CSS, and Font Awesome Icons</p>
+            <p>© 2023 Change Management Tools</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple animation for the steps
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = document.querySelectorAll('.step');
+            
+            steps.forEach((step, index) => {
+                // Add delay based on index for sequential animation
+                step.style.animationDelay = `${index * 0.2}s`;
+                step.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+        });
+    </script>
+</body>
+</html>

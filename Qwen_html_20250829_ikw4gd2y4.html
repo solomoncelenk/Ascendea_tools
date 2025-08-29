@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stakeholder Power/Interest Matrix</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.7;
+      color: #333;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9fb;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      text-align: center;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1px;
+      width: 80%;
+      max-width: 600px;
+      margin: 30px auto;
+      border: 2px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .cell {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .high-power {
+      background-color: #d9e8f5;
+    }
+    .low-power {
+      background-color: #f0f7ff;
+    }
+    .high-interest {
+      background-color: #e6f4ea;
+    }
+    .low-interest {
+      background-color: #fdf6e6;
+    }
+    .quadrant-title {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+    .quadrant-desc {
+      font-size: 14px;
+    }
+    .axis-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      max-width: 600px;
+      margin: 0 auto 10px;
+      font-weight: bold;
+      color: #444;
+    }
+    .axis-top {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .summary {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .summary p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Stakeholder Power/Interest Matrix</h1>
+  <p class="subtitle">Classifies stakeholders into high/low power and high/low interest groups, defining how much communication and engagement they need.</p>
+
+  <!-- Axis Labels -->
+  <div class="axis-top">Interest Level →</div>
+
+  <!-- Matrix Grid -->
+  <div class="matrix">
+    <!-- Top Left: High Power, High Interest -->
+    <div class="cell high-power high-interest">
+      <div class="quadrant-title">Manage Closely</div>
+      <div class="quadrant-desc">Key players who need full engagement and regular updates.</div>
+    </div>
+    <!-- Top Right: Low Power, High Interest -->
+    <div class="cell low-power high-interest">
+      <div class="quadrant-title">Keep Informed</div>
+      <div class="quadrant-desc">High interest but limited influence — update regularly to maintain support.</div>
+    </div>
+    <!-- Bottom Left: High Power, Low Interest -->
+    <div class="cell high-power low-interest">
+      <div class="quadrant-title">Keep Satisfied</div>
+      <div class="quadrant-desc">Powerful but disengaged — meet expectations to prevent resistance.</div>
+    </div>
+    <!-- Bottom Right: Low Power, Low Interest -->
+    <div class="cell low-power low-interest">
+      <div class="quadrant-title">Monitor</div>
+      <div class="quadrant-desc">Minimal effort required — check in occasionally.</div>
+    </div>
+  </div>
+
+  <!-- Axis Labels -->
+  <div class="axis-labels">
+    <span><strong>High Power</strong></span>
+    <span><strong>Low Power</strong></span>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <p><strong>Purpose:</strong> Prioritize stakeholder engagement based on influence and interest.</p>
+    <p><strong>Value:</strong> Prevents wasted effort on low-influence groups while ensuring key players are prioritized.</p>
+  </div>
+
+</body>
+</html>
