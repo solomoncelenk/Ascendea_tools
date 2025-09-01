@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ascendea Revenue Simulator</title>
+  <script src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+  <style>
+    body { 
+      font-family: 'Segoe UI', Arial, sans-serif; 
+      padding: 25px; 
+      background: #f8fafc; 
+      color: #1e293b;
+    }
+    h1 { 
+      color: #1e40af; 
+      margin-bottom: 10px;
+    }
+    p { 
+      color: #64748b; 
+      max-width: 800px;
+    }
+    .input-section { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin: 20px 0; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-family: monospace; 
+      white-space: pre; 
+      overflow-x: auto;
+    }
+    table { 
+      border-collapse: collapse; 
+      width: 100%; 
+      margin: 25px 0; 
+      font-size: 14px;
+    }
+    th, td { 
+      border: 1px solid #cbd5e1; 
+      padding: 10px; 
+      text-align: right; 
+    }
+    th { 
+      background: #1e40af; 
+      color: white; 
+      text-align: left; 
+      font-weight: 600;
+    }
+    tr:nth-child(even) { 
+      background: #f1f5f9; 
+    }
+    tr:hover { 
+      background: #e0f2fe; 
+    }
+    .btn { 
+      padding: 12px 24px; 
+      font-size: 16px; 
+      background: #1e40af; 
+      color: white; 
+      border: none; 
+      cursor: pointer; 
+      border-radius: 6px; 
+      margin-right: 10px;
+    }
+    .btn:hover { 
+      background: #1e3a8a; 
+    }
+    .btn.download { 
+      background: #059669; 
+    }
+    .btn.download:hover { 
+      background: #047857; 
+    }
+    .controls { 
+      margin: 20px 0; 
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Ascendea Revenue Simulator</h1>
+  <p><strong>Edit the inputs below to re-run the simulation. Click "Run Simulation" to update results.</strong></p>
+
+  <div class="controls">
+    <button class="btn" onclick="runSimulation()">Run Simulation</button>
+    <button class="btn download" onclick="downloadCSV()">Download CSV</button>
+  </div>
+
+  <div class="input-section" id="inputCode">
+LEADS = 1000
+
+# Prices (USD)
+PRICE_COURSE = 999
+PRICE_OS = 4999
+PRICE_CCA = 1999
+PRICE_ENTERPRISE_OS = 14999
+PRICE_LICENSING = 49999
+
+# Conversion Rates (%, e.g., 0.05 = 5%)
+CONV_FREE_TO_COURSE = {
+    'Conservative': 0.03,
+    'Mid': 0.05,
+    'Aggressive': 0.10
+}
+CONV_COURSE_TO_OS = {
+    'Conservative': 0.20,
+    'Mid': 0.25,
+    'Aggressive': 0.25
+}
+CONV_COURSE_TO_CCA = {
+    'Conservative': 0.07,
+    'Mid': 0.08,
+    'Aggressive': 0.10
+}
+CONV_CCA_TO_OS = {
+    'Conservative': 0.30,
+    'Mid': 0.40,
+    'Aggressive': 0.40
+}
+CONV_OS_TO_ENTERPRISE = {
+    'Conservative': 0.15,
+    'Mid': 0.20,
+    'Aggressive': 0.25
+}
+CONV_OS_TO_LICENSING = {
+    'Conservative': 0.03,
+    'Mid': 0.04,
+    'Aggressive': 0.05
+}
+  </div>
+
+  <table id="resultsTable">
+    <tr><th>Calculating results...</th></tr>
+  </table>
+
+  <script type="py">
+    from js import document, console
+    import csv
+    from io import StringIO
+
+    def runSimulation():
+        try:
+            # Get input code
+            code = document.getElementById('inputCode').textContent
+
+            # Execute input config
+            config = {}
+            exec(code, config)
+            LEADS = config['LEADS']
+            PRICE_COURSE = config['PRICE_COURSE']
+            PRICE_OS = config['PRICE_OS']
+            PRICE_CCA = config['PRICE_CCA']
+            PRICE_ENTERPRISE_OS = config['PRICE_ENTERPRISE_OS']
+            PRICE_LICENSING = config['PRICE_LICENSING']
+            CONV_FREE_TO_COURSE = config['CONV_FREE_TO_COURSE']
+            CONV_COURSE_TO_OS = config['CONV_COURSE_TO_OS']
+            CONV_COURSE_TO_CCA = config['CONV_COURSE_TO_CCA']
+            CONV_CCA_TO_OS = config['CONV_CCA_TO_OS']
+            CONV_OS_TO_ENTERPRISE = config['CONV_OS_TO_ENTERPRISE']
+            CONV_OS_TO_LICENSING = config['CONV_OS_TO_LICENSING']
+
+            # Scenarios
+            scenarios = ['Conservative', 'Mid', 'Aggressive']
+            results = []
+
+            for scenario in scenarios:
+                c1 = CONV_FREE_TO_COURSE[scenario]
+                c2 = CONV_COURSE_TO_OS[scenario]
+                c3 = CONV_COURSE_TO_CCA[scenario]
+                c4 = CONV_CCA_TO_OS[scenario]
+                c5 = CONV_OS_TO_ENTERPRISE[scenario]
+                c6 = CONV_OS_TO_LICENSING[scenario]
+
+                # Calculations
+                course_buyers = LEADS * c1
+                os_from_course = course_buyers * c2
+                cca_from_course = course_buyers * c3
+                os_from_cca = cca_from_course * c4
+                os_total = os_from_course + os_from_cca
+                os_enterprise = os_total * c5
+                licenses_os_path = os_total * c6
+                licenses_enterprise_path = os_enterprise * 0.25  # Assumed 25% of enterprise upgrades go to licensing
+                licenses_total = licenses_os_path + licenses_enterprise_path
+
+                revenue_courses = course_buyers * PRICE_COURSE
+                revenue_cca = cca_from_course * PRICE_CCA
+                revenue_os = os_total * PRICE_OS
+                revenue_enterprise = os_enterprise * PRICE_ENTERPRISE_OS
+                revenue_licensing = licenses_total * PRICE_LICENSING
+                revenue_total = sum([revenue_courses, revenue_cca, revenue_os, revenue_enterprise, revenue_licensing])
+
+                results.append({
+                    'Scenario': scenario,
+                    'Leads': int(LEADS),
+                    'Course Buyers': round(course_buyers, 2),
+                    'OS from Course': round(os_from_course, 2),
+                    'CCA from Course': round(cca_from_course, 2),
+                    'OS from CCA': round(os_from_cca, 2),
+                    'OS Total': round(os_total, 2),
+                    'OS Enterprise': round(os_enterprise, 2),
+                    'Licenses (OS path)': round(licenses_os_path, 2),
+                    'Licenses (Enterprise path)': round(licenses_enterprise_path, 2),
+                    'Licenses Total': round(licenses_total, 2),
+                    'Revenue - Courses': round(revenue_courses, 2),
+                    'Revenue - CCA': round(revenue_cca, 2),
+                    'Revenue - OS': round(revenue_os, 2),
+                    'Revenue - OS Enterprise': round(revenue_enterprise, 2),
+                    'Revenue - Licensing': round(revenue_licensing, 2),
+                    'Revenue - TOTAL': round(revenue_total, 2)
+                })
+
+            # Update table
+            table = document.getElementById('resultsTable')
+            table.innerHTML = """
+              <tr>
+                <th>Scenario</th>
+                <th>Leads</th>
+                <th>Course Buyers</th>
+                <th>OS from Course</th>
+                <th>CCA from Course</th>
+                <th>OS from CCA</th>
+                <th>OS Total</th>
+                <th>OS Enterprise</th>
+                <th>Licenses (OS path)</th>
+                <th>Licenses (Enterprise path)</th>
+                <th>Licenses Total</th>
+                <th>Revenue - Courses</th>
+                <th>Revenue - CCA</th>
+                <th>Revenue - OS</th>
+                <th>Revenue - OS Enterprise</th>
+                <th>Revenue - Licensing</th>
+                <th>Revenue - TOTAL</th>
+              </tr>
+            """
+            for row in results:
+                tr = document.createElement('tr')
+                tr.innerHTML = ''.join(f"<td>{v}</td>" for v in row.values())
+                table.appendChild(tr)
+
+            # Store results globally for CSV export
+            window.results = results
+
+        except Exception as e:
+            console.log(f"Error: {e}")
+            document.getElementById('resultsTable').innerHTML = f"<tr><td>Error: {e}</td></tr>"
+
+    def downloadCSV(*args):
+        import js
+        if not hasattr(js.window, 'results'):
+            alert("Run the simulation first!")
+            return
+        
+        results = js.window.results
+        headers = list(results[0].keys())
+        csv_buffer = StringIO()
+        writer = csv.DictWriter(csv_buffer, fieldnames=headers)
+        writer.writeheader()
+        for row in results:
+            writer.writerow(row)
+        
+        csv_content = csv_buffer.getvalue()
+        blob = js.Blob.new([csv_content], {type: "text/csv"})
+        url = js.URL.createObjectURL(blob)
+        
+        a = js.document.createElement('a')
+        a.href = url
+        a.download = "ascendea_revenue_simulator.csv"
+        a.click()
+        js.URL.revokeObjectURL(url)
+
+    # Auto-run on load
+    runSimulation()
+  </script>
+
+  <script>
+    function runSimulation() {
+      // Update code from UI if changed
+      const codeEl = document.getElementById('inputCode');
+      codeEl.textContent = codeEl.innerText;
+      // Re-run Python
+      pywebworker.postMessage('runSimulation');
+    }
+    function downloadCSV() {
+      pywebworker.postMessage('downloadCSV');
+    }
+  </script>
+
+</body>
+</html>
