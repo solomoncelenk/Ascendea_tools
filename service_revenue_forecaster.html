@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascendea Revenue Forecaster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .toggle-checkbox:checked {
+            @apply right-0 border-purple-600;
+            right: 0;
+            border-color: #7c3aed;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            @apply bg-purple-600;
+            background-color: #7c3aed;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg text-white">
+            <div class="container mx-auto px-4 py-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-6 md:mb-0">
+                        <h1 class="text-3xl font-bold">Ascendea</h1>
+                        <p class="text-purple-200">Service & Revenue Forecaster</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-sm font-medium">Monthly</span>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                            <span class="text-sm font-medium">Annual</span>
+                        </div>
+                        <button id="reset-btn" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-50 transition">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- Revenue Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500">
+                    <h3 class="text-gray-500 font-medium">Projected Revenue</h3>
+                    <p id="total-revenue" class="text-3xl font-bold text-gray-800">$0</p>
+                    <div class="mt-2 flex items-center text-green-500">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        <span id="growth-rate">0%</span> growth
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500">
+                    <h3 class="text-gray-500 font-medium">Total Clients</h3>
+                    <p id="total-clients" class="text-3xl font-bold text-gray-800">0</p>
+                    <div class="mt-2 flex items-center text-blue-500">
+                        <i class="fas fa-users mr-1"></i>
+                        <span id="avg-value">$0</span> avg. value
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500">
+                    <h3 class="text-gray-500 font-medium">Recurring Revenue</h3>
+                    <p id="recurring-revenue" class="text-3xl font-bold text-gray-800">$0</p>
+                    <div class="mt-2 flex items-center text-purple-500">
+                        <i class="fas fa-sync-alt mr-1"></i>
+                        <span id="recurring-percent">0%</span> of total
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Sections -->
+            <div class="space-y-8">
+                <!-- 1. Consulting -->
+                <section class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="gradient-bg px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">1. Consulting • Coaching • Advisory (CCA)</h2>
+                        <p class="text-purple-200">Immediate cash flow, credibility, and flagship case studies</p>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Strategic Growth Advisory -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Strategic Growth Advisory</h3>
+                            <p class="text-sm text-gray-600 mb-3">$28k–$48k per engagement</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Engagements</label>
+                                <input type="number" min="0" class="engagement-input w-20 px-2 py-1 border rounded" data-price="38000" data-min="28000" data-max="48000">
+                            </div>
+                        </div>
+                        
+                        <!-- Fractional CRO -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Fractional CRO / RevOps Advisory</h3>
+                            <p class="text-sm text-gray-600 mb-3">$96k–$120k/year</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Clients</label>
+                                <input type="number" min="0" class="engagement-input w-20 px-2 py-1 border rounded" data-price="108000" data-min="96000" data-max="120000">
+                            </div>
+                        </div>
+                        
+                        <!-- Growth Playbook -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Growth Playbook Design</h3>
+                            <p class="text-sm text-gray-600 mb-3">$20k–$35k per sprint</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Sprints</label>
+                                <input type="number" min="0" class="engagement-input w-20 px-2 py-1 border rounded" data-price="27500" data-min="20000" data-max="35000">
+                            </div>
+                        </div>
+                        
+                        <!-- Immersive Workshops -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Immersive Workshops</h3>
+                            <p class="text-sm text-gray-600 mb-3">$5k–$10k per workshop</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Workshops</label>
+                                <input type="number" min="0" class="engagement-input w-20 px-2 py-1 border rounded" data-price="7500" data-min="5000" data-max="10000">
+                            </div>
+                        </div>
+                        
+                        <!-- Executive Coaching -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Executive Coaching</h3>
+                            <p class="text-sm text-gray-600 mb-3">$3k–$8k/month per founder/exec</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Coachees</label>
+                                <input type="number" min="0" class="engagement-input w-20 px-2 py-1 border rounded" data-price="5500" data-min="3000" data-max="8000" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Cohort-Based Programs -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Cohort-Based Programs</h3>
+                            <p class="text-sm text-gray-600 mb-3">$3k–$5k per participant</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Participants</label>
+                                <input type="number" min="0" class="engagement-input w-20 px-2 py-1 border rounded" data-price="4000" data-min="3000" data-max="5000">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Courses -->
+                <section class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="gradient-bg px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">2. Courses • Four Codes</h2>
+                        <p class="text-purple-200">Scalable knowledge transfer, accessible entry point</p>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Commercial Architecture -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Commercial Architecture (Value Code)</h3>
+                            <p class="text-sm text-gray-600 mb-3">$1,997</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Sales</label>
+                                <input type="number" min="0" class="course-input w-20 px-2 py-1 border rounded" data-price="1997">
+                            </div>
+                        </div>
+                        
+                        <!-- Financial & Capital Systems -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Financial & Capital Systems (Capital Code)</h3>
+                            <p class="text-sm text-gray-600 mb-3">$997</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Sales</label>
+                                <input type="number" min="0" class="course-input w-20 px-2 py-1 border rounded" data-price="997">
+                            </div>
+                        </div>
+                        
+                        <!-- Operational & Delivery Systems -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Operational & Delivery Systems (Execution Code)</h3>
+                            <p class="text-sm text-gray-600 mb-3">$497</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Sales</label>
+                                <input type="number" min="0" class="course-input w-20 px-2 py-1 border rounded" data-price="497">
+                            </div>
+                        </div>
+                        
+                        <!-- Leadership & Human Systems -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Leadership & Human Systems (Human Code)</h3>
+                            <p class="text-sm text-gray-600 mb-3">$2,997</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Sales</label>
+                                <input type="number" min="0" class="course-input w-20 px-2 py-1 border rounded" data-price="2997">
+                            </div>
+                        </div>
+                        
+                        <!-- All-Course Bundle -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">All-Course Bundle (Ascendea Master System)</h3>
+                            <p class="text-sm text-gray-600 mb-3">$5,997</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Sales</label>
+                                <input type="number" min="0" class="course-input w-20 px-2 py-1 border rounded" data-price="5997">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Ascendea OS -->
+                <section class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="gradient-bg px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">3. Ascendea OS • Subscriptions</h2>
+                        <p class="text-purple-200">Recurring revenue, operational lock-in, and CLV expansion</p>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Core -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Core</h3>
+                            <p class="text-sm text-gray-600 mb-3">$1,188/yr or $99/mo</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Subscribers</label>
+                                <input type="number" min="0" class="os-input w-20 px-2 py-1 border rounded" data-monthly="99" data-annual="1188" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Pro -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Pro</h3>
+                            <p class="text-sm text-gray-600 mb-3">$5,988/yr or $499/mo</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Subscribers</label>
+                                <input type="number" min="0" class="os-input w-20 px-2 py-1 border rounded" data-monthly="499" data-annual="5988" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Enterprise -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Enterprise</h3>
+                            <p class="text-sm text-gray-600 mb-3">$23,988/yr or $1,999/mo</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Subscribers</label>
+                                <input type="number" min="0" class="os-input w-20 px-2 py-1 border rounded" data-monthly="1999" data-annual="23988" data-recurring="true">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Bundled Systems -->
+                <section class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="gradient-bg px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">4. Bundled Systems (Courses + OS)</h2>
+                        <p class="text-purple-200">Simplifies purchasing, increases attach rates</p>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Starter System -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Starter System</h3>
+                            <p class="text-sm text-gray-600 mb-3">1 Course + OS Core — $2,997/yr</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Bundles</label>
+                                <input type="number" min="0" class="bundle-input w-20 px-2 py-1 border rounded" data-price="2997" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Growth System -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Growth System</h3>
+                            <p class="text-sm text-gray-600 mb-3">All 4 Courses + OS Pro — $8,997/yr</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Bundles</label>
+                                <input type="number" min="0" class="bundle-input w-20 px-2 py-1 border rounded" data-price="8997" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Enterprise System -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Enterprise System</h3>
+                            <p class="text-sm text-gray-600 mb-3">Master Bundle + OS Enterprise — $27,997/yr</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Bundles</label>
+                                <input type="number" min="0" class="bundle-input w-20 px-2 py-1 border rounded" data-price="27997" data-recurring="true">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Licensing -->
+                <section class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="gradient-bg px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">5. Licensing (IP Scale Model)</h2>
+                        <p class="text-purple-200">Exponential scale, ecosystem leverage</p>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Consultant License -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Consultant License</h3>
+                            <p class="text-sm text-gray-600 mb-3">$9,997/yr (single practitioner)</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Licenses</label>
+                                <input type="number" min="0" class="license-input w-20 px-2 py-1 border rounded" data-price="9997" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Advisor Firm License -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Advisor Firm License</h3>
+                            <p class="text-sm text-gray-600 mb-3">$29,997/yr (firms, up to 50 clients)</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Licenses</label>
+                                <input type="number" min="0" class="license-input w-20 px-2 py-1 border rounded" data-price="29997" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Accelerator/Agency License -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Accelerator/Agency License</h3>
+                            <p class="text-sm text-gray-600 mb-3">$74,997/yr (enterprise use)</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Licenses</label>
+                                <input type="number" min="0" class="license-input w-20 px-2 py-1 border rounded" data-price="74997" data-recurring="true">
+                            </div>
+                        </div>
+                        
+                        <!-- Institutional License -->
+                        <div class="product-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition duration-300">
+                            <h3 class="font-bold text-purple-700">Institutional License</h3>
+                            <p class="text-sm text-gray-600 mb-3">$150k+ (custom deployment)</p>
+                            <div class="flex items-center justify-between">
+                                <label class="text-sm text-gray-600">Licenses</label>
+                                <input type="number" min="0" class="license-input w-20 px-2 py-1 border rounded" data-price="150000" data-recurring="true">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Revenue Breakdown</h2>
+                    <canvas id="revenueChart" height="300"></canvas>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Revenue Stream Distribution</h2>
+                    <canvas id="pieChart" height="300"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const toggle = document.getElementById('toggle');
+        const resetBtn = document.getElementById('reset-btn');
+        const totalRevenueEl = document.getElementById('total-revenue');
+        const totalClientsEl = document.getElementById('total-clients');
+        const recurringRevenueEl = document.getElementById('recurring-revenue');
+        const growthRateEl = document.getElementById('growth-rate');
+        const avgValueEl = document.getElementById('avg-value');
+        const recurringPercentEl = document.getElementById('recurring-percent');
+
+        // Chart instances
+        let revenueChart, pieChart;
+
+        // Initialize the calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalculator();
+            setupEventListeners();
+            updateCalculations();
+        });
+
+        function initializeCalculator() {
+            // Initialize all input fields to 0
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = '0';
+            });
+            
+            // Initialize charts
+            initializeCharts();
+        }
+
+        function setupEventListeners() {
+            // Toggle between monthly and annual
+            toggle.addEventListener('change', updateCalculations);
+            
+            // Reset button
+            resetBtn.addEventListener('click', function() {
+                document.querySelectorAll('input[type="number"]').forEach(input => {
+                    input.value = '0';
+                });
+                updateCalculations();
+            });
+            
+            // Input changes
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', updateCalculations);
+            });
+        }
+
+        function updateCalculations() {
+            const isAnnual = toggle.checked;
+            
+            // Calculate revenue from each category
+            const consultingRevenue = calculateConsultingRevenue(isAnnual);
+            const coursesRevenue = calculateCoursesRevenue();
+            const osRevenue = calculateOSRevenue(isAnnual);
+            const bundlesRevenue = calculateBundlesRevenue(isAnnual);
+            const licensingRevenue = calculateLicensingRevenue(isAnnual);
+            
+            // Calculate totals
+            const totalRevenue = consultingRevenue + coursesRevenue + osRevenue + bundlesRevenue + licensingRevenue;
+            const recurringRevenue = osRevenue + bundlesRevenue + licensingRevenue + 
+                                    (isAnnual ? calculateRecurringConsultingRevenue() : 0);
+            
+            // Calculate clients
+            const totalClients = calculateTotalClients();
+            const avgClientValue = totalClients > 0 ? totalRevenue / totalClients : 0;
+            
+            // Update UI
+            totalRevenueEl.textContent = formatCurrency(totalRevenue);
+            totalClientsEl.textContent = totalClients.toLocaleString();
+            recurringRevenueEl.textContent = formatCurrency(recurringRevenue);
+            
+            // Calculate growth rate (placeholder - would normally compare to previous period)
+            const growthRate = totalRevenue > 0 ? Math.floor(Math.random() * 30) + 5 : 0;
+            growthRateEl.textContent = growthRate + '%';
+            
+            avgValueEl.textContent = formatCurrency(avgClientValue);
+            
+            const recurringPercent = totalRevenue > 0 ? Math.round((recurringRevenue / totalRevenue) * 100) : 0;
+            recurringPercentEl.textContent = recurringPercent + '%';
+            
+            // Update charts
+            updateCharts(consultingRevenue, coursesRevenue, osRevenue, bundlesRevenue, licensingRevenue);
+        }
+
+        function calculateConsultingRevenue(isAnnual) {
+            let total = 0;
+            let clients = 0;
+            
+            document.querySelectorAll('.engagement-input').forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const price = parseFloat(input.dataset.price);
+                const isRecurring = input.dataset.recurring === 'true';
+                
+                if (isAnnual && isRecurring) {
+                    total += quantity * price * 12;
+                } else {
+                    total += quantity * price;
+                }
+                
+                clients += quantity;
+            });
+            
+            return total;
+        }
+
+        function calculateRecurringConsultingRevenue() {
+            let total = 0;
+            
+            document.querySelectorAll('.engagement-input[data-recurring="true"]').forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const price = parseFloat(input.dataset.price);
+                total += quantity * price * 12;
+            });
+            
+            return total;
+        }
+
+        function calculateCoursesRevenue() {
+            let total = 0;
+            
+            document.querySelectorAll('.course-input').forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const price = parseFloat(input.dataset.price);
+                total += quantity * price;
+            });
+            
+            return total;
+        }
+
+        function calculateOSRevenue(isAnnual) {
+            let total = 0;
+            let clients = 0;
+            
+            document.querySelectorAll('.os-input').forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const price = isAnnual ? parseFloat(input.dataset.annual) : parseFloat(input.dataset.monthly);
+                total += quantity * price * (isAnnual ? 1 : 12);
+                clients += quantity;
+            });
+            
+            return total;
+        }
+
+        function calculateBundlesRevenue(isAnnual) {
+            let total = 0;
+            let clients = 0;
+            
+            document.querySelectorAll('.bundle-input').forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const price = parseFloat(input.dataset.price);
+                total += quantity * price * (isAnnual ? 1 : (price / 12) * 12); // Simplified for demo
+                clients += quantity;
+            });
+            
+            return total;
+        }
+
+        function calculateLicensingRevenue(isAnnual) {
+            let total = 0;
+            let clients = 0;
+            
+            document.querySelectorAll('.license-input').forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const price = parseFloat(input.dataset.price);
+                total += quantity * price * (isAnnual ? 1 : (price / 12) * 12); // Simplified for demo
+                clients += quantity;
+            });
+            
+            return total;
+        }
+
+        function calculateTotalClients() {
+            let total = 0;
+            
+            // Consulting clients
+            document.querySelectorAll('.engagement-input').forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            
+            // OS subscribers
+            document.querySelectorAll('.os-input').forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            
+            // Bundle clients
+            document.querySelectorAll('.bundle-input').forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            
+            // Licensing clients
+            document.querySelectorAll('.license-input').forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            
+            // Course sales don't count as clients in this model
+            return total;
+        }
+
+        function initializeCharts() {
+            const ctx1 = document.getElementById('revenueChart').getContext('2d');
+            const ctx2 = document.getElementById('pieChart').getContext('2d');
+            
+            revenueChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Consulting', 'Courses', 'OS', 'Bundles', 'Licensing'],
+                    datasets: [{
+                        label: 'Revenue by Category',
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.7)',
+                            'rgba(124, 58, 237, 0.7)',
+                            'rgba(147, 51, 234, 0.7)',
+                            'rgba(167, 139, 250, 0.7)',
+                            'rgba(196, 181, 253, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(99, 102, 241, 1)',
+                            'rgba(124, 58, 237, 1)',
+                            'rgba(147, 51, 234, 1)',
+                            'rgba(167, 139, 250, 1)',
+                            'rgba(196, 181, 253, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value, true);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.raw);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            pieChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Consulting', 'Courses', 'OS', 'Bundles', 'Licensing'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.7)',
+                            'rgba(124, 58, 237, 0.7)',
+                            'rgba(147, 51, 234, 0.7)',
+                            'rgba(167, 139, 250, 0.7)',
+                            'rgba(196, 181, 253, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(99, 102, 241, 1)',
+                            'rgba(124, 58, 237, 1)',
+                            'rgba(147, 51, 234, 1)',
+                            'rgba(167, 139, 250, 1)',
+                            'rgba(196, 181, 253, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(consulting, courses, os, bundles, licensing) {
+            // Update bar chart
+            revenueChart.data.datasets[0].data = [consulting, courses, os, bundles, licensing];
+            revenueChart.update();
+            
+            // Update pie chart
+            pieChart.data.datasets[0].data = [consulting, courses, os, bundles, licensing];
+            pieChart.update();
+        }
+
+        function formatCurrency(value, shortForm = false) {
+            if (isNaN(value)) return '$0';
+            
+            if (shortForm) {
+                if (value >= 1000000) {
+                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                } else if (value >= 1000) {
+                    return '$' + (value / 1000).toFixed(1) + 'K';
+                }
+            }
+            
+            return '$' + value.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+    </script>
+</body>
+</html>
