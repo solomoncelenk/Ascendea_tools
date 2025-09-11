@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F4F CRO & CFO Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+        .dashboard-card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .status-red {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        .status-orange {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        .status-green {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">F4F CRO & CFO Dashboard</h1>
+            <p class="text-lg text-gray-600">Track growth efficiency with real-time financial guardrails</p>
+        </header>
+
+        <!-- Input Section -->
+        <section class="dashboard-card bg-white rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📥 Input Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label for="acquisitionSpend" class="block text-sm font-medium text-gray-700 mb-1">Total Acquisition Spend ($)</label>
+                    <input type="number" id="acquisitionSpend" value="10000" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="monthlyRevenue" class="block text-sm font-medium text-gray-700 mb-1">Avg Monthly Revenue ($)</label>
+                    <input type="number" id="monthlyRevenue" value="65" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="newCustomers" class="block text-sm font-medium text-gray-700 mb-1">New Customers This Month</label>
+                    <input type="number" id="newCustomers" value="125" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="firstRevenue" class="block text-sm font-medium text-gray-700 mb-1">First-Time Revenue ($)</label>
+                    <input type="number" id="firstRevenue" value="8125" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="churn" class="block text-sm font-medium text-gray-700 mb-1">Monthly Churn (%)</label>
+                    <input type="number" id="churn" value="8" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="referral" class="block text-sm font-medium text-gray-700 mb-1">Referral Rate (%)</label>
+                    <input type="number" id="referral" value="22" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <button id="updateBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md flex items-center gap-2 transition-colors">
+                    <span>🔄 Update Dashboard</span>
+                </button>
+                <button id="exportBtn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md flex items-center gap-2 transition-colors">
+                    <span>💾 Export as HTML</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Metrics Output -->
+        <section class="dashboard-card bg-white rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Key Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div id="ltvCacCard" class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">LTV:CAC Ratio</p>
+                    <p class="text-2xl font-bold text-gray-800"><span id="ltvCacRatio">3.75</span>x</p>
+                </div>
+                <div class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">Calculated CAC</p>
+                    <p class="text-2xl font-bold text-gray-800">$<span id="cacDisplay">80.00</span></p>
+                </div>
+                <div class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">Calculated LTV</p>
+                    <p class="text-2xl font-bold text-gray-800">$<span id="ltvDisplay">300.00</span></p>
+                </div>
+                <div class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">Payback Period</p>
+                    <p class="text-2xl font-bold text-gray-800"><span id="paybackPeriod">1.00</span> months</p>
+                </div>
+                <div class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">New Customers</p>
+                    <p class="text-2xl font-bold text-gray-800"><span id="newCustomersDisplay">125</span></p>
+                </div>
+                <div class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">AOV (New)</p>
+                    <p class="text-2xl font-bold text-gray-800">$<span id="aov">65.00</span></p>
+                </div>
+                <div class="metric-card p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">First Rev</p>
+                    <p class="text-2xl font-bold text-gray-800">$<span id="firstRevenueDisplay">8,125</span></p>
+                </div>
+                <div id="statusCard" class="metric-card p-4 rounded-lg status-green">
+                    <p class="text-sm text-gray-500">CFO Status</p>
+                    <p class="text-lg font-semibold text-gray-800"><span id="statusMessage">✅ Healthy LTV:CAC – Maintain Course</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="dashboard-card bg-white rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📈 LTV:CAC Performance vs Benchmarks</h2>
+            <div class="h-80">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Benchmark Table -->
+        <section class="dashboard-card bg-white rounded-xl p-6 mb-8 overflow-x-auto">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">🆚 Industry Benchmarks</h2>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CAC</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">LTV</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">LTV:CAC</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">My Muscle Chef</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$110</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$320</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2.9x</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">High volume, high churn</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Youfoodz</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$100</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$300</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.0x</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Aggressive discounts</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">F4F Target</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><$100</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$300+</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4–6x</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Efficiency-focused</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>F4F Internal Dashboard | Built for Operational Excellence in CRO & Finance</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize chart
+        let performanceChart;
+        function initChart(ltvCacRatio) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            if (performanceChart) {
+                performanceChart.destroy();
+            }
+            
+            const isHealthy = ltvCacRatio >= 4;
+            
+            performanceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Your LTV:CAC', 'Target Min (4x)', 'Competitor Avg (~3x)'],
+                    datasets: [{
+                        data: [ltvCacRatio, 4, 3],
+                        backgroundColor: [
+                            isHealthy ? '#2e7d32' : '#f44336',
+                            '#81c784',
+                            '#bdbdbd'
+                        ],
+                        borderColor: [
+                            isHealthy ? '#1b5e20' : '#d32f2f',
+                            '#4caf50',
+                            '#9e9e9e'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'LTV:CAC Ratio'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toFixed(2) + 'x';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Calculate metrics
+        function calculateMetrics() {
+            const acquisitionSpend = parseFloat(document.getElementById('acquisitionSpend').value);
+            const monthlyRevenue = parseFloat(document.getElementById('monthlyRevenue').value);
+            const newCustomers = parseInt(document.getElementById('newCustomers').value);
+            const firstRevenue = parseFloat(document.getElementById('firstRevenue').value);
+            const churnRate = parseFloat(document.getElementById('churn').value) / 100;
+            
+            // Calculate metrics
+            const cac = acquisitionSpend / newCustomers;
+            const avgCustomerLifespan = churnRate === 0 ? Infinity : (1 / churnRate);
+            const ltv = monthlyRevenue * avgCustomerLifespan;
+            const ltvCacRatio = ltv / cac;
+            const paybackPeriod = (cac / (ltv / 12)).toFixed(2);
+            const aov = (firstRevenue / newCustomers).toFixed(2);
+            
+            // Update display
+            document.getElementById('ltvCacRatio').textContent = ltvCacRatio.toFixed(2);
+            document.getElementById('cacDisplay').textContent = cac.toFixed(2);
+            document.getElementById('ltvDisplay').textContent = ltv.toFixed(2);
+            document.getElementById('paybackPeriod').textContent = paybackPeriod;
+            document.getElementById('newCustomersDisplay').textContent = newCustomers.toLocaleString();
+            document.getElementById('aov').textContent = aov;
+            document.getElementById('firstRevenueDisplay').textContent = firstRevenue.toLocaleString();
+            
+            // Update status
+            const statusCard = document.getElementById('statusCard');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            if (cac > ltv/3) {
+                statusCard.className = 'metric-card p-4 rounded-lg status-red';
+                statusMessage.textContent = '🚨 CAC Too High! Must be < 1/3 of LTV';
+            } else if (ltvCacRatio < 4) {
+                statusCard.className = 'metric-card p-4 rounded-lg status-orange';
+                statusMessage.textContent = '⚠️ Payback Low – Improve Retention or Reduce CAC';
+            } else if (ltvCacRatio > 6) {
+                statusCard.className = 'metric-card p-4 rounded-lg status-green';
+                statusMessage.textContent = '🟢 Efficient Growth – Scale Safely';
+            } else {
+                statusCard.className = 'metric-card p-4 rounded-lg status-green';
+                statusMessage.textContent = '✅ Healthy LTV:CAC – Maintain Course';
+            }
+            
+            // Update chart
+            initChart(ltvCacRatio);
+        }
+
+        // Export as HTML
+        function exportAsHTML() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            a.href = url;
+            a.download = `F4F_Dashboard_${dateStr}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Dashboard exported successfully!');
+        }
+
+        // Event listeners
+        document.getElementById('updateBtn').addEventListener('click', calculateMetrics);
+        document.getElementById('exportBtn').addEventListener('click', exportAsHTML);
+
+        // Initial calculation
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateMetrics();
+        });
+    </script>
+</body>
+</html>
