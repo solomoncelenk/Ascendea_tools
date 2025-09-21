@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food 4 Fitness - Offer Margin Model Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #666;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .mix-input {
+            width: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .mix-input {
+                width: 60px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-5">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-in">
+        <header class="bg-indigo-700 text-white p-6 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">Food 4 Fitness - Offer Margin Model Calculator</h1>
+            <p class="text-indigo-100 font-light">Compare marketing offer tiers and find your margin sweet spot</p>
+        </header>
+
+        <div class="bg-gray-50 p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Global Inputs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="space-y-1">
+                    <label for="avgMealPrice" class="block text-sm font-medium text-gray-700">Average Meal Price (AUD)</label>
+                    <input type="number" id="avgMealPrice" step="0.01" min="0" value="10.95" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <p class="text-xs text-gray-500">Base price used for COGS estimation</p>
+                </div>
+                <div class="space-y-1">
+                    <label for="cogsPerMeal" class="block text-sm font-medium text-gray-700">COGS per Meal (AUD)</label>
+                    <input type="number" id="cogsPerMeal" step="0.01" min="0" value="5.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <p class="text-xs text-gray-500">Cost of goods sold for one meal</p>
+                </div>
+                <div class="space-y-1">
+                    <label for="snackCost" class="block text-sm font-medium text-gray-700">Snack/Dessert Unit Cost (AUD)</label>
+                    <input type="number" id="snackCost" step="0.01" min="0" value="2.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <p class="text-xs text-gray-500">Cost of one free snack/dessert</p>
+                </div>
+                <div class="space-y-1">
+                    <label for="freeMealCost" class="block text-sm font-medium text-gray-700">Free Meal Unit Cost (AUD)</label>
+                    <input type="number" id="freeMealCost" step="0.01" min="0" value="5.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <p class="text-xs text-gray-500">Cost of one free meal (defaults to COGS)</p>
+                </div>
+                <div class="space-y-1">
+                    <label for="creditRedemptionRate" class="block text-sm font-medium text-gray-700">Credit Redemption Rate (%)</label>
+                    <input type="number" id="creditRedemptionRate" step="1" min="0" max="100" value="70" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <p class="text-xs text-gray-500">Percentage of customers who redeem future credits</p>
+                </div>
+                <div class="space-y-1">
+                    <label for="orderVolume" class="block text-sm font-medium text-gray-700">Order Volume to Model</label>
+                    <input type="number" id="orderVolume" step="1" min="1" value="1000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <p class="text-xs text-gray-500">Number of orders for scenario projections</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky top-0 bg-white p-6 border-b-2 border-gray-200 z-10 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Scenario Summary</h2>
+                <div class="flex space-x-2">
+                    <button id="addTierBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Add Tier
+                    </button>
+                    <button id="resetBtn" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        Reset to Defaults
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-4">
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-1">Weighted AOV</p>
+                    <p class="text-xl font-bold text-gray-800" id="weightedAov">$0.00</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-1">Weighted Discount Cost/Order</p>
+                    <p class="text-xl font-bold text-gray-800" id="weightedDiscountCost">$0.00</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-1">Weighted Total Costs/Order</p>
+                    <p class="text-xl font-bold text-gray-800" id="weightedTotalCosts">$0.00</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-1">Projected Revenue</p>
+                    <p class="text-xl font-bold text-gray-800" id="projectedRevenue">$0.00</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-1">Projected Margin</p>
+                    <p class="text-xl font-bold text-gray-800" id="projectedMargin">$0.00</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-1">Overall Margin %</p>
+                    <p class="text-xl font-bold text-gray-800" id="overallMarginPercent">0.00%</p>
+                </div>
+            </div>
+            
+            <div class="hidden bg-red-50 text-red-700 font-medium p-3 rounded-md mt-3" id="validationMessage">
+                Mix percentages must sum to 100%. Please adjust your tier mix percentages.
+            </div>
+            
+            <div class="flex space-x-3 mt-4">
+                <button id="exportCsvBtn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    Export Tier CSV
+                </button>
+                <button id="exportSummaryCsvBtn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    Export Summary CSV
+                </button>
+                <button id="exportJsonBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Export JSON
+                </button>
+                <button id="importJsonBtn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                    Import JSON
+                </button>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto p-6">
+            <table class="min-w-full divide-y divide-gray-200" id="tierTable">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Include</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tier Label</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">AOV (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Discount %</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"># Free Snacks</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"># Free Meals</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Credit $ (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Mix %</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Discount Value (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                            <span class="tooltip">Base COGS <span class="tooltiptext">AOV × (COGS per meal ÷ Avg meal price)</span></span>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Free Snacks Cost (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Free Meals Cost (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Expected Credit Cost (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Net Revenue (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Net Margin $ (AUD)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Margin %</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="tierTableBody">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-gray-50 p-6 border-t border-gray-200 flex flex-wrap gap-3">
+            <button id="exportCsvBtn2" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                Export Tier CSV
+            </button>
+            <button id="exportSummaryCsvBtn2" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                Export Summary CSV
+            </button>
+            <button id="exportJsonBtn2" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Export JSON
+            </button>
+            <button id="importJsonBtn2" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                Import JSON
+            </button>
+            <button id="resetBtn2" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                Reset to Defaults
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let tiers = [];
+        let debounceTimer;
+
+        // DOM Elements
+        const avgMealPriceInput = document.getElementById('avgMealPrice');
+        const cogsPerMealInput = document.getElementById('cogsPerMeal');
+        const snackCostInput = document.getElementById('snackCost');
+        const freeMealCostInput = document.getElementById('freeMealCost');
+        const creditRedemptionRateInput = document.getElementById('creditRedemptionRate');
+        const orderVolumeInput = document.getElementById('orderVolume');
+        const tierTableBody = document.getElementById('tierTableBody');
+        const addTierBtn = document.getElementById('addTierBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resetBtn2 = document.getElementById('resetBtn2');
+        const exportCsvBtn = document.getElementById('exportCsvBtn');
+        const exportSummaryCsvBtn = document.getElementById('exportSummaryCsvBtn');
+        const exportJsonBtn = document.getElementById('exportJsonBtn');
+        const importJsonBtn = document.getElementById('importJsonBtn');
+        const exportCsvBtn2 = document.getElementById('exportCsvBtn2');
+        const exportSummaryCsvBtn2 = document.getElementById('exportSummaryCsvBtn2');
+        const exportJsonBtn2 = document.getElementById('exportJsonBtn2');
+        const importJsonBtn2 = document.getElementById('importJsonBtn2');
+        const validationMessage = document.getElementById('validationMessage');
+        
+        // Summary elements
+        const weightedAovElement = document.getElementById('weightedAov');
+        const weightedDiscountCostElement = document.getElementById('weightedDiscountCost');
+        const weightedTotalCostsElement = document.getElementById('weightedTotalCosts');
+        const projectedRevenueElement = document.getElementById('projectedRevenue');
+        const projectedMarginElement = document.getElementById('projectedMargin');
+        const overallMarginPercentElement = document.getElementById('overallMarginPercent');
+
+        // Initialize with default tiers
+        function initializeTiers() {
+            tiers = [
+                {
+                    label: "Tier 1: $119+",
+                    aov: 119,
+                    discountPercent: 10,
+                    freeSnacks: 0,
+                    freeMeals: 0,
+                    creditAmount: 0,
+                    mixPercent: 40,
+                    include: true
+                },
+                {
+                    label: "Tier 2: $199+",
+                    aov: 199,
+                    discountPercent: 10,
+                    freeSnacks: 1,
+                    freeMeals: 0,
+                    creditAmount: 0,
+                    mixPercent: 35,
+                    include: true
+                },
+                {
+                    label: "Tier 3: $279+",
+                    aov: 279,
+                    discountPercent: 15,
+                    freeSnacks: 0,
+                    freeMeals: 2,
+                    creditAmount: 20,
+                    mixPercent: 25,
+                    include: true
+                }
+            ];
+        }
+
+        // Format currency with AUD symbol and 2 decimal places
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-AU', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value);
+        }
+
+        // Format number with thousands separators
+        function formatNumber(value) {
+            return new Intl.NumberFormat('en-AU').format(value);
+        }
+
+        // Calculate values for a single tier
+        function calculateTier(tier) {
+            const avgMealPrice = parseFloat(avgMealPriceInput.value) || 0;
+            const cogsPerMeal = parseFloat(cogsPerMealInput.value) || 0;
+            const snackCost = parseFloat(snackCostInput.value) || 0;
+            const freeMealCost = parseFloat(freeMealCostInput.value) || 0;
+            const creditRedemptionRate = parseFloat(creditRedemptionRateInput.value) || 0;
+            
+            // Calculate discount value
+            const discountValue = tier.aov * (tier.discountPercent / 100);
+            
+            // Calculate base COGS estimate
+            const baseCogs = tier.aov * (cogsPerMeal / avgMealPrice);
+            
+            // Calculate free snacks cost
+            const freeSnacksCost = tier.freeSnacks * snackCost;
+            
+            // Calculate free meals cost
+            const freeMealsCost = tier.freeMeals * freeMealCost;
+            
+            // Calculate expected credit cost
+            const expectedCreditCost = tier.creditAmount * (creditRedemptionRate / 100);
+            
+            // Calculate net revenue
+            const netRevenue = tier.aov - discountValue;
+            
+            // Calculate net margin
+            const netMargin = netRevenue - (baseCogs + freeSnacksCost + freeMealsCost + expectedCreditCost);
+            
+            // Calculate margin percentage
+            const marginPercent = netRevenue > 0 ? (netMargin / netRevenue) * 100 : 0;
+            
+            return {
+                discountValue,
+                baseCogs,
+                freeSnacksCost,
+                freeMealsCost,
+                expectedCreditCost,
+                netRevenue,
+                netMargin,
+                marginPercent
+            };
+        }
+
+        // Calculate summary for all included tiers
+        function calculateSummary() {
+            const orderVolume = parseInt(orderVolumeInput.value) || 0;
+            let totalMix = 0;
+            let weightedAov = 0;
+            let weightedDiscountCost = 0;
+            let weightedTotalCosts = 0;
+            let totalRevenue = 0;
+            let totalMargin = 0;
+            let includedTierCount = 0;
+            
+            // Calculate total mix percentage for validation
+            tiers.forEach(tier => {
+                if (tier.include) {
+                    totalMix += tier.mixPercent;
+                    includedTierCount++;
+                }
+            });
+            
+            // Validate mix percentage
+            const isValid = Math.abs(totalMix - 100) < 0.01 && includedTierCount > 0;
+            
+            if (!isValid) {
+                validationMessage.classList.remove('hidden');
+                return {
+                    weightedAov: 0,
+                    weightedDiscountCost: 0,
+                    weightedTotalCosts: 0,
+                    projectedRevenue: 0,
+                    projectedMargin: 0,
+                    overallMarginPercent: 0,
+                    isValid: false
+                };
+            } else {
+                validationMessage.classList.add('hidden');
+            }
+            
+            // Calculate weighted values
+            tiers.forEach(tier => {
+                if (tier.include) {
+                    const mixWeight = tier.mixPercent / 100;
+                    const calculations = calculateTier(tier);
+                    
+                    weightedAov += tier.aov * mixWeight;
+                    weightedDiscountCost += calculations.discountValue * mixWeight;
+                    weightedTotalCosts += (calculations.baseCogs + calculations.freeSnacksCost + calculations.freeMealsCost + calculations.expectedCreditCost) * mixWeight;
+                    totalRevenue += calculations.netRevenue * mixWeight * orderVolume;
+                    totalMargin += calculations.netMargin * mixWeight * orderVolume;
+                }
+            });
+            
+            const overallMarginPercent = weightedAov > 0 ? ((weightedAov - weightedTotalCosts - weightedDiscountCost) / (weightedAov - weightedDiscountCost)) * 100 : 0;
+            
+            return {
+                weightedAov,
+                weightedDiscountCost,
+                weightedTotalCosts,
+                projectedRevenue: totalRevenue,
+                projectedMargin: totalMargin,
+                overallMarginPercent,
+                isValid: true
+            };
+        }
+
+        // Render tier table
+        function renderTierTable() {
+            tierTableBody.innerHTML = '';
+            
+            tiers.forEach((tier, index) => {
+                const calculations = calculateTier(tier);
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                
+                // Include checkbox
+                const includeCell = document.createElement('td');
+                includeCell.className = 'px-6 py-4 whitespace-nowrap';
+                const includeCheckbox = document.createElement('input');
+                includeCheckbox.type = 'checkbox';
+                includeCheckbox.className = 'rounded border-gray-300 text-indigo-600 focus:ring-indigo-500';
+                includeCheckbox.checked = tier.include;
+                includeCheckbox.addEventListener('change', () => {
+                    tiers[index].include = includeCheckbox.checked;
+                    debouncedRecalculate();
+                });
+                includeCell.appendChild(includeCheckbox);
+                row.appendChild(includeCell);
+                
+                // Tier label
+                const labelCell = document.createElement('td');
+                labelCell.className = 'px-6 py-4 whitespace-nowrap';
+                const labelInput = document.createElement('input');
+                labelInput.type = 'text';
+                labelInput.className = 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                labelInput.value = tier.label;
+                labelInput.addEventListener('input', () => {
+                    tiers[index].label = labelInput.value;
+                    debouncedRecalculate();
+                });
+                labelCell.appendChild(labelInput);
+                row.appendChild(labelCell);
+                
+                // AOV
+                const aovCell = document.createElement('td');
+                aovCell.className = 'px-6 py-4 whitespace-nowrap';
+                const aovInput = document.createElement('input');
+                aovInput.type = 'number';
+                aovInput.className = 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                aovInput.step = '0.01';
+                aovInput.min = '0';
+                aovInput.value = tier.aov;
+                aovInput.addEventListener('input', () => {
+                    tiers[index].aov = parseFloat(aovInput.value) || 0;
+                    debouncedRecalculate();
+                });
+                aovCell.appendChild(aovInput);
+                row.appendChild(aovCell);
+                
+                // Discount %
+                const discountCell = document.createElement('td');
+                discountCell.className = 'px-6 py-4 whitespace-nowrap';
+                const discountInput = document.createElement('input');
+                discountInput.type = 'number';
+                discountInput.className = 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                discountInput.step = '1';
+                discountInput.min = '0';
+                discountInput.max = '100';
+                discountInput.value = tier.discountPercent;
+                discountInput.addEventListener('input', () => {
+                    tiers[index].discountPercent = parseFloat(discountInput.value) || 0;
+                    debouncedRecalculate();
+                });
+                discountCell.appendChild(discountInput);
+                row.appendChild(discountCell);
+                
+                // Free Snacks
+                const snacksCell = document.createElement('td');
+                snacksCell.className = 'px-6 py-4 whitespace-nowrap';
+                const snacksInput = document.createElement('input');
+                snacksInput.type = 'number';
+                snacksInput.className = 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                snacksInput.step = '1';
+                snacksInput.min = '0';
+                snacksInput.value = tier.freeSnacks;
+                snacksInput.addEventListener('input', () => {
+                    tiers[index].freeSnacks = parseInt(snacksInput.value) || 0;
+                    debouncedRecalculate();
+                });
+                snacksCell.appendChild(snacksInput);
+                row.appendChild(snacksCell);
+                
+                // Free Meals
+                const mealsCell = document.createElement('td');
+                mealsCell.className = 'px-6 py-4 whitespace-nowrap';
+                const mealsInput = document.createElement('input');
+                mealsInput.type = 'number';
+                mealsInput.className = 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                mealsInput.step = '1';
+                mealsInput.min = '0';
+                mealsInput.value = tier.freeMeals;
+                mealsInput.addEventListener('input', () => {
+                    tiers[index].freeMeals = parseInt(mealsInput.value) || 0;
+                    debouncedRecalculate();
+                });
+                mealsCell.appendChild(mealsInput);
+                row.appendChild(mealsCell);
+                
+                // Credit $
+                const creditCell = document.createElement('td');
+                creditCell.className = 'px-6 py-4 whitespace-nowrap';
+                const creditInput = document.createElement('input');
+                creditInput.type = 'number';
+                creditInput.className = 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                creditInput.step = '0.01';
+                creditInput.min = '0';
+                creditInput.value = tier.creditAmount;
+                creditInput.addEventListener('input', () => {
+                    tiers[index].creditAmount = parseFloat(creditInput.value) || 0;
+                    debouncedRecalculate();
+                });
+                creditCell.appendChild(creditInput);
+                row.appendChild(creditCell);
+                
+                // Mix %
+                const mixCell = document.createElement('td');
+                mixCell.className = 'px-6 py-4 whitespace-nowrap';
+                const mixInput = document.createElement('input');
+                mixInput.type = 'number';
+                mixInput.className = 'mix-input block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm';
+                mixInput.step = '1';
+                mixInput.min = '0';
+                mixInput.max = '100';
+                mixInput.value = tier.mixPercent;
+                mixInput.addEventListener('input', () => {
+                    tiers[index].mixPercent = parseFloat(mixInput.value) || 0;
+                    debouncedRecalculate();
+                });
+                mixCell.appendChild(mixInput);
+                row.appendChild(mixCell);
+                
+                // Discount Value
+                const discountValueCell = document.createElement('td');
+                discountValueCell.className = 'px-6 py-4 whitespace-nowrap';
+                discountValueCell.textContent = formatCurrency(calculations.discountValue);
+                row.appendChild(discountValueCell);
+                
+                // Base COGS
+                const baseCogsCell = document.createElement('td');
+                baseCogsCell.className = 'px-6 py-4 whitespace-nowrap';
+                baseCogsCell.textContent = formatCurrency(calculations.baseCogs);
+                row.appendChild(baseCogsCell);
+                
+                // Free Snacks Cost
+                const snacksCostCell = document.createElement('td');
+                snacksCostCell.className = 'px-6 py-4 whitespace-nowrap';
+                snacksCostCell.textContent = formatCurrency(calculations.freeSnacksCost);
+                row.appendChild(snacksCostCell);
+                
+                // Free Meals Cost
+                const mealsCostCell = document.createElement('td');
+                mealsCostCell.className = 'px-6 py-4 whitespace-nowrap';
+                mealsCostCell.textContent = formatCurrency(calculations.freeMealsCost);
+                row.appendChild(mealsCostCell);
+                
+                // Expected Credit Cost
+                const creditCostCell = document.createElement('td');
+                creditCostCell.className = 'px-6 py-4 whitespace-nowrap';
+                creditCostCell.textContent = formatCurrency(calculations.expectedCreditCost);
+                row.appendChild(creditCostCell);
+                
+                // Net Revenue
+                const netRevenueCell = document.createElement('td');
+                netRevenueCell.className = 'px-6 py-4 whitespace-nowrap';
+                netRevenueCell.textContent = formatCurrency(calculations.netRevenue);
+                row.appendChild(netRevenueCell);
+                
+                // Net Margin
+                const netMarginCell = document.createElement('td');
+                netMarginCell.className = 'px-6 py-4 whitespace-nowrap';
+                netMarginCell.textContent = formatCurrency(calculations.netMargin);
+                if (calculations.netMargin < 0) {
+                    netMarginCell.classList.add('text-red-600');
+                } else {
+                    netMarginCell.classList.add('text-green-600');
+                }
+                row.appendChild(netMarginCell);
+                
+                // Margin %
+                const marginPercentCell = document.createElement('td');
+                marginPercentCell.className = 'px-6 py-4 whitespace-nowrap';
+                marginPercentCell.textContent = `${calculations.marginPercent.toFixed(2)}%`;
+                if (calculations.marginPercent < 0) {
+                    marginPercentCell.classList.add('text-red-600');
+                } else {
+                    marginPercentCell.classList.add('text-green-600');
+                }
+                row.appendChild(marginPercentCell);
+                
+                // Actions
+                const actionsCell = document.createElement('td');
+                actionsCell.className = 'px-6 py-4 whitespace-nowrap space-x-2';
+                const duplicateBtn = document.createElement('button');
+                duplicateBtn.textContent = 'Duplicate';
+                duplicateBtn.className = 'px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm';
+                duplicateBtn.addEventListener('click', () => {
+                    duplicateTier(index);
+                });
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.className = 'px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm';
+                deleteBtn.addEventListener('click', () => {
+                    deleteTier(index);
+                });
+                
+                actionsCell.appendChild(duplicateBtn);
+                actionsCell.appendChild(deleteBtn);
+                row.appendChild(actionsCell);
+                
+                tierTableBody.appendChild(row);
+            });
+        }
+
+        // Render summary
+        function renderSummary() {
+            const summary = calculateSummary();
+            
+            weightedAovElement.textContent = formatCurrency(summary.weightedAov);
+            weightedDiscountCostElement.textContent = formatCurrency(summary.weightedDiscountCost);
+            weightedTotalCostsElement.textContent = formatCurrency(summary.weightedTotalCosts);
+            projectedRevenueElement.textContent = formatCurrency(summary.projectedRevenue);
+            projectedMarginElement.textContent = formatCurrency(summary.projectedMargin);
+            overallMarginPercentElement.textContent = `${summary.overallMarginPercent.toFixed(2)}%`;
+            
+            if (summary.projectedMargin < 0) {
+                projectedMarginElement.classList.add('text-red-600');
+                projectedMarginElement.classList.remove('text-green-600');
+            } else {
+                projectedMarginElement.classList.add('text-green-600');
+                projectedMarginElement.classList.remove('text-red-600');
+            }
+            
+            if (summary.overallMarginPercent < 0) {
+                overallMarginPercentElement.classList.add('text-red-600');
+                overallMarginPercentElement.classList.remove('text-green-600');
+            } else {
+                overallMarginPercentElement.classList.add('text-green-600');
+                overallMarginPercentElement.classList.remove('text-red-600');
+            }
+        }
+
+        // Debounced recalculate function
+        function debouncedRecalculate() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                renderTierTable();
+                renderSummary();
+            }, 300);
+        }
+
+        // Add a new tier
+        function addTier() {
+            tiers.push({
+                label: `Tier ${tiers.length + 1}`,
+                aov: 100,
+                discountPercent: 0,
+                freeSnacks: 0,
+                freeMeals: 0,
+                creditAmount: 0,
+                mixPercent: 0,
+                include: true
+            });
+            renderTierTable();
+            renderSummary();
+        }
+
+        // Duplicate a tier
+        function duplicateTier(index) {
+            const tierToDuplicate = { ...tiers[index] };
+            // Modify label to indicate it's a copy
+            tierToDuplicate.label = `${tierToDuplicate.label} (Copy)`;
+            tiers.push(tierToDuplicate);
+            renderTierTable();
+            renderSummary();
+        }
+
+        // Delete a tier
+        function deleteTier(index) {
+            if (tiers.length > 1) {
+                tiers.splice(index, 1);
+                renderTierTable();
+                renderSummary();
+            } else {
+                alert("You must have at least one tier.");
+            }
+        }
+
+        // Export tiers to CSV
+        function exportTierCsv() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Header row
+            const header = [
+                "Include", "Tier Label", "AOV (AUD)", "Discount %", "# Free Snacks", 
+                "# Free Meals", "Credit $ (AUD)", "Mix %", "Discount Value (AUD)", 
+                "Base COGS (AUD)", "Free Snacks Cost (AUD)", "Free Meals Cost (AUD)", 
+                "Expected Credit Cost (AUD)", "Net Revenue (AUD)", "Net Margin $ (AUD)", "Margin %"
+            ];
+            csvContent += header.join(",") + "\n";
+            
+            // Data rows
+            tiers.forEach(tier => {
+                const calculations = calculateTier(tier);
+                const row = [
+                    tier.include ? "Yes" : "No",
+                    `"${tier.label}"`,
+                    tier.aov.toFixed(2),
+                    tier.discountPercent,
+                    tier.freeSnacks,
+                    tier.freeMeals,
+                    tier.creditAmount.toFixed(2),
+                    tier.mixPercent,
+                    calculations.discountValue.toFixed(2),
+                    calculations.baseCogs.toFixed(2),
+                    calculations.freeSnacksCost.toFixed(2),
+                    calculations.freeMealsCost.toFixed(2),
+                    calculations.expectedCreditCost.toFixed(2),
+                    calculations.netRevenue.toFixed(2),
+                    calculations.netMargin.toFixed(2),
+                    calculations.marginPercent.toFixed(2)
+                ];
+                csvContent += row.join(",") + "\n";
+            });
+            
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "food4fitness_offer_tiers.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Export summary to CSV
+        function exportSummaryCsv() {
+            const summary = calculateSummary();
+            const orderVolume = parseInt(orderVolumeInput.value) || 0;
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Header row
+            const header = ["Metric", "Value"];
+            csvContent += header.join(",") + "\n";
+            
+            // Data rows
+            const data = [
+                ["Weighted AOV", formatCurrency(summary.weightedAov).replace(/[$]/g, '')],
+                ["Weighted Discount Cost/Order", formatCurrency(summary.weightedDiscountCost).replace(/[$]/g, '')],
+                ["Weighted Total Costs/Order", formatCurrency(summary.weightedTotalCosts).replace(/[$]/g, '')],
+                ["Projected Revenue", formatCurrency(summary.projectedRevenue).replace(/[$]/g, '')],
+                ["Projected Margin", formatCurrency(summary.projectedMargin).replace(/[$]/g, '')],
+                ["Overall Margin %", summary.overallMarginPercent.toFixed(2)],
+                ["Order Volume", orderVolume],
+                ["Mix Valid", summary.isValid ? "Yes" : "No"]
+            ];
+            
+            data.forEach(row => {
+                csvContent += `"${row[0]}",${row[1]}\n`;
+            });
+            
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "food4fitness_offer_summary.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Export configuration to JSON
+        function exportJson() {
+            const config = {
+                global: {
+                    avgMealPrice: parseFloat(avgMealPriceInput.value),
+                    cogsPerMeal: parseFloat(cogsPerMealInput.value),
+                    snackCost: parseFloat(snackCostInput.value),
+                    freeMealCost: parseFloat(freeMealCostInput.value),
+                    creditRedemptionRate: parseFloat(creditRedemptionRateInput.value),
+                    orderVolume: parseInt(orderVolumeInput.value)
+                },
+                tiers: [...tiers]
+            };
+            
+            const jsonStr = JSON.stringify(config, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "food4fitness_offer_config.json");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Import configuration from JSON
+        function importJson() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const config = JSON.parse(event.target.result);
+                        
+                        // Load global settings
+                        if (config.global) {
+                            avgMealPriceInput.value = config.global.avgMealPrice || 10.95;
+                            cogsPerMealInput.value = config.global.cogsPerMeal || 5.00;
+                            snackCostInput.value = config.global.snackCost || 2.00;
+                            freeMealCostInput.value = config.global.freeMealCost || 5.00;
+                            creditRedemptionRateInput.value = config.global.creditRedemptionRate || 70;
+                            orderVolumeInput.value = config.global.orderVolume || 1000;
+                        }
+                        
+                        // Load tiers
+                        if (config.tiers && Array.isArray(config.tiers)) {
+                            tiers = config.tiers.map(tier => ({
+                                label: tier.label || "New Tier",
+                                aov: tier.aov || 100,
+                                discountPercent: tier.discountPercent || 0,
+                                freeSnacks: tier.freeSnacks || 0,
+                                freeMeals: tier.freeMeals || 0,
+                                creditAmount: tier.creditAmount || 0,
+                                mixPercent: tier.mixPercent || 0,
+                                include: tier.include !== undefined ? tier.include : true
+                            }));
+                        }
+                        
+                        renderTierTable();
+                        renderSummary();
+                    } catch (error) {
+                        alert("Error importing configuration: " + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Reset to defaults
+        function resetToDefaults() {
+            if (confirm("Are you sure you want to reset to default values? All current data will be lost.")) {
+                avgMealPriceInput.value = "10.95";
+                cogsPerMealInput.value = "5.00";
+                snackCostInput.value = "2.00";
+                freeMealCostInput.value = "5.00";
+                creditRedemptionRateInput.value = "70";
+                orderVolumeInput.value = "1000";
+                
+                initializeTiers();
+                renderTierTable();
+                renderSummary();
+            }
+        }
+
+        // Event Listeners
+        addTierBtn.addEventListener('click', addTier);
+        resetBtn.addEventListener('click', resetToDefaults);
+        resetBtn2.addEventListener('click', resetToDefaults);
+        exportCsvBtn.addEventListener('click', exportTierCsv);
+        exportSummaryCsvBtn.addEventListener('click', exportSummaryCsv);
+        exportJsonBtn.addEventListener('click', exportJson);
+        importJsonBtn.addEventListener('click', importJson);
+        exportCsvBtn2.addEventListener('click', exportTierCsv);
+        exportSummaryCsvBtn2.addEventListener('click', exportSummaryCsv);
+        exportJsonBtn2.addEventListener('click', exportJson);
+        importJsonBtn2.addEventListener('click', importJson);
+        
+        // Global input listeners
+        [avgMealPriceInput, cogsPerMealInput, snackCostInput, freeMealCostInput, creditRedemptionRateInput, orderVolumeInput].forEach(input => {
+            input.addEventListener('input', debouncedRecalculate);
+        });
+
+        // Initialize the application
+        function init() {
+            initializeTiers();
+            renderTierTable();
+            renderSummary();
+            AOS.init();
+            feather.replace();
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
