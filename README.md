@@ -1,26 +1,39 @@
-# Blue Ocean Strategy Canvas — Streamlit (Dark Mode)
+# Obviously Awesome Positioning Canvas — Streamlit (Dark Mode)
 
-This app lets you:
-- Define buyer value factors and score your offer vs competitors.
-- Visualise a Strategy Canvas (line chart).
-- Build an ERRC grid (Eliminate/Reduce/Raise/Create) with auto-suggestions.
-- Generate a narrative Offer Differentiation Report.
+This app helps you implement April Dunford's framework:
+- **Competitive Alternatives**, **Unique Attributes**, **Value Themes**, **ICP**, **Market Category**, **Narrative Check**
+- **Differentiator Scorecard** with adjustable weights
+- **Positioning Statement** builder
+- **PNG downloads** (scorecard + scatter)
+- **Google Sheets** load/save (optional)
 
-## Files
-- `blue_ocean_app.py` — main app
-- `requirements.txt` — dependencies
-- `.streamlit/config.toml` — dark theme
-- `strategy_canvas_template.csv` — sample CSV (wide format)
+## Deploy (Streamlit Community Cloud)
+1) Push these files to a GitHub repo.
+2) On Streamlit Cloud → New app → Main file: `dunford_positioning_app.py` → Deploy.
 
-## Deploy to Streamlit Community Cloud
-1. Create a GitHub repo and upload all files from this folder.
-2. Go to https://share.streamlit.io → Sign in → New app.
-3. Set **Main file path** to `blue_ocean_app.py` and Deploy.
+### Google Sheets secrets (optional)
+In app settings → Secrets:
+```
+[gcp_service_account]
+type = "service_account"
+project_id = "<your-project>"
+private_key_id = "<id>"
+private_key = "-----BEGIN PRIVATE KEY-----
+<key>
+-----END PRIVATE KEY-----
+"
+client_email = "<svc>@<project>.iam.gserviceaccount.com"
+client_id = "<id>"
+token_uri = "https://oauth2.googleapis.com/token"
+
+[gsheets]
+url = "https://docs.google.com/spreadsheets/d/<YOUR_SHEET_ID>/edit#gid=0"
+```
 
 ## Local run
-```bash
+```
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-streamlit run blue_ocean_app.py
+streamlit run dunford_positioning_app.py
 ```
