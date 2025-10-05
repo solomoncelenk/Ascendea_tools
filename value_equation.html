@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Value Equation Scorecard</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;max-width:1200px}
+    h1{margin:0 0 12px}
+    .row{display:flex;gap:16px;flex-wrap:wrap}
+    .card{border:1px solid #ddd;border-radius:12px;padding:16px;flex:1 1 360px;background:#fff}
+    table{border-collapse:collapse;width:100%} th,td{border:1px solid #eee;padding:8px;text-align:left} th{background:#fafafa}
+    label{display:block;margin:8px 0 4px}
+    input[type="range"]{width:100%}
+    .dim{font-size:12px;color:#666}
+  </style>
+</head>
+<body>
+  <h1>Hormozi Value Equation — Offer Scorecard</h1>
+  <p class="dim">Equation: (Dream Outcome × Likelihood) / (Time Delay × Effort & Sacrifice). Lower Time/Effort increases value.</p>
+
+  <div class="row">
+    <div class="card" style="max-width:360px">
+      <h3>Data</h3>
+      <p>Upload CSV with columns: <code>offer,brand,dream_outcome,likelihood,time_delay,effort_sacrifice</code></p>
+      <input type="file" id="csvInput" accept=".csv"/>
+      <p class="dim">No file? A sample dataset will be used.</p>
+      <hr/>
+      <h3>Weights</h3>
+      <label>Preset</label>
+      <select id="preset">
+        <option>Default</option>
+        <option>Enterprise Buyer</option>
+        <option>SMB Buyer</option>
+        <option>Transformation Buyer</option>
+      </select>
+
+      <label>Dream Outcome weight: <span id="w_do_lbl">1.0</span></label>
+      <input type="range" id="w_do" min="0.1" max="3.0" step="0.1" value="1.0">
+
+      <label>Likelihood weight: <span id="w_l_lbl">1.0</span></label>
+      <input type="range" id="w_l"  min="0.1" max="3.0" step="0.1" value="1.0">
+
+      <label>Time Delay weight: <span id="w_t_lbl">1.0</span></label>
+      <input type="range" id="w_t"  min="0.1" max="3.0" step="0.1" value="1.0">
+
+      <label>Effort & Sacrifice weight: <span id="w_e_lbl">1.0</span></label>
+      <input type="range" id="w_e"  min="0.1" max="3.0" step="0.1" value="1.0">
+    </div>
+
+    <div class="card">
+      <h3>Scorecard</h3>
+      <div id="tableWrap"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card"><div id="bar"></div></div>
+    <div class="card"><div id="radar"></div></div>
+  </div>
+
+<script>
+const sample = [
+  {offer:"Core Coaching",brand:"Us",dream_outcome:9,likelihood:7,time_delay:6,effort_sacrifice:5},
+  {offer:"Premium Sprint",brand:"Us",dream_outcome:10,likelihood:8,time_delay:4,effort_sacrifice:4},
+  {offer:"Enterprise Advisory",brand:"Us",dream_outcome:10,likelihood:9,time_delay:3,effort_sacrifice:3},
+  {offer:"Competitor A",brand:"Competitor",dream_outcome:8,likelihood:6,time_delay:7,effort_sacrifice:6},
+  {offer:"Competitor B",brand:"Competitor",dream_outcome:9,likelihood:7,time_delay:6,effort_sacrifice:6},
+];
+
+let rows = sample.slice();
+
+function setPreset(name){
+  const map = {
+    "Default":[1,1,1,1],
+    "Enterprise Buyer":[1.0,1.5,1.0,0.8],
+    "SMB Buyer":[1.0,1.0,1.5,1.0],
+    "Transformation Buyer":[1.5,1.0,1.0,1.0]
+  };
+  const [a,b,c,d] = map[name] || map["Default"];
+  setSlider("w_do",a); setSlider("w_l",b); setSlider("w_t",c); setSlider("w_e",d);
+}
+function setSlider(id,val){
+  const el = document.getElementById(id);
+  el.value = val;
+  document.getElementById(id+"_lbl").textContent = Number(val).toFixed(1);
+}
+["w_do","w_l","w_t","w_e"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", e=>{
+    document.getElementById(id+"_lbl").textContent = Number(e.target.value).toFixed(1);
+    render();
+  });
+});
+document.getElementById("preset").addEventListener("change", e=>{
+  setPreset(e.target.value); render();
+});
+
+document.getElementById("csvInput").addEventListener("change", e=>{
+  const file = e.target.files[0];
+  if(!file){ rows = sample.slice(); render(); return; }
+  Papa.parse(file, {
+    header:true, dynamicTyping:true, skipEmptyLines:true,
+    complete: (res)=>{
+      rows = res.data.map(r=>({
+        offer: r.offer, brand: r.brand,
+        dream_outcome: Number(r.dream_outcome),
+        likelihood: Number(r.likelihood),
+        time_delay: Number(r.time_delay),
+        effort_sacrifice: Number(r.effort_sacrifice)
+      })).filter(r=>r.offer && r.brand);
+      render();
+    }
+  });
+});
+
+function computeScores(data){
+  const w_do = Number(document.getElementById("w_do").value);
+  const w_l  = Number(document.getElementById("w_l").value);
+  const w_t  = Number(document.getElementById("w_t").value);
+  const w_e  = Number(document.getElementById("w_e").value);
+
+  const scored = data.map(r=>{
+    const score = (Math.pow(r.dream_outcome, w_do) * Math.pow(r.likelihood, w_l)) /
+                  (Math.pow(r.time_delay, w_t) * Math.pow(r.effort_sacrifice, w_e));
+    return {...r, value_score: score};
+  });
+  const max = Math.max(...scored.map(r=>r.value_score));
+  scored.forEach(r=> r.value_index_100 = 100 * r.value_score / max);
+  scored.sort((a,b)=>b.value_score - a.value_score);
+  return scored;
+}
+
+function renderTable(data){
+  const cols = ["offer","brand","dream_outcome","likelihood","time_delay","effort_sacrifice","value_score","value_index_100"];
+  let html = "<table><thead><tr>"+cols.map(c=>`<th>${c}</th>`).join("")+"</tr></thead><tbody>";
+  data.forEach(r=>{
+    html += "<tr>"+cols.map(c=>{
+      const v = (c==="value_score"||c==="value_index_100") ? Number(r[c]).toFixed(3) : r[c];
+      return `<td>${v}</td>`;
+    }).join("")+"</tr>";
+  });
+  html += "</tbody></table>";
+  document.getElementById("tableWrap").innerHTML = html;
+}
+
+function renderBar(data){
+  Plotly.newPlot("bar",[{
+    x: data.map(r=>r.offer), y: data.map(r=>r.value_score),
+    type:"bar", marker:{}, text:data.map(r=>r.brand), hovertemplate:"%{x}<br>Score=%{y:.3f}<br>%{text}<extra></extra>"
+  }], {title:"Value Score by Offer", margin:{t:40}}, {responsive:true});
+}
+
+function renderRadar(data){
+  const dims = ["dream_outcome","likelihood","time_delay","effort_sacrifice"];
+  const traces = data.map(r=>({
+    type:"scatterpolar", r:dims.map(d=>r[d]), theta:["Dream Outcome","Likelihood","Time Delay","Effort & Sacrifice"],
+    fill:"toself", name:r.offer, opacity:0.6
+  }));
+  Plotly.newPlot("radar", traces, {title:"Offer Profiles (1–10 scale)", polar:{radialaxis:{range:[0,10]}}}, {responsive:true});
+}
+
+function render(){
+  const scored = computeScores(rows);
+  renderTable(scored);
+  renderBar(scored);
+  renderRadar(scored);
+}
+
+setPreset("Default");
+render();
+</script>
+</body>
+</html>
