@@ -9,7 +9,61 @@ st.title("Hormozi Value Equation — Offer Scorecard")
 
 with st.sidebar:
     st.header("Data")
-    uploaded = st.file_uploader("Upload value_equation_template.csv", type=["csv"])
+    # --- Data source: Manual editor OR CSV upload ---
+sample_df = pd.DataFrame({
+    "offer": ["Core Coaching","Premium Sprint","Enterprise Advisory","Competitor A","Competitor B"],
+    "brand": ["Us","Us","Us","Competitor","Competitor"],
+    "dream_outcome": [9,10,10,8,9],
+    "likelihood": [7,8,9,6,7],
+    "time_delay": [6,4,3,7,6],
+    "effort_sacrifice": [5,4,3,6,6]
+})
+
+with st.sidebar:
+    st.header("Data")
+    mode = st.radio("Choose data mode", ["Manual editor", "Upload CSV"], index=0)
+
+if mode == "Upload CSV":
+    with st.sidebar:
+        uploaded = st.file_uploader("Upload value_equation_template.csv", type=["csv"])
+        st.caption("Columns required: offer, brand, dream_outcome, likelihood, time_delay, effort_sacrifice (1–10).")
+    if uploaded is not None:
+        df = pd.read_csv(uploaded)
+    else:
+        st.info("No file uploaded — using sample data.")
+        df = sample_df.copy()
+else:
+    if "ve_df" not in st.session_state:
+        st.session_state.ve_df = sample_df.copy()
+
+    with st.sidebar:
+        colA, colB = st.columns(2)
+        if colA.button("Reset to sample"):
+            st.session_state.ve_df = sample_df.copy()
+        st.caption("Tip: Add rows at the bottom of the table.")
+
+    df = st.data_editor(
+        st.session_state.ve_df,
+        num_rows="dynamic",
+        use_container_width=True,
+        column_config={
+            "offer": st.column_config.TextColumn("offer"),
+            "brand": st.column_config.SelectboxColumn("brand", options=["Us","Competitor"]),
+            "dream_outcome": st.column_config.NumberColumn("dream_outcome", min_value=0, max_value=10, step=1),
+            "likelihood": st.column_config.NumberColumn("likelihood", min_value=0, max_value=10, step=1),
+            "time_delay": st.column_config.NumberColumn("time_delay", min_value=0, max_value=10, step=1),
+            "effort_sacrifice": st.column_config.NumberColumn("effort_sacrifice", min_value=0, max_value=10, step=1),
+        },
+    )
+    st.session_state.ve_df = df.copy()
+
+    st.download_button(
+        "⬇️ Download current data (CSV)",
+        data=df.to_csv(index=False),
+        file_name="value_equation_data.csv",
+        mime="text/csv",
+    )
+", type=["csv"])
     st.caption("Columns required: offer, brand, dream_outcome, likelihood, time_delay, effort_sacrifice (1–10 scales)")
 
 if uploaded is not None:
