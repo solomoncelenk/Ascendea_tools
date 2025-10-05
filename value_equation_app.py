@@ -152,7 +152,7 @@ st.sidebar.caption(
 # ---------- Header ----------
 st.title("📈 Value Equation Calculator")
 st.write(
-    "Compute perceived value for each offer using Hormozi’s Value Equation. "
+    "Compute perceived value for each offer using Ascendea’s Value Equation. "
     "Upload a CSV or use the inline editor, then compare offers and export results."
 )
 
