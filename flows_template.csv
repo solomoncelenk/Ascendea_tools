@@ -1,0 +1,8 @@
+source_tier,target_tier,label,prob,notes
+Entry,Core,Low-friction lead in,0.3,Entry→Core conversion
+Core,Premium,Advance,0.35,Core→Premium
+Core,Upsell,Upsell,0.25,Cross-sell rate
+Premium,Recurring,Anchor,0.7,Premium to Retainer
+Core,Recurring,Anchor,0.5,Core to Retainer
+Premium,Recurring,Anchor,0.8,Premium to Retainer
+Entry,Core,Feeds,0.3,Entry→Core repeat
