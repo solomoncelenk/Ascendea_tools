@@ -1,41 +1,26 @@
-# Offer Ecosystem Map — Streamlit (Dark Mode)
+# Offer Profitability Toolkit — Expert Edition
 
-Visualise **Entry → Core → Premium → Upsell → Recurring**, wire flows, and run financial diagnostics.
+### What you get
+- **Streamlit App (dark mode)**: interactive analysis with uploads, schema mapping, Pareto, trends, waterfall, exports.
+- **CLI Script**: batch run → CSVs + PNG charts saved to an output folder.
 
-## Files
-- `offer_ecosystem_app.py` — main app
-- `requirements.txt` — dependencies
-- `.streamlit/config.toml` — dark theme
-- `offers_template.csv`, `flows_template.csv`, `errc_template.csv` — sample CSVs
-
-## Deploy to Streamlit Community Cloud
-1) Create a GitHub repo and upload all files from this folder.
-2) Go to https://share.streamlit.io → New app.
-3) Main file path: `offer_ecosystem_app.py` → Deploy.
-
-## Local run
+## Streamlit App
 ```
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-streamlit run offer_ecosystem_app.py
+streamlit run offer_profitability_app.py
+```
+Upload a CSV/XLSX (min columns: `offer,revenue,cogs`; optional: `date,segment,variable_costs,units`).
+
+## CLI Script
+```
+python offer_profitability_cli.py   --input offers_sample.csv   --offer offer --revenue revenue --cogs cogs   --date date --segment segment --variable variable_costs --units units   --out output
 ```
 
-### (Optional) Google Sheets
-Add secrets in app settings → Secrets:
-```
-[gcp_service_account]
-type = "service_account"
-project_id = "<your-project>"
-private_key_id = "<id>"
-private_key = "-----BEGIN PRIVATE KEY-----
-<key>
------END PRIVATE KEY-----
-"
-client_email = "<svc>@<project>.iam.gserviceaccount.com"
-client_id = "<id>"
-token_uri = "https://oauth2.googleapis.com/token"
+Outputs:
+- `output/summary.csv`
+- `output/pareto_revenue.csv`
+- `output/charts/*.png`
 
-[gsheets]
-url = "https://docs.google.com/spreadsheets/d/<YOUR_SHEET_ID>/edit#gid=0"
-```
+PNG export uses `kaleido`.

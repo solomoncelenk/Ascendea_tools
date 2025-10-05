@@ -1,0 +1,6 @@
+offer,date,segment,revenue,cogs,variable_costs,units
+Core Program,2025-01-15,B2B,150000,67500,15000,10
+Premium Advisory,2025-02-20,Enterprise,240000,84000,30000,6
+Workshop,2025-01-05,B2B,20000,8000,3000,40
+Addon,2025-03-03,B2B,30000,12000,4000,20
+Retainer,2025-04-01,Enterprise,96000,28800,12000,12
