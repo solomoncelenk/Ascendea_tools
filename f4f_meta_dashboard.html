@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ascendea Meta Ads Dashboard</title>
+  <style>
+    :root {
+      --bg: #0F0F12;
+      --card-bg: #1A1A1F;
+      --border: #2A2A35;
+      --text: #E2E2E8;
+      --text-muted: #A0A0B0;
+      --success: #4ADE80;
+      --warning: #FBBF24;
+      --danger: #F87171;
+      --primary: #818CF8;
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      padding: 24px;
+      font-size: 15px;
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 24px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .executive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      text-align: center;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      margin: 8px 0;
+      color: white;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-green { color: var(--success); }
+    .status-amber { color: var(--warning); }
+    .status-red { color: var(--danger); }
+
+    .action-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .action-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 18px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .action-card.scale { border-left-color: var(--success); }
+    .action-card.maintain { border-left-color: var(--warning); }
+    .action-card.pause { border-left-color: var(--danger); }
+
+    .action-card h4 {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .roadmap-table {
+      width: 100%;
+    }
+
+    .roadmap-table td, .roadmap-table th {
+      padding: 12px 10px;
+    }
+
+    .insight-box {
+      background: rgba(129, 140, 248, 0.08);
+      border-left: 3px solid var(--primary);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-style: italic;
+    }
+
+    .collapsible {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .collapsible::after {
+      content: "▼";
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .collapsible.active::after {
+      content: "▲";
+    }
+
+    .content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .content.show {
+      max-height: 500px;
+    }
+
+    @media (max-width: 768px) {
+      .executive-grid,
+      .action-board {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌌 Ascendea Meta Ads Performance Dashboard</h1>
+  <div class="subtitle">Period: Oct 1 – Oct 23, 2025 • Dark Mode • Executive View</div>
+
+  <!-- Executive Snapshot -->
+  <h2>1. Executive Snapshot</h2>
+  <div class="card">
+    <div class="executive-grid">
+      <div class="metric">
+        <div class="metric-label">Total Spend</div>
+        <div class="metric-value">$6,736 AUD</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Purchases</div>
+        <div class="metric-value">876</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Blended CAC</div>
+        <div class="metric-value">$7.69</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Blended AOV</div>
+        <div class="metric-value">$156.30</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Blended ROAS</div>
+        <div class="metric-value">20.3x</div>
+      </div>
+    </div>
+    <div class="insight-box">
+      🎯 <strong>Strategic Pulse:</strong> Highly profitable—but fragile. Creative fatigue and attribution risk require immediate action.
+    </div>
+  </div>
+
+  <!-- Campaign Health -->
+  <h2>2. Campaign Health Matrix</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th>CAC</th>
+          <th>ROAS</th>
+          <th>AOV</th>
+          <th>Frequency</th>
+          <th>CTR</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Testing/Specialty</td>
+          <td>$7.40</td>
+          <td>20.3x</td>
+          <td>$150.45</td>
+          <td>16.1</td>
+          <td>4.2%</td>
+          <td><span class="status-red">Fatigue</span></td>
+          <td>🔄 Creative refresh</td>
+        </tr>
+        <tr>
+          <td>Retargeting Conversion</td>
+          <td>$8.47</td>
+          <td>20.8x</td>
+          <td>$176.45</td>
+          <td>22.1</td>
+          <td>4.7%</td>
+          <td><span class="status-red">Exhausted</span></td>
+          <td>⏸️ Cap spend</td>
+        </tr>
+        <tr>
+          <td>Advantage+ Conversion</td>
+          <td>$8.70</td>
+          <td>18.8x</td>
+          <td>$163.82</td>
+          <td>7.2</td>
+          <td>3.2%</td>
+          <td><span class="status-green">Scalable</span></td>
+          <td>🚀 Scale + CTR boost</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Demographic Power Map -->
+  <h2>3. Demographic Power Map</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>CAC</th>
+          <th>ROAS</th>
+          <th>AOV</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>45–54</td><td>Male</td><td><strong>$6.27</strong></td><td><strong>26.6x</strong></td><td>$166.84</td><td>🌟 #1 Performer</td></tr>
+        <tr><td>25–34</td><td>Male</td><td>$7.00</td><td>24.6x</td><td>$172.08</td><td>🚀 Core engine</td></tr>
+        <tr><td>35–44</td><td>Female</td><td>$8.42</td><td>21.0x</td><td>$176.60</td><td>💎 High AOV</td></tr>
+        <tr><td>18–24</td><td>Both</td><td>>$12</td><td><8.0x</td><td><$101</td><td>❌ Deprioritize</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Ad-Level Action Board -->
+  <h2>4. Ad-Level Action Board</h2>
+  <div class="action-board">
+    <div class="action-card scale">
+      <h4>🚀 SCALE</h4>
+      <ul>
+        <li><strong>Testing | Ad 9 | Socials</strong> — CAC $5.89, ROAS 28.3x</li>
+        <li><strong>Testing | Ad 7 | Diji</strong> — CAC $7.19, ROAS 22.0x</li>
+        <li><strong>Shire | Ad 2 (v2)</strong> — CAC $6.58, ROAS 24.5x</li>
+      </ul>
+    </div>
+    <div class="action-card maintain">
+      <h4>✅ MAINTAIN</h4>
+      <ul>
+        <li>Repurposed Family Meals (Stable CAC $7.48)</li>
+        <li>High-ROAS retargeting (tiny volume)</li>
+      </ul>
+    </div>
+    <div class="action-card pause">
+      <h4>⛔ PAUSE / CUT</h4>
+      <ul>
+        <li>Preppin Done | Static — CAC $24.59</li>
+        <li>Winter Warmers — CAC $24.02</li>
+        <li>Start Your Week On Track — CAC $20.98</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Strategic Roadmap -->
+  <h2>5. Strategic Roadmap: November 2025</h2>
+  <div class="card">
+    <table class="roadmap-table">
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Action</th>
+          <th>Timeline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Creative Refresh</td><td>Launch 3 new hooks for Testing + Retargeting</td><td><strong>Week 1</strong></td></tr>
+        <tr><td>Scale Advantage+</td><td>Increase budget 20%, test 5 new creatives</td><td>Week 2</td></tr>
+        <tr><td>Audience Expansion</td><td>Broaden prospecting; test lookalikes of M 45–54</td><td>Week 2–3</td></tr>
+        <tr><td>ROAS Validation</td><td>Sync GA4 + CRM; run geo-lift test</td><td>Ongoing</td></tr>
+        <tr><td>Deprioritize 18–24</td><td>Exclude from all campaigns</td><td><strong>Immediate</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Attribution Note -->
+  <div class="insight-box" style="margin-top: 30px; background: rgba(248, 113, 113, 0.08); border-left-color: var(--danger);">
+    ⚠️ <strong>Attribution Caution:</strong> ROAS >20x is likely inflated by Meta’s attribution model. Use GA4/CRM to validate incrementality.
+  </div>
+
+  <script>
+    // Optional: Add interactivity (e.g., collapsible sections) if needed later
+    document.querySelectorAll('.collapsible').forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('active');
+        const content = button.nextElementSibling;
+        content.classList.toggle('show');
+      });
+    });
+  </script>
+</body>
+</html>
