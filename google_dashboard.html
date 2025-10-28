@@ -1,69 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>F4F Google Ads Dashboard</title>
-  <!-- Bootstrap 5 Dark Theme -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+      --bg-primary: #0f0f15;
+      --bg-secondary: #1a1a25;
+      --bg-card: rgba(30, 30, 46, 0.7);
+      --text-primary: #f0f0ff;
+      --text-secondary: #a0a0c0;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-blue: #4dabf7;
+      --accent-green: #69db7c;
+      --accent-purple: #cc70e3;
+      --accent-red: #ff6b6b;
+      --chart-bg: rgba(20, 20, 35, 0.6);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: #121212;
-      color: #eaeaea;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       font-family: 'Inter', sans-serif;
+      padding: 0;
+      margin: 0;
+      line-height: 1.6;
     }
-    .card {
-      background-color: #1e1e1e;
-      border: none;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+
+    .dashboard-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem;
     }
-    .kpi {
+
+    header {
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2.25rem;
+      background: linear-gradient(90deg, #4dabf7, #69db7c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .period {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+      color: white;
+    }
+
+    .kpi-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .kpi-icon {
       font-size: 1.4rem;
-      font-weight: bold;
+      opacity: 0.7;
+      margin-bottom: 0.75rem;
     }
+
+    /* Chart Cards */
+    .chart-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .chart-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .chart-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     canvas {
-      background: #181818;
+      background: var(--chart-bg);
       border-radius: 12px;
-      padding: 10px;
+      padding: 12px;
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Table */
+    .table-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      color: var(--text-primary);
+    }
+
+    thead th {
+      background: rgba(30, 30, 46, 0.9);
+      font-weight: 600;
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+
+    tbody td {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    tbody tr:hover {
+      background: rgba(70, 70, 100, 0.15);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 1.25rem;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      .kpi-value {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-
-  <div class="container-fluid p-4">
-    <h1 class="mb-3">Food4Fitness Google Ads Dashboard</h1>
-    <p class="text-muted">Period: Oct 1 – Oct 28, 2025</p>
+  <div class="dashboard-container">
+    <header>
+      <h1>Food4Fitness Google Ads Dashboard</h1>
+      <p class="period">Period: Oct 1 – Oct 28, 2025</p>
+    </header>
 
     <!-- KPIs -->
-    <div class="row mb-4">
-      <div class="col-md-2"><div class="card"><div class="kpi">A$9,111</div><p>Total Spend</p></div></div>
-      <div class="col-md-2"><div class="card"><div class="kpi">1,352</div><p>Total Conversions</p></div></div>
-      <div class="col-md-2"><div class="card"><div class="kpi">A$6.74</div><p>Avg CPA</p></div></div>
-      <div class="col-md-2"><div class="card"><div class="kpi">A$127,707</div><p>Total Conv. Value</p></div></div>
-      <div class="col-md-2"><div class="card"><div class="kpi">14.0x</div><p>Conv. Value / Cost</p></div></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon"><i class="bi bi-currency-dollar"></i></div>
+        <div class="kpi-value">A$9,111</div>
+        <div class="kpi-label">Total Spend</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon"><i class="bi bi-arrow-repeat"></i></div>
+        <div class="kpi-value">1,352</div>
+        <div class="kpi-label">Total Conversions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon"><i class="bi bi-graph-up"></i></div>
+        <div class="kpi-value">A$6.74</div>
+        <div class="kpi-label">Avg CPA</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon"><i class="bi bi-cash-coin"></i></div>
+        <div class="kpi-value">A$127,707</div>
+        <div class="kpi-label">Total Conv. Value</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon"><i class="bi bi-percent"></i></div>
+        <div class="kpi-value">14.0x</div>
+        <div class="kpi-label">Conv. Value / Cost</div>
+      </div>
     </div>
 
     <!-- Campaign Performance -->
-    <h3 class="mt-4">Campaign Performance</h3>
-    <div class="card">
-      <canvas id="campaignChart" height="120"></canvas>
+    <div class="chart-card">
+      <h2 class="chart-title"><i class="bi bi-bar-chart"></i> Campaign Performance</h2>
+      <canvas id="campaignChart" height="100"></canvas>
     </div>
 
     <!-- Ad Group Performance -->
-    <h3 class="mt-4">Ad Group Performance</h3>
-    <div class="card">
-      <canvas id="adgroupChart" height="120"></canvas>
+    <div class="chart-card">
+      <h2 class="chart-title"><i class="bi bi-line-chart"></i> Ad Group Performance</h2>
+      <canvas id="adgroupChart" height="100"></canvas>
     </div>
 
     <!-- Keyword to Ad Tie-In -->
-    <h3 class="mt-4">Keyword → Ad Tie-In</h3>
-    <div class="card">
-      <table class="table table-dark table-striped">
+    <div class="chart-card table-card">
+      <h2 class="chart-title"><i class="bi bi-search"></i> Keyword → Ad Tie-In</h2>
+      <table>
         <thead>
           <tr>
             <th>Keyword</th>
@@ -75,17 +245,43 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>meal delivery sydney</td><td>Ad | Brand NSW</td><td>320</td><td>45</td><td>A$7.11</td><td>A$7,200</td></tr>
-          <tr><td>healthy ready meals</td><td>Ad | Perf Max VIC</td><td>210</td><td>30</td><td>A$8.20</td><td>A$4,800</td></tr>
-          <tr><td>food prep near me</td><td>Ad | Generic Campaign</td><td>185</td><td>22</td><td>A$10.05</td><td>A$3,000</td></tr>
+          <tr>
+            <td>meal delivery sydney</td>
+            <td>Ad | Brand NSW</td>
+            <td>320</td>
+            <td>45</td>
+            <td>A$7.11</td>
+            <td>A$7,200</td>
+          </tr>
+          <tr>
+            <td>healthy ready meals</td>
+            <td>Ad | Perf Max VIC</td>
+            <td>210</td>
+            <td>30</td>
+            <td>A$8.20</td>
+            <td>A$4,800</td>
+          </tr>
+          <tr>
+            <td>food prep near me</td>
+            <td>Ad | Generic Campaign</td>
+            <td>185</td>
+            <td>22</td>
+            <td>A$10.05</td>
+            <td>A$3,000</td>
+          </tr>
         </tbody>
       </table>
     </div>
-
   </div>
 
   <script>
-    // Campaign-level chart
+    // Global Chart Defaults
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#f0f0ff';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+    Chart.defaults.backgroundColor = 'transparent';
+
+    // Campaign Chart
     const ctx1 = document.getElementById('campaignChart').getContext('2d');
     new Chart(ctx1, {
       type: 'bar',
@@ -95,26 +291,55 @@
           {
             label: 'Spend (AUD)',
             data: [3875,1266,719,998,688],
-            backgroundColor: '#42a5f5'
+            backgroundColor: 'rgba(77, 171, 247, 0.7)',
+            borderColor: 'rgba(77, 171, 247, 1)',
+            borderWidth: 1,
+            borderRadius: 6,
+            borderSkipped: false,
           },
           {
             label: 'Conversions',
             data: [769,182,100,64,147],
-            backgroundColor: '#66bb6a'
+            backgroundColor: 'rgba(105, 219, 124, 0.7)',
+            borderColor: 'rgba(105, 219, 124, 1)',
+            borderWidth: 1,
+            borderRadius: 6,
+            borderSkipped: false,
           }
         ]
       },
       options: {
         responsive: true,
-        plugins: { legend: { labels: { color: '#eaeaea' } } },
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1200,
+          easing: 'easeOutQuart'
+        },
+        plugins: {
+          legend: {
+            labels: {
+              font: { size: 13 },
+              padding: 15
+            }
+          }
+        },
         scales: {
-          x: { ticks: { color: '#eaeaea' } },
-          y: { ticks: { color: '#eaeaea' } }
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 12 } }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255,255,255,0.05)'
+            },
+            ticks: { font: { size: 12 } }
+          }
         }
       }
     });
 
-    // Ad group-level chart
+    // Ad Group Chart
     const ctx2 = document.getElementById('adgroupChart').getContext('2d');
     new Chart(ctx2, {
       type: 'line',
@@ -123,21 +348,46 @@
         datasets: [{
           label: 'CPA (AUD)',
           data: [5.04,6.94,7.18,25.55,23.44],
-          borderColor: '#ef5350',
-          fill: false,
+          borderColor: '#ff6b6b',
+          backgroundColor: 'rgba(255, 107, 107, 0.1)',
+          borderWidth: 3,
+          pointBackgroundColor: '#ff6b6b',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          fill: true,
           tension: 0.3
         }]
       },
       options: {
         responsive: true,
-        plugins: { legend: { labels: { color: '#eaeaea' } } },
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        },
+        plugins: {
+          legend: {
+            labels: {
+              font: { size: 13 },
+              padding: 15
+            }
+          }
+        },
         scales: {
-          x: { ticks: { color: '#eaeaea' } },
-          y: { ticks: { color: '#eaeaea' } }
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 12 } }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255,255,255,0.05)'
+            },
+            ticks: { font: { size: 12 } }
+          }
         }
       }
     });
   </script>
-
 </body>
 </html>
