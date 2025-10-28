@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F4F Google Ads Dashboard</title>
+  <!-- Bootstrap 5 Dark Theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #121212;
+      color: #eaeaea;
+      font-family: 'Inter', sans-serif;
+    }
+    .card {
+      background-color: #1e1e1e;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+    .kpi {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    canvas {
+      background: #181818;
+      border-radius: 12px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid p-4">
+    <h1 class="mb-3">Food4Fitness Google Ads Dashboard</h1>
+    <p class="text-muted">Period: Oct 1 – Oct 28, 2025</p>
+
+    <!-- KPIs -->
+    <div class="row mb-4">
+      <div class="col-md-2"><div class="card"><div class="kpi">A$9,111</div><p>Total Spend</p></div></div>
+      <div class="col-md-2"><div class="card"><div class="kpi">1,352</div><p>Total Conversions</p></div></div>
+      <div class="col-md-2"><div class="card"><div class="kpi">A$6.74</div><p>Avg CPA</p></div></div>
+      <div class="col-md-2"><div class="card"><div class="kpi">A$127,707</div><p>Total Conv. Value</p></div></div>
+      <div class="col-md-2"><div class="card"><div class="kpi">14.0x</div><p>Conv. Value / Cost</p></div></div>
+    </div>
+
+    <!-- Campaign Performance -->
+    <h3 class="mt-4">Campaign Performance</h3>
+    <div class="card">
+      <canvas id="campaignChart" height="120"></canvas>
+    </div>
+
+    <!-- Ad Group Performance -->
+    <h3 class="mt-4">Ad Group Performance</h3>
+    <div class="card">
+      <canvas id="adgroupChart" height="120"></canvas>
+    </div>
+
+    <!-- Keyword to Ad Tie-In -->
+    <h3 class="mt-4">Keyword → Ad Tie-In</h3>
+    <div class="card">
+      <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th>Matched Ad</th>
+            <th>Clicks</th>
+            <th>Conversions</th>
+            <th>CPA</th>
+            <th>Conv. Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>meal delivery sydney</td><td>Ad | Brand NSW</td><td>320</td><td>45</td><td>A$7.11</td><td>A$7,200</td></tr>
+          <tr><td>healthy ready meals</td><td>Ad | Perf Max VIC</td><td>210</td><td>30</td><td>A$8.20</td><td>A$4,800</td></tr>
+          <tr><td>food prep near me</td><td>Ad | Generic Campaign</td><td>185</td><td>22</td><td>A$10.05</td><td>A$3,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    // Campaign-level chart
+    const ctx1 = document.getElementById('campaignChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ['Brand NSW','Brand VIC','Brand QLD','Perf Max VIC','Perf Max NSW'],
+        datasets: [
+          {
+            label: 'Spend (AUD)',
+            data: [3875,1266,719,998,688],
+            backgroundColor: '#42a5f5'
+          },
+          {
+            label: 'Conversions',
+            data: [769,182,100,64,147],
+            backgroundColor: '#66bb6a'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#eaeaea' } } },
+        scales: {
+          x: { ticks: { color: '#eaeaea' } },
+          y: { ticks: { color: '#eaeaea' } }
+        }
+      }
+    });
+
+    // Ad group-level chart
+    const ctx2 = document.getElementById('adgroupChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: ['NSW Brand','VIC Brand','QLD Perf Max','Generic','Competitors'],
+        datasets: [{
+          label: 'CPA (AUD)',
+          data: [5.04,6.94,7.18,25.55,23.44],
+          borderColor: '#ef5350',
+          fill: false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#eaeaea' } } },
+        scales: {
+          x: { ticks: { color: '#eaeaea' } },
+          y: { ticks: { color: '#eaeaea' } }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
