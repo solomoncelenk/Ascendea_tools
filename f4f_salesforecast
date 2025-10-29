@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Forecasting Dashboard – Contribution & Cash Impact</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0c0c14;
+      --bg-card: rgba(25, 25, 42, 0.75);
+      --text-primary: #f0f0ff;
+      --text-secondary: #a0a0c0;
+      --border-color: rgba(255, 255, 255, 0.07);
+      --accent-blue: #4dabf7;
+      --accent-green: #69db7c;
+      --accent-orange: #ff9e6d;
+      --accent-red: #ff6b6b;
+      --guardrail: #ffd43b;
+      --cash-green: #4ade80;
+      --cash-amber: #fbbf24;
+      --cash-red: #f87171;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding: 1.25rem;
+    }
+
+    .container {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .card-content {
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+    }
+
+    .baseline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .metric {
+      background: rgba(40, 40, 60, 0.5);
+      padding: 0.75rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-weight: 700;
+      font-size: 1.15rem;
+      display: block;
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* Drivers */
+    .drivers-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .drivers-list li {
+      padding: 0.6rem 0;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+
+    .drivers-list i {
+      color: var(--accent-green);
+      margin-top: 0.25rem;
+    }
+
+    /* Calculator */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .calc-input {
+      background: rgba(30, 30, 50, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.6rem;
+      color: white;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .calc-result {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: rgba(105, 219, 124, 0.15);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* Scenarios */
+    .scenarios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .scenario-card {
+      padding: 1.25rem;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scenario-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+    }
+
+    .conservative { background-color: rgba(255, 107, 107, 0.12); }
+    .conservative::before { background-color: var(--accent-red); }
+
+    .base { background-color: rgba(105, 219, 124, 0.15); }
+    .base::before { background-color: var(--accent-green); }
+
+    .aggressive { background-color: rgba(255, 158, 109, 0.15); }
+    .aggressive::before { background-color: var(--accent-orange); }
+
+    .scenario-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .scenario-toggle {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .monthly-forecast {
+      display: none;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .monthly-forecast.show {
+      display: block;
+    }
+
+    .exit-rate {
+      font-weight: 700;
+      margin-top: 0.75rem;
+      font-size: 1rem;
+    }
+
+    /* Cash Lens */
+    .cash-lens {
+      margin-top: 0.75rem;
+      padding: 0.6rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .cash-low { background: rgba(248, 113, 113, 0.15); color: var(--cash-red); }
+    .cash-medium { background: rgba(251, 191, 36, 0.15); color: var(--cash-amber); }
+    .cash-high { background: rgba(74, 222, 128, 0.15); color: var(--cash-green); }
+
+    /* Bottom Line */
+    .bottom-line {
+      background: rgba(77, 171, 247, 0.12);
+      border: 1px solid rgba(77, 171, 247, 0.3);
+      border-radius: 16px;
+      padding: 1.25rem;
+    }
+
+    .bottom-line h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Margin Toggle */
+    .margin-toggle {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .margin-btn {
+      padding: 0.4rem 0.8rem;
+      background: rgba(60, 60, 90, 0.6);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .margin-btn.active {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    /* Charts */
+    .chart-container {
+      height: 220px;
+      margin-top: 1rem;
+    }
+
+    canvas {
+      background: rgba(20, 20, 35, 0.4);
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .scenarios { grid-template-columns: 1fr; }
+      .baseline-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1>Sales Forecasting Dashboard</h1>
+      <p class="subtitle">Contribution Margin & Cash Runway Impact | Nov 2025 – Jun 2026</p>
+    </header>
+
+    <!-- Baseline -->
+    <div class="card">
+      <div class="card-header" onclick="toggleSection('baseline')">
+        <div class="card-title"><i class="bi bi-pin-angle-fill"></i> Baseline Reference (Oct 2025)</div>
+        <i class="bi bi-chevron-down toggle-icon" id="baseline-icon"></i>
+      </div>
+      <div class="card-content" id="baseline-content">
+        <div class="baseline-grid">
+          <div class="metric"><span class="metric-value">$484K</span><div class="metric-label">Revenue</div></div>
+          <div class="metric"><span class="metric-value">$20</span><div class="metric-label">Blended CAC</div></div>
+          <div class="metric"><span class="metric-value">$156</span><div class="metric-label">AOV</div></div>
+          <div class="metric"><span class="metric-value">1,800</span><div class="metric-label">New Customers</div></div>
+          <div class="metric"><span class="metric-value">16.3%</span><div class="metric-label">Contribution Margin</div></div>
+          <div class="metric"><span class="metric-value">$90K</span><div class="metric-label">Cash on Hand<br>(≈10 days COGS)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Drivers -->
+    <div class="card">
+      <div class="card-header" onclick="toggleSection('drivers')">
+        <div class="card-title"><i class="bi bi-lightning-charge"></i> Key Forecasting Drivers</div>
+        <i class="bi bi-chevron-down toggle-icon" id="drivers-icon"></i>
+      </div>
+      <div class="card-content" id="drivers-content">
+        <ul class="drivers-list">
+          <li><i class="bi bi-bar-chart-line"></i> <strong>Ad Scaling Capacity:</strong> Limited by contribution margin, not ROAS.</li>
+          <li><i class="bi bi-palette"></i> <strong>Creative Renewal:</strong> CTR lifts unlock 10–20% more sales without higher CAC.</li>
+          <li><i class="bi bi-arrow-repeat"></i> <strong>Retention & Upsell:</strong> 5–10% uplift in returning orders strengthens contribution.</li>
+          <li><i class="bi bi-cash-coin"></i> <strong>Cash Gate:</strong> Every $1 ad spend must pass 13-week COGS + OPEX coverage test.</li>
+        </ul>
+        <div style="margin-top:1rem; padding:0.8rem; background:rgba(255,212,59,0.1); border-left:3px solid var(--guardrail); border-radius:6px;">
+          <i class="bi bi-shield-lock"></i> <strong>Hard Floor:</strong> Maintain ≥16% contribution margin. Test 20% upside.
+        </div>
+      </div>
+    </div>
+
+    <!-- Contribution Calculator -->
+    <div class="card">
+      <div class="card-header" onclick="toggleSection('calculator')">
+        <div class="card-title"><i class="bi bi-calculator"></i> Contribution Margin Calculator</div>
+        <i class="bi bi-chevron-down toggle-icon" id="calculator-icon"></i>
+      </div>
+      <div class="card-content" id="calculator-content">
+        <p>Estimate monthly contribution based on revenue and margin.</p>
+        <div class="calc-grid">
+          <div>
+            <label>Revenue ($)</label>
+            <input type="number" class="calc-input" id="revInput" value="500000" oninput="calcContribution()">
+          </div>
+          <div>
+            <label>Margin (%)</label>
+            <input type="number" class="calc-input" id="marginInput" value="16.3" step="0.1" oninput="calcContribution()">
+          </div>
+        </div>
+        <div class="calc-result" id="contributionResult">
+          Contribution: $81,500
+        </div>
+        <div style="margin-top:0.75rem; font-size:0.85rem; color:var(--text-secondary);">
+          💡 Use this to test scenarios before scaling.
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenarios -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="bi bi-graph-up-arrow"></i> Scenario Forecasts (Nov 2025 – Jun 2026)</div>
+      </div>
+      <div class="card-content">
+        <div class="margin-toggle">
+          <button class="margin-btn active" onclick="switchMarginView(16.3)">16.3% Margin</button>
+          <button class="margin-btn" onclick="switchMarginView(20)">20% Margin</button>
+        </div>
+
+        <div class="scenarios">
+          <!-- Conservative -->
+          <div class="scenario-card conservative">
+            <div class="scenario-title"><i class="bi bi-arrow-down-circle"></i> Conservative (+5%)</div>
+            <ul style="font-size:0.85rem; padding-left:1.2rem; margin:0.5rem 0;">
+              <li>+5% ad scaling (cash-constrained)</li>
+              <li>No creative refresh</li>
+              <li>Returning customers flat</li>
+            </ul>
+            <div class="exit-rate">FY26 Exit: <strong>$6.9M annualized</strong></div>
+            <button class="scenario-toggle" onclick="toggleMonthly('conservative')">
+              <i class="bi bi-calendar-week"></i> Monthly Forecast
+            </button>
+            <div class="monthly-forecast" id="conservative-forecast">
+              <strong>Nov:</strong> $500K → $82K<br>
+              <strong>Dec:</strong> $500K → $82K<br>
+              <strong>Jan:</strong> $525K → $86K<br>
+              <strong>Feb:</strong> $535K → $87K<br>
+              <strong>Mar:</strong> $550K → $90K<br>
+              <strong>Apr:</strong> $575K → $94K<br>
+              <strong>May:</strong> $600K → $98K<br>
+              <strong>Jun:</strong> $575K → $94K<br>
+              <div class="cash-lens cash-low"><i class="bi bi-exclamation-triangle"></i> Runway: <1 month COGS</div>
+            </div>
+          </div>
+
+          <!-- Base -->
+          <div class="scenario-card base">
+            <div class="scenario-title"><i class="bi bi-check-circle"></i> Base (+10%) — Recommended</div>
+            <ul style="font-size:0.85rem; padding-left:1.2rem; margin:0.5rem 0;">
+              <li>+10% ad scaling (contribution-gated)</li>
+              <li>Creative refreshed → CAC ↓10%</li>
+              <li>Returning +5% QoQ</li>
+            </ul>
+            <div class="exit-rate">FY26 Exit: <strong>$7.8M annualized</strong></div>
+            <button class="scenario-toggle" onclick="toggleMonthly('base')">
+              <i class="bi bi-calendar-week"></i> Monthly Forecast
+            </button>
+            <div class="monthly-forecast" id="base-forecast">
+              <strong>Nov:</strong> $525K → $86K<br>
+              <strong>Dec:</strong> $550K → $90K<br>
+              <strong>Jan:</strong> $575K → $94K<br>
+              <strong>Feb:</strong> $600K → $98K<br>
+              <strong>Mar:</strong> $625K → $102K<br>
+              <strong>Apr:</strong> $625K → $102K<br>
+              <strong>May:</strong> $650K → $106K<br>
+              <strong>Jun:</strong> $650K → $106K<br>
+              <div class="cash-lens cash-medium"><i class="bi bi-shield"></i> Runway: ~4–5 weeks COGS</div>
+            </div>
+          </div>
+
+          <!-- Aggressive -->
+          <div class="scenario-card aggressive">
+            <div class="scenario-title"><i class="bi bi-arrow-up-circle"></i> Aggressive (+15–20%)</div>
+            <ul style="font-size:0.85rem; padding-left:1.2rem; margin:0.5rem 0; color:var(--accent-red);">
+              <li>+15–20% ad scaling</li>
+              <li>Full creative renewal</li>
+              <li>Returning +10% QoQ</li>
+              <li>⚠️ High cash risk if margin <20%</li>
+            </ul>
+            <div class="exit-rate">FY26 Exit: <strong>$9.6M annualized</strong></div>
+            <button class="scenario-toggle" onclick="toggleMonthly('aggressive')">
+              <i class="bi bi-calendar-week"></i> Monthly Forecast
+            </button>
+            <div class="monthly-forecast" id="aggressive-forecast">
+              <strong>Nov:</strong> $550K → $90K<br>
+              <strong>Dec:</strong> $600K → $98K<br>
+              <strong>Jan:</strong> $650K → $106K<br>
+              <strong>Feb:</strong> $675K → $110K<br>
+              <strong>Mar:</strong> $700K → $114K<br>
+              <strong>Apr:</strong> $750K → $122K<br>
+              <strong>May:</strong> $775K → $126K<br>
+              <strong>Jun:</strong> $800K → $130K<br>
+              <div class="cash-lens cash-high"><i class="bi bi-currency-dollar"></i> Runway: ~6–7 weeks COGS (if margin ≥20%)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="contributionChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Line -->
+    <div class="bottom-line">
+      <h3><i class="bi bi-award"></i> Strategic Bottom Line</h3>
+      <p>
+        <strong>Safe Path (Base):</strong> $7.8M revenue → $1.2M annual contribution (16.3%). At 20% margin: <strong>$1.56M</strong>.<br>
+        <strong>Upside (Aggressive):</strong> $9.6M revenue — <em>only sustainable if margin holds ≥20%</em>. Otherwise, liquidity collapses in <90 days.<br>
+        <strong>Downside (Conservative):</strong> $6.9M revenue, perpetual cash fragility (<1 month COGS buffer).
+      </p>
+      <div style="margin-top:0.75rem; padding:0.75rem; background:rgba(255,107,107,0.15); border-radius:8px; font-size:0.9rem;">
+        🔑 <strong>Key Insight:</strong> Creative renewal + retention are force multipliers that unlock safe scaling without margin erosion.
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Toggle sections
+    function toggleSection(id) {
+      const content = document.getElementById(id + '-content');
+      const icon = document.getElementById(id + '-icon');
+      content.classList.toggle('collapsed');
+      icon.classList.toggle('collapsed');
+    }
+
+    // Toggle monthly forecasts
+    function toggleMonthly(scenario) {
+      const el = document.getElementById(scenario + '-forecast');
+      el.classList.toggle('show');
+    }
+
+    // Contribution calculator
+    function calcContribution() {
+      const rev = parseFloat(document.getElementById('revInput').value) || 0;
+      const margin = parseFloat(document.getElementById('marginInput').value) || 0;
+      const contrib = (rev * margin / 100).toLocaleString('en-US', { maximumFractionDigits: 0 });
+      document.getElementById('contributionResult').textContent = `Contribution: $${contrib}`;
+    }
+
+    // Margin view toggle (for future expansion)
+    function switchMarginView(margin) {
+      document.querySelectorAll('.margin-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      // In a full app, this would re-render charts/tables
+      alert(`Switched to ${margin}% margin view. (Full implementation would update all forecasts.)`);
+    }
+
+    // Initialize charts
+    window.onload = () => {
+      const months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+      const revBase = [525, 550, 575, 600, 625, 625, 650, 650];
+      const revAggr = [550, 600, 650, 675, 700, 750, 775, 800];
+      const revCons = [500, 500, 525, 535, 550, 575, 600, 575];
+
+      // Revenue Chart
+      const ctx1 = document.getElementById('revenueChart').getContext('2d');
+      new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [
+            { label: 'Conservative', data: revCons, borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.1)', tension: 0.3, fill: false },
+            { label: 'Base', data: revBase, borderColor: '#69db7c', backgroundColor: 'rgba(105,219,124,0.1)', tension: 0.3, fill: false, borderWidth: 3 },
+            { label: 'Aggressive', data: revAggr, borderColor: '#ff9e6d', backgroundColor: 'rgba(255,158,109,0.1)', tension: 0.3, fill: false }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#f0f0ff' } } },
+          scales: {
+            x: { ticks: { color: '#a0a0c0' } },
+            y: { 
+              ticks: { color: '#a0a0c0', callback: v => '$' + v + 'K' },
+              beginAtZero: false
+            }
+          }
+        }
+      });
+
+      // Contribution Chart (16.3%)
+      const contribBase = revBase.map(v => (v * 0.163).toFixed(1));
+      const contribAggr = revAggr.map(v => (v * 0.163).toFixed(1));
+      const contribCons = revCons.map(v => (v * 0.163).toFixed(1));
+
+      const ctx2 = document.getElementById('contributionChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: months,
+          datasets: [
+            { label: 'Conservative', data: contribCons, backgroundColor: 'rgba(255,107,107,0.6)' },
+            { label: 'Base', data: contribBase, backgroundColor: 'rgba(105,219,124,0.7)' },
+            { label: 'Aggressive', data: contribAggr, backgroundColor: 'rgba(255,158,109,0.7)' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#f0f0ff' } } },
+          scales: {
+            x: { ticks: { color: '#a0a0c0' } },
+            y: { 
+              ticks: { color: '#a0a0c0', callback: v => '$' + v + 'K' },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    };
+
+    // Open all by default
+    document.querySelectorAll('.card-content').forEach(el => el.classList.remove('collapsed'));
+  </script>
+</body>
+</html>
