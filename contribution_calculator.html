@@ -1,0 +1,1024 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribution Income Calculator</title>
+    <style>
+        /* CSS Variables for Theme */
+        :root {
+            --bg: #FBF8EF;
+            --bg-soft: #E5E2D9;
+            --text: #393939;
+            --text-soft: #6B7280;
+            --brand: #F2003C;
+            --info: #005A87;
+            --success: #00E4AB;
+            --warning: #FFBB00;
+            --accent-2: #7A529E;
+            --accent-3: #FFBB00;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(0, 0, 0, 0.1);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --focus-ring: 0 0 0 3px rgba(242, 0, 60, 0.2);
+            --radius: 14px;
+            --spacing: 24px;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1A1A1A;
+            --bg-soft: #2D2D2D;
+            --text: #FFFFFF;
+            --text-soft: #A1A1A1;
+            --card-bg: #2D2D2D;
+            --card-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: var(--spacing);
+            transition: background-color 0.2s ease;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.2;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            margin-bottom: var(--spacing);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            padding: var(--spacing);
+            margin-bottom: var(--spacing);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Form Elements */
+        input, select, button {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background-color: var(--card-bg);
+            color: var(--text);
+            min-height: 44px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus, select:focus, button:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: var(--focus-ring);
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--brand);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .form-row input {
+            flex: 1;
+        }
+
+        /* Variable Costs List */
+        .variable-costs-list {
+            margin-top: 16px;
+        }
+
+        .variable-cost-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .variable-cost-item input[type="text"] {
+            flex: 2;
+        }
+
+        .variable-cost-item input[type="number"] {
+            flex: 1;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-soft);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--brand);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            position: sticky;
+            top: var(--spacing);
+        }
+
+        .kpi {
+            margin-bottom: var(--spacing);
+        }
+
+        .kpi-value {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+            transition: color 0.2s ease;
+        }
+
+        .kpi-label {
+            font-size: 1rem;
+            color: var(--text-soft);
+        }
+
+        .kpi-secondary {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .kpi-positive {
+            color: var(--success);
+        }
+
+        .kpi-negative {
+            color: var(--brand);
+        }
+
+        .kpi-neutral {
+            color: var(--info);
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--bg-soft);
+            color: var(--text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Presenter Mode */
+        .presenter-mode .kpi-value {
+            font-size: 3.6rem;
+        }
+
+        .presenter-mode .kpi-secondary {
+            font-size: 1.8rem;
+        }
+
+        .presenter-mode .card {
+            background-color: var(--bg);
+            box-shadow: none;
+            border: none;
+        }
+
+        .presenter-overlay {
+            position: fixed;
+            bottom: var(--spacing);
+            right: var(--spacing);
+            background-color: var(--brand);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .presenter-mode .presenter-overlay {
+            display: block;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .presets {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            background-color: var(--bg-soft);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .currency-selector {
+            width: 80px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+                padding: 0;
+            }
+
+            .container {
+                display: block;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .results-panel {
+                position: static;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .value-change {
+            animation: pulse 0.3s ease;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Info Section */
+        .info-section {
+            margin-top: var(--spacing);
+            padding: var(--spacing);
+            background-color: var(--bg-soft);
+            border-radius: var(--radius);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="btn-secondary" style="position: fixed; top: 16px; right: 16px; z-index: 10;">🌓</button>
+
+    <div class="container">
+        <div class="input-panel">
+            <h1>Contribution Income Calculator</h1>
+            
+            <!-- Basic Inputs -->
+            <div class="card">
+                <h2>Basic Inputs</h2>
+                
+                <div class="form-group">
+                    <label for="currency">Currency</label>
+                    <select id="currency" class="currency-selector">
+                        <option value="$">$ USD</option>
+                        <option value="€">€ EUR</option>
+                        <option value="£">£ GBP</option>
+                        <option value="¥">¥ JPY</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="revenue">Revenue <span class="tooltip">?<span class="tooltip-text">Total income from sales before any expenses</span></span></label>
+                    <input type="number" id="revenue" min="0" step="1000" placeholder="Enter revenue amount">
+                </div>
+            </div>
+            
+            <!-- Variable Costs -->
+            <div class="card">
+                <div class="form-group">
+                    <h2>Variable Costs <span class="tooltip">?<span class="tooltip-text">Costs that change with production volume (e.g., materials, commissions)</span></span></h2>
+                    <button id="add-cost-btn" class="btn-secondary btn-small">+ Add Cost Item</button>
+                </div>
+                
+                <div class="variable-costs-list" id="variable-costs-container">
+                    <!-- Cost items will be added here dynamically -->
+                </div>
+            </div>
+            
+            <!-- Advanced Options -->
+            <div class="card">
+                <h2>Advanced Options</h2>
+                
+                <div class="form-group">
+                    <label class="form-row">
+                        <input type="checkbox" id="show-gross-profit">
+                        <span>Show Gross Profit</span>
+                    </label>
+                </div>
+                
+                <div id="gross-profit-section" class="hidden">
+                    <div class="form-group">
+                        <label for="cogs">Cost of Goods Sold (COGS)</label>
+                        <input type="number" id="cogs" min="0" step="1000" placeholder="Enter COGS amount">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-row">
+                        <input type="checkbox" id="show-fixed-costs">
+                        <span>Show Fixed Costs</span>
+                    </label>
+                </div>
+                
+                <div id="fixed-costs-section" class="hidden">
+                    <div class="form-group">
+                        <label for="fixed-costs">Fixed Costs</label>
+                        <input type="number" id="fixed-costs" min="0" step="1000" placeholder="Enter fixed costs amount">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scenario Tools -->
+            <div class="card no-print">
+                <h2>Scenario Tools</h2>
+                
+                <div class="form-group">
+                    <label for="scenario-slider">Revenue Scenario (±50%)</label>
+                    <input type="range" id="scenario-slider" min="-50" max="50" value="0" step="5">
+                    <div class="form-row" style="justify-content: space-between;">
+                        <span>-50%</span>
+                        <span id="scenario-value">0%</span>
+                        <span>+50%</span>
+                    </div>
+                </div>
+                
+                <div class="presets">
+                    <h3 style="width: 100%; margin-bottom: 8px;">Presets:</h3>
+                    <button class="preset-btn" data-preset="agency">Agency Retainer</button>
+                    <button class="preset-btn" data-preset="d2c">DTC Order</button>
+                    <button class="preset-btn" data-preset="saas">SaaS Subscription</button>
+                </div>
+                
+                <div class="actions">
+                    <button id="reset-btn" class="btn-secondary">Reset</button>
+                    <button id="undo-btn" class="btn-secondary">Undo</button>
+                    <button id="copy-btn" class="btn-secondary">Copy Snapshot</button>
+                    <button id="csv-btn" class="btn-secondary">Download CSV</button>
+                    <button id="print-btn" class="btn-secondary">Print</button>
+                    <button id="info-btn" class="btn-secondary">About</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Panel -->
+        <div class="results-panel">
+            <div class="card">
+                <h2>Results</h2>
+                
+                <div class="kpi">
+                    <div class="kpi-value" id="contribution-income">$0</div>
+                    <div class="kpi-label">Contribution Income <span class="tooltip">?<span class="tooltip-text">Revenue minus variable costs - shows how much contributes to covering fixed costs and profit</span></span></div>
+                </div>
+                
+                <div class="kpi">
+                    <div class="kpi-value kpi-neutral" id="contribution-margin">0%</div>
+                    <div class="kpi-label">Contribution Margin <span class="tooltip">?<span class="tooltip-text">Contribution Income as a percentage of Revenue - shows efficiency</span></span></div>
+                </div>
+                
+                <div class="kpi">
+                    <div class="kpi-value kpi-secondary" id="revenue-display">$0</div>
+                    <div class="kpi-label">Revenue</div>
+                </div>
+                
+                <div class="kpi">
+                    <div class="kpi-value kpi-secondary" id="variable-costs-display">$0</div>
+                    <div class="kpi-label">Variable Costs</div>
+                </div>
+                
+                <div id="gross-profit-results" class="hidden">
+                    <div class="kpi">
+                        <div class="kpi-value kpi-secondary" id="gross-profit-display">$0</div>
+                        <div class="kpi-label">Gross Profit</div>
+                    </div>
+                    
+                    <div class="kpi">
+                        <div class="kpi-value kpi-secondary" id="gross-margin-display">0%</div>
+                        <div class="kpi-label">Gross Margin</div>
+                    </div>
+                </div>
+                
+                <div id="operating-profit-results" class="hidden">
+                    <div class="kpi">
+                        <div class="kpi-value kpi-secondary" id="operating-profit-display">$0</div>
+                        <div class="kpi-label">Operating Profit</div>
+                    </div>
+                    
+                    <div class="kpi">
+                        <div class="kpi-value kpi-secondary" id="operating-margin-display">0%</div>
+                        <div class="kpi-label">Operating Margin</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Webinar Tools -->
+            <div class="card no-print">
+                <h2>Webinar Tools</h2>
+                
+                <div class="form-group">
+                    <label class="form-row">
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="presenter-mode">
+                            <span class="toggle-slider"></span>
+                        </div>
+                        <span>Presenter Mode</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <button id="help-btn" class="btn-secondary">Keyboard Shortcuts (?)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Presenter Overlay -->
+    <div class="presenter-overlay" id="presenter-overlay">
+        Last change: Initial load
+    </div>
+    
+    <!-- Info Modal -->
+    <div class="modal" id="info-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="info-modal-close">×</button>
+            <h2>About Contribution Income</h2>
+            <div class="info-section">
+                <h3>1. The Core Idea</h3>
+                <p>Every sale brings in revenue. But not all of that revenue is yours to keep — first you have to pay for everything that changes with each sale: ad spend to acquire the customer, contractors or delivery labour, payment processing fees, shipping or fulfilment, and any other cost that rises as sales rise. Once those are paid, what's left is your contribution income.</p>
+                
+                <h3>2. The Simple Formula</h3>
+                <p><strong>Contribution Income = Revenue − Variable Costs</strong></p>
+                <p>Example: You sell a service for $10,000. It costs $7,000 to deliver (ads, freelancers, commissions). → Contribution Income = $3,000. That $3,000 goes toward paying your fixed costs — like full-time staff, office rent, and tools — and whatever remains after that becomes your net profit.</p>
+                
+                <h3>3. Why It Matters</h3>
+                <p>It tells you how much each sale truly adds to the business, not just revenue on paper. It shows whether your offers are scalable — if your contribution income is thin, growing sales might not grow profit. It's the control metric for pricing, CAC, and margin discipline.</p>
+                
+                <h3>4. The Relationship to Contribution Margin (%)</h3>
+                <p>Contribution Income is the actual number (the dollars left after variable costs). Contribution Margin is the percentage of each sale that becomes contribution income. Example: If you make $3,000 on a $10,000 sale, your contribution margin = 30%.</p>
+                
+                <h3>5. The Big Picture</h3>
+                <p>Think of your business in layers: Revenue – total money coming in. Variable Costs – what you spend to make that money. Contribution Income – what's left to cover fixed costs and profit. Fixed Costs – salaries, rent, software. Net Profit – what's left after everything.</p>
+                <p><strong>In one line:</strong> Contribution income is the cash each sale contributes to running and growing your business — after delivery costs, before overheads.</p>
+            </div>
+            <div class="actions">
+                <button id="close-info-btn" class="btn-primary">Got it!</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div class="modal" id="help-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="help-modal-close">×</button>
+            <h2>Keyboard Shortcuts</h2>
+            <ul style="list-style: none; padding: 0; margin: 16px 0;">
+                <li style="padding: 8px 0; border-bottom: 1px solid var(--card-border);"><strong>R</strong> - Focus Revenue field</li>
+                <li style="padding: 8px 0; border-bottom: 1px solid var(--card-border);"><strong>A</strong> - Add new variable cost</li>
+                <li style="padding: 8px 0; border-bottom: 1px solid var(--card-border);"><strong>D</strong> - Delete selected cost</li>
+                <li style="padding: 8px 0; border-bottom: 1px solid var(--card-border);"><strong>M</strong> - Toggle Presenter Mode</li>
+                <li style="padding: 8px 0; border-bottom: 1px solid var(--card-border);"><strong>?</strong> - Show this help</li>
+                <li style="padding: 8px 0;"><strong>Esc</strong> - Close any open modal</li>
+            </ul>
+            <div class="actions">
+                <button id="close-help-btn" class="btn-primary">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let state = {
+            currency: '$',
+            revenue: 100000,
+            variableCosts: [
+                { name: 'Contractors', amount: 30000, included: true },
+                { name: 'Paid Ads', amount: 20000, included: true },
+                { name: 'Processing Fees', amount: 3000, included: true }
+            ],
+            cogs: 0,
+            fixedCosts: 0,
+            showGrossProfit: false,
+            showFixedCosts: false,
+            scenarioAdjustment: 0,
+            history: []
+        };
+
+        // DOM Elements
+        const elements = {
+            currency: document.getElementById('currency'),
+            revenue: document.getElementById('revenue'),
+            variableCostsContainer: document.getElementById('variable-costs-container'),
+            addCostBtn: document.getElementById('add-cost-btn'),
+            showGrossProfit: document.getElementById('show-gross-profit'),
+            showFixedCosts: document.getElementById('show-fixed-costs'),
+            cogs: document.getElementById('cogs'),
+            fixedCosts: document.getElementById('fixed-costs'),
+            scenarioSlider: document.getElementById('scenario-slider'),
+            scenarioValue: document.getElementById('scenario-value'),
+            resetBtn: document.getElementById('reset-btn'),
+            undoBtn: document.getElementById('undo-btn'),
+            copyBtn: document.getElementById('copy-btn'),
+            csvBtn: document.getElementById('csv-btn'),
+            printBtn: document.getElementById('print-btn'),
+            infoBtn: document.getElementById('info-btn'),
+            presenterMode: document.getElementById('presenter-mode'),
+            presenterOverlay: document.getElementById('presenter-overlay'),
+            helpBtn: document.getElementById('help-btn'),
+            contributionIncome: document.getElementById('contribution-income'),
+            contributionMargin: document.getElementById('contribution-margin'),
+            revenueDisplay: document.getElementById('revenue-display'),
+            variableCostsDisplay: document.getElementById('variable-costs-display'),
+            grossProfitDisplay: document.getElementById('gross-profit-display'),
+            grossMarginDisplay: document.getElementById('gross-margin-display'),
+            operatingProfitDisplay: document.getElementById('operating-profit-display'),
+            operatingMarginDisplay: document.getElementById('operating-margin-display'),
+            grossProfitResults: document.getElementById('gross-profit-results'),
+            operatingProfitResults: document.getElementById('operating-profit-results'),
+            grossProfitSection: document.getElementById('gross-profit-section'),
+            fixedCostsSection: document.getElementById('fixed-costs-section'),
+            themeToggle: document.getElementById('theme-toggle'),
+            infoModal: document.getElementById('info-modal'),
+            helpModal: document.getElementById('help-modal'),
+            closeInfoBtn: document.getElementById('close-info-btn'),
+            closeHelpBtn: document.getElementById('close-help-btn'),
+            infoModalClose: document.getElementById('info-modal-close'),
+            helpModalClose: document.getElementById('help-modal-close')
+        };
+
+        // Initialize the calculator
+        function init() {
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Load state from URL hash if available
+            loadStateFromHash();
+            
+            // Initialize UI with default state
+            renderUI();
+            
+            // Calculate initial values
+            recalculate();
+            
+            // Save initial state to history
+            saveStateToHistory();
+            
+            // Check preferred theme
+            checkThemePreference();
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Input changes
+            elements.currency.addEventListener('change', handleCurrencyChange);
+            elements.revenue.addEventListener('change', handleRevenueChange);
+            elements.addCostBtn.addEventListener('click', addVariableCostRow);
+            elements.showGrossProfit.addEventListener('change', toggleGrossProfit);
+            elements.showFixedCosts.addEventListener('change', toggleFixedCosts);
+            elements.cogs.addEventListener('change', handleCogsChange);
+            elements.fixedCosts.addEventListener('change', handleFixedCostsChange);
+            elements.scenarioSlider.addEventListener('input', handleScenarioChange);
+            
+            // Buttons
+            elements.resetBtn.addEventListener('click', resetCalculator);
+            elements.undoBtn.addEventListener('click', undoLastChange);
+            elements.copyBtn.addEventListener('click', copySnapshot);
+            elements.csvBtn.addEventListener('click', downloadCSV);
+            elements.printBtn.addEventListener('click', printCalculator);
+            elements.infoBtn.addEventListener('click', showInfoModal);
+            elements.helpBtn.addEventListener('click', showHelpModal);
+            elements.presenterMode.addEventListener('change', togglePresenterMode);
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            elements.closeInfoBtn.addEventListener('click', hideInfoModal);
+            elements.closeHelpBtn.addEventListener('click', hideHelpModal);
+            elements.infoModalClose.addEventListener('click', hideInfoModal);
+            elements.helpModalClose.addEventListener('click', hideHelpModal);
+            
+            // Preset buttons
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+            
+            // Modal close on click outside
+            window.addEventListener('click', (e) => {
+                if (e.target === elements.infoModal) hideInfoModal();
+                if (e.target === elements.helpModal) hideHelpModal();
+            });
+            
+            // Save state when leaving the page
+            window.addEventListener('beforeunload', saveStateToHash);
+        }
+
+        // Handle keyboard shortcuts
+        function handleKeyboardShortcuts(e) {
+            // Ignore if typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+            
+            switch (e.key.toLowerCase()) {
+                case 'r':
+                    // Focus Revenue field
+                    e.preventDefault();
+                    elements.revenue.focus();
+                    elements.revenue.select();
+                    break;
+                case 'a':
+                    // Add new variable cost
+                    e.preventDefault();
+                    addVariableCostRow();
+                    break;
+                case 'd':
+                    // Delete selected cost
+                    e.preventDefault();
+                    deleteSelectedCost();
+                    break;
+                case 'm':
+                    // Toggle Presenter Mode
+                    e.preventDefault();
+                    elements.presenterMode.checked = !elements.presenterMode.checked;
+                    togglePresenterMode();
+                    break;
+                case '?':
+                    // Show help
+                    e.preventDefault();
+                    showHelpModal();
+                    break;
+                case 'escape':
+                    // Close modals
+                    hideInfoModal();
+                    hideHelpModal();
+                    break;
+            }
+        }
+
+        // Delete the selected cost (last focused)
+        function deleteSelectedCost() {
+            const focused = document.activeElement;
+            if (!focused || !focused.closest('.variable-cost-item')) return;
+            
+            const row = focused.closest('.variable-cost-item');
+            const index = Array.from(row.parentNode.children).indexOf(row);
+            
+            if (index >= 0 && index < state.variableCosts.length) {
+                state.variableCosts.splice(index, 1);
+                saveStateToHistory();
+                renderVariableCosts();
+                recalculate();
+            }
+        }
+
+        // Apply a preset configuration
+        function applyPreset(preset) {
+            switch (preset) {
+                case 'agency':
+                    state.revenue = 15000;
+                    state.variableCosts = [
+                        { name: 'Freelancers', amount: 6000, included: true },
+                        { name: 'Software', amount: 1000, included: true },
+                        { name: 'Ads', amount: 2000, included: true }
+                    ];
+                    state.cogs = 0;
+                    state.fixedCosts = 8000;
+                    break;
+                case 'd2c':
+                    state.revenue = 120;
+                    state.variableCosts = [
+                        { name: 'Product Cost', amount: 30, included: true },
+                        { name: 'Packaging', amount: 5, included: true },
+                        { name: 'Shipping', amount: 10, included: true },
+                        { name: 'Ads', amount: 20, included: true }
+                    ];
+                    state.cogs = 45;
+                    state.fixedCosts = 15;
+                    break;
+                case 'saas':
+                    state.revenue = 99;
+                    state.variableCosts = [
+                        { name: 'Stripe Fees', amount: 3, included: true },
+                        { name: 'Support', amount: 5, included: true },
+                        { name: 'Hosting', amount: 2, included: true }
+                    ];
+                    state.cogs = 0;
+                    state.fixedCosts = 50;
+                    break;
+            }
+            
+            // Set scenario back to 0
+            state.scenarioAdjustment = 0;
+            elements.scenarioSlider.value = 0;
+            elements.scenarioValue.textContent = '0%';
+            
+            // Update UI
+            saveStateToHistory();
+            renderUI();
+            recalculate();
+            updatePresenterOverlay(`Applied preset: ${preset}`);
+        }
+
+        // Handle currency change
+        function handleCurrencyChange() {
+            state.currency = elements.currency.value;
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Currency changed to ${state.currency}`);
+        }
+
+        // Handle revenue change
+        function handleRevenueChange() {
+            const value = parseFloat(elements.revenue.value) || 0;
+            state.revenue = Math.max(0, value);
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Revenue → ${formatCurrency(state.revenue * (1 + state.scenarioAdjustment / 100))}`);
+        }
+
+        // Handle COGS change
+        function handleCogsChange() {
+            const value = parseFloat(elements.cogs.value) || 0;
+            state.cogs = Math.max(0, value);
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`COGS → ${formatCurrency(state.cogs)}`);
+        }
+
+        // Handle fixed costs change
+        function handleFixedCostsChange() {
+            const value = parseFloat(elements.fixedCosts.value) || 0;
+            state.fixedCosts = Math.max(0, value);
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Fixed Costs → ${formatCurrency(state.fixedCosts)}`);
+        }
+
+        // Handle scenario slider change
+        function handleScenarioChange() {
+            state.scenarioAdjustment = parseInt(elements.scenarioSlider.value);
+            elements.scenarioValue.textContent = `${state.scenarioAdjustment}%`;
+            recalculate();
+            updatePresenterOverlay(`Scenario: ${state.scenarioAdjustment > 0 ? '+' : ''}${state.scenarioAdjustment}% revenue`);
+        }
+
+        // Toggle gross profit section
+        function toggleGrossProfit() {
+            state.showGrossProfit = elements.showGrossProfit.checked;
+            elements.grossProfitSection.classList.toggle('hidden', !state.showGrossProfit);
+            elements.grossProfitResults.classList.toggle('hidden', !state.showGrossProfit);
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Gross Profit ${state.showGrossProfit ? 'shown' : 'hidden'}`);
+        }
+
+        // Toggle fixed costs section
+        function toggleFixedCosts() {
+            state.showFixedCosts = elements.showFixedCosts.checked;
+            elements.fixedCostsSection.classList.toggle('hidden', !state.showFixedCosts);
+            elements.operatingProfitResults.classList.toggle('hidden', !state.showFixedCosts);
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Fixed Costs ${state.showFixedCosts ? 'shown' : 'hidden'}`);
+        }
+
+        // Add a new variable cost row
+        function addVariableCostRow() {
+            state.variableCosts.push({
+                name: 'New Cost',
+                amount: 0,
+                included: true
+            });
+            saveStateToHistory();
+            renderVariableCosts();
+            recalculate();
+            updatePresenterOverlay('Added new variable cost');
+            
+            // Focus the new row's name field
+            const lastRow = document.querySelector('.variable-cost-item:last-child input[type="text"]');
+            if (lastRow) {
+                lastRow.focus();
+                lastRow.select();
+            }
+        }
+
+        // Handle variable cost name change
+        function handleCostNameChange(index, e) {
+            state.variableCosts[index].name = e.target.value;
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Cost name changed: ${e.target.value}`);
+        }
+
+        // Handle variable cost amount change
+        function handleCostAmountChange(index, e) {
+            const value = parseFloat(e.target.value) || 0;
+            state.variableCosts[index].amount = Math.max(0, value);
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Cost amount changed: ${formatCurrency(value)}`);
+        }
+
+        // Handle variable cost include toggle
+        function handleCostIncludeChange(index, e) {
+            state.variableCosts[index].included = e.target.checked;
+            saveStateToHistory();
+            recalculate();
+            updatePresenterOverlay(`Cost ${e.target.checked ? 'included
