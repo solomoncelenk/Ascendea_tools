@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision ICP Pyramid™</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .pyramid-layer {
+            transition: all 0.3s ease;
+        }
+        .pyramid-layer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .has-tooltip:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Precision ICP Pyramid™</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                A <span class="font-semibold text-blue-600">score-based qualification</span> framework that removes subjectivity from prospecting
+            </p>
+        </div>
+
+        <!-- Pyramid Visualization -->
+        <div class="flex flex-col items-center mb-20">
+            <!-- Layer 3 -->
+            <div class="pyramid-layer w-full max-w-2xl bg-white rounded-lg shadow-md p-6 mb-6 border-l-8 border-indigo-500 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-indigo-500"></div>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="text-sm font-semibold px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full mr-3">Layer 3</span>
+                            <h3 class="text-2xl font-bold text-gray-800">Decision Pathway Predictability</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Ensure the buying process is navigable with minimal risk of stall.</p>
+                    </div>
+                    <div class="bg-indigo-50 px-4 py-2 rounded-lg md:ml-4">
+                        <span class="text-sm font-medium text-gray-600">Weighting</span>
+                        <div class="text-2xl font-bold text-indigo-700">25%</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Criteria</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-600">
+                            <li>Clarity of decision process</li>
+                            <li>Known approval steps</li>
+                            <li>Availability of decision-makers</li>
+                            <li>Historical cycle predictability</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Scoring</h4>
+                            <div class="flex items-center">
+                                <span class="text-gray-600 mr-2">0-100 scale</span>
+                                <span class="text-sm font-medium px-2 py-1 bg-red-100 text-red-800 rounded">Min 70</span>
+                            </div>
+                            <div class="progress-bar mt-2">
+                                <div class="progress-fill bg-indigo-500" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Measurement Tool</h4>
+                            <div class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-800">
+                                <i class="fas fa-chart-line mr-2"></i>
+                                <span>Decision Navigation Score™</span>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">A forecast integrity metric tied to deal probability</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 2 -->
+            <div class="pyramid-layer w-full max-w-3xl bg-white rounded-lg shadow-md p-6 mb-6 border-l-8 border-blue-500 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="text-sm font-semibold px-3 py-1 bg-blue-100 text-blue-800 rounded-full mr-3">Layer 2</span>
+                            <h3 class="text-2xl font-bold text-gray-800">Problem Urgency & Budget</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Filter for accounts actively motivated to solve the problem now, not later.</p>
+                    </div>
+                    <div class="bg-blue-50 px-4 py-2 rounded-lg md:ml-4">
+                        <span class="text-sm font-medium text-gray-600">Weighting</span>
+                        <div class="text-2xl font-bold text-blue-700">35%</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Criteria</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-600">
+                            <li>Internal recognition of the problem</li>
+                            <li>Urgency trigger events</li>
+                            <li>Budget allocated</li>
+                            <li>Buying cycle start date</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Scoring</h4>
+                            <div class="flex items-center">
+                                <span class="text-gray-600 mr-2">0-100 scale</span>
+                                <span class="text-sm font-medium px-2 py-1 bg-red-100 text-red-800 rounded">Min 75</span>
+                            </div>
+                            <div class="progress-bar mt-2">
+                                <div class="progress-fill bg-blue-500" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Measurement Tool</h4>
+                            <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800">
+                                <i class="fas fa-bolt mr-2"></i>
+                                <span>ICP Activation Readiness Score™</span>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">Scored during discovery and updated dynamically based on signal intelligence</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 1 -->
+            <div class="pyramid-layer w-full max-w-4xl bg-white rounded-lg shadow-md p-6 border-l-8 border-green-500 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-green-500"></div>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="text-sm font-semibold px-3 py-1 bg-green-100 text-green-800 rounded-full mr-3">Layer 1</span>
+                            <h3 class="text-2xl font-bold text-gray-800">Revenue Engine Fit</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Ensure account viability before any resource commitment.</p>
+                    </div>
+                    <div class="bg-green-50 px-4 py-2 rounded-lg md:ml-4">
+                        <span class="text-sm font-medium text-gray-600">Weighting</span>
+                        <div class="text-2xl font-bold text-green-700">40%</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Criteria</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-600">
+                            <li>Industry alignment</li>
+                            <li>Company size</li>
+                            <li>Annual revenue potential</li>
+                            <li>Decision-making unit complexity</li>
+                            <li>Purchasing authority</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Scoring</h4>
+                            <div class="flex items-center">
+                                <span class="text-gray-600 mr-2">0-100 scale</span>
+                                <span class="text-sm font-medium px-2 py-1 bg-red-100 text-red-800 rounded">Min 80</span>
+                            </div>
+                            <div class="progress-bar mt-2">
+                                <div class="progress-fill bg-green-500" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Measurement Tool</h4>
+                            <div class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800">
+                                <i class="fas fa-filter mr-2"></i>
+                                <span>ICP Structural Fit Score™</span>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">A composite score embedded in CRM for automatic filtering</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operational Integration Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Operational Integration</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-robot text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Automation</h3>
+                    </div>
+                    <p class="text-gray-600">Build ICP scoring rules directly into CRM lead routing to automatically qualify or disqualify prospects based on the Precision ICP Pyramid™ criteria.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-orange-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-shield-alt text-orange-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Governance</h3>
+                    </div>
+                    <p class="text-gray-600">Any lead or account below the threshold at any layer is recycled into nurture sequences, not advanced into the pipeline, ensuring resource efficiency.</p>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-blue-800">Implementation Note</h3>
+                        <p class="mt-2 text-blue-700">The Precision ICP Pyramid™ works best when integrated with your existing CRM and marketing automation platforms. Consider implementing:</p>
+                        <ul class="mt-2 list-disc pl-5 space-y-1 text-blue-700">
+                            <li>Automated scoring workflows</li>
+                            <li>Dynamic lead routing based on layer scores</li>
+                            <li>Visual dashboards to track layer progression</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Calculator -->
+        <div class="mt-20 bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">ICP Score Calculator</h2>
+            <p class="text-gray-600 text-center mb-8">Estimate your prospect's total ICP score based on the Precision Pyramid™ layers</p>
+            
+            <div class="space-y-6">
+                <!-- Layer 1 Input -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="layer1" class="block text-sm font-medium text-gray-700">Layer 1: Revenue Engine Fit (40%)</label>
+                        <span id="layer1Value" class="text-sm font-medium text-gray-500">0</span>
+                    </div>
+                    <input type="range" id="layer1" min="0" max="100" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>0</span>
+                        <span>100</span>
+                    </div>
+                    <div class="mt-1 text-sm text-red-600 hidden" id="layer1Error">Score must be ≥ 80 to pass</div>
+                </div>
+                
+                <!-- Layer 2 Input -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="layer2" class="block text-sm font-medium text-gray-700">Layer 2: Problem Urgency & Budget (35%)</label>
+                        <span id="layer2Value" class="text-sm font-medium text-gray-500">0</span>
+                    </div>
+                    <input type="range" id="layer2" min="0" max="100" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>0</span>
+                        <span>100</span>
+                    </div>
+                    <div class="mt-1 text-sm text-red-600 hidden" id="layer2Error">Score must be ≥ 75 to pass</div>
+                </div>
+                
+                <!-- Layer 3 Input -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="layer3" class="block text-sm font-medium text-gray-700">Layer 3: Decision Pathway Predictability (25%)</label>
+                        <span id="layer3Value" class="text-sm font-medium text-gray-500">0</span>
+                    </div>
+                    <input type="range" id="layer3" min="0" max="100" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>0</span>
+                        <span>100</span>
+                    </div>
+                    <div class="mt-1 text-sm text-red-600 hidden" id="layer3Error">Score must be ≥ 70 to pass</div>
+                </div>
+                
+                <!-- Results -->
+                <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-800">Total ICP Score</h3>
+                        <span id="totalScore" class="text-3xl font-bold text-gray-800">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="totalProgress" class="progress-fill bg-gradient-to-r from-green-500 to-blue-500" style="width: 0%"></div>
+                    </div>
+                    <div id="resultMessage" class="mt-4 p-4 rounded-lg hidden">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i id="resultIcon" class="fas text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 id="resultTitle" class="text-lg font-medium"></h4>
+                                <p id="resultDescription" class="mt-1 text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-20 text-center text-gray-500 text-sm">
+            <p>Precision ICP Pyramid™ - A systematic approach to ideal customer profiling</p>
+            <p class="mt-2">© <span id="currentYear"></span> All rights reserved</p>
+        </div>
+    </div>
+
+    <script>
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Calculator functionality
+        const layer1Input = document.getElementById('layer1');
+        const layer2Input = document.getElementById('layer2');
+        const layer3Input = document.getElementById('layer3');
+        const layer1Value = document.getElementById('layer1Value');
+        const layer2Value = document.getElementById('layer2Value');
+        const layer3Value = document.getElementById('layer3Value');
+        const totalScore = document.getElementById('totalScore');
+        const totalProgress = document.getElementById('totalProgress');
+        const resultMessage = document.getElementById('resultMessage');
+        const resultIcon = document.getElementById('resultIcon');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDescription = document.getElementById('resultDescription');
+        const layer1Error = document.getElementById('layer1Error');
+        const layer2Error = document.getElementById('layer2Error');
+        const layer3Error = document.getElementById('layer3Error');
+
+        function calculateScore() {
+            const layer1Score = parseInt(layer1Input.value);
+            const layer2Score = parseInt(layer2Input.value);
+            const layer3Score = parseInt(layer3Input.value);
+            
+            // Update displayed values
+            layer1Value.textContent = layer1Score;
+            layer2Value.textContent = layer2Score;
+            layer3Value.textContent = layer3Score;
+            
+            // Calculate weighted total
+            const weightedTotal = (layer1Score * 0.4) + (layer2Score * 0.35) + (layer3Score * 0.25);
+            totalScore.textContent = Math.round(weightedTotal);
+            totalProgress.style.width = `${weightedTotal}%`;
+            
+            // Check thresholds
+            const layer1Pass = layer1Score >= 80;
+            const layer2Pass = layer2Score >= 75;
+            const layer3Pass = layer3Score >= 70;
+            
+            // Show/hide errors
+            layer1Error.classList.toggle('hidden', layer1Pass);
+            layer2Error.classList.toggle('hidden', layer2Pass);
+            layer3Error.classList.toggle('hidden', layer3Pass);
+            
+            // Determine result message
+            let allPass = layer1Pass && layer2Pass && layer3Pass;
+            let anyPass = layer1Pass || layer2Pass || layer3Pass;
+            
+            if (allPass) {
+                showResult('success', 'Strong ICP Fit', 'This prospect meets all criteria thresholds and should be prioritized for immediate engagement.');
+            } else if (weightedTotal >= 70 && anyPass) {
+                showResult('warning', 'Moderate ICP Fit', 'This prospect shows potential but may require additional qualification. Consider targeted nurturing.');
+            } else {
+                showResult('error', 'Weak ICP Fit', 'This prospect does not meet minimum criteria thresholds. Recommend recycling into nurture sequences.');
+            }
+        }
+        
+        function showResult(type, title, description) {
+            resultMessage.classList.remove('hidden');
+            
+            // Set icon and colors based on type
+            if (type === 'success') {
+                resultIcon.className = 'fas fa-check-circle text-green-500';
+                resultMessage.className = 'mt-4 p-4 rounded-lg bg-green-50 border border-green-200';
+            } else if (type === 'warning') {
+                resultIcon.className = 'fas fa-exclamation-triangle text-yellow-500';
+                resultMessage.className = 'mt-4 p-4 rounded-lg bg-yellow-50 border border-yellow-200';
+            } else {
+                resultIcon.className = 'fas fa-times-circle text-red-500';
+                resultMessage.className = 'mt-4 p-4 rounded-lg bg-red-50 border border-red-200';
+            }
+            
+            resultTitle.textContent = title;
+            resultDescription.textContent = description;
+        }
+        
+        // Add event listeners
+        layer1Input.addEventListener('input', calculateScore);
+        layer2Input.addEventListener('input', calculateScore);
+        layer3Input.addEventListener('input', calculateScore);
+        
+        // Initial calculation
+        calculateScore();
+    </script>
+<p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=tjmac1/precision-icp-pyramid" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p></body>
+</html>
