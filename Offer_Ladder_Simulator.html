@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offer Ladder Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .offer-card {
+            transition: all 0.3s ease;
+        }
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .conversion-path {
+            position: relative;
+        }
+        .conversion-path::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -20px;
+            width: 20px;
+            height: 2px;
+            background: #3b82f6;
+        }
+        .conversion-path:last-child::after {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .conversion-path::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Offer Ladder Simulator</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Visualize your offer hierarchy, calculate profitability, and optimize your funnel architecture
+            </p>
+        </header>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-10">
+            <div class="flex flex-wrap justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-gray-800">Funnel Metrics</h2>
+                <button id="reset-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                    <i class="fas fa-redo mr-2"></i>Reset All
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <label for="total-traffic" class="block text-sm font-medium text-gray-700 mb-1">Total Traffic</label>
+                    <div class="relative">
+                        <input type="number" id="total-traffic" value="1000" min="0" 
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-users text-gray-500"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <label for="base-conversion" class="block text-sm font-medium text-gray-700 mb-1">Base Conversion Rate (%)</label>
+                    <div class="relative">
+                        <input type="number" id="base-conversion" value="5" min="0" max="100" 
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-percentage text-gray-500"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <label for="upsell-rate" class="block text-sm font-medium text-gray-700 mb-1">Upsell Take Rate (%)</label>
+                    <div class="relative">
+                        <input type="number" id="upsell-rate" value="20" min="0" max="100" 
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-arrow-up text-gray-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <div class="flex flex-col md:flex-row items-stretch gap-6 min-w-max pb-6">
+                    <!-- Low Ticket Offer -->
+                    <div class="offer-card bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex-1 min-w-[280px] conversion-path">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-blue-600">Low Ticket Offer</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Entry Point</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="low-price" class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                                <input type="number" id="low-price" value="27" min="0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div>
+                                <label for="low-cost" class="block text-sm font-medium text-gray-700 mb-1">Cost Per Unit ($)</label>
+                                <input type="number" id="low-cost" value="7" min="0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-medium text-gray-700">Profit/Unit:</span>
+                                    <span id="low-profit" class="font-bold text-blue-700">$20.00</span>
+                                </div>
+                                <div class="flex justify-between text-sm mt-1">
+                                    <span class="font-medium text-gray-700">Conversions:</span>
+                                    <span id="low-conversions" class="font-bold text-blue-700">50</span>
+                                </div>
+                                <div class="flex justify-between text-sm mt-1">
+                                    <span class="font-medium text-gray-700">Revenue:</span>
+                                    <span id="low-revenue" class="font-bold text-blue-700">$1,350.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mid Ticket Offer -->
+                    <div class="offer-card bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex-1 min-w-[280px] conversion-path">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-purple-600">Mid Ticket Offer</h3>
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Upsell 1</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="mid-price" class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                                <input type="number" id="mid-price" value="97" min="0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500">
+                            </div>
+                            
+                            <div>
+                                <label for="mid-cost" class="block text-sm font-medium text-gray-700 mb-1">Cost Per Unit ($)</label>
+                                <input type="number" id="mid-cost" value="27" min="0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500">
+                            </div>
+                            
+                            <div class="bg-purple-50 p-3 rounded-lg">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-medium text-gray-700">Profit/Unit:</span>
+                                    <span id="mid-profit" class="font-bold text-purple-700">$70.00</span>
+                                </div>
+                                <div class="flex justify-between text-sm mt-1">
+                                    <span class="font-medium text-gray-700">Conversions:</span>
+                                    <span id="mid-conversions" class="font-bold text-purple-700">10</span>
+                                </div>
+                                <div class="flex justify-between text-sm mt-1">
+                                    <span class="font-medium text-gray-700">Revenue:</span>
+                                    <span id="mid-revenue" class="font-bold text-purple-700">$970.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- High Ticket Offer -->
+                    <div class="offer-card bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex-1 min-w-[280px]">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-green-600">High Ticket Offer</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Upsell 2</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="high-price" class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                                <input type="number" id="high-price" value="497" min="0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            
+                            <div>
+                                <label for="high-cost" class="block text-sm font-medium text-gray-700 mb-1">Cost Per Unit ($)</label>
+                                <input type="number" id="high-cost" value="147" min="0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-medium text-gray-700">Profit/Unit:</span>
+                                    <span id="high-profit" class="font-bold text-green-700">$350.00</span>
+                                </div>
+                                <div class="flex justify-between text-sm mt-1">
+                                    <span class="font-medium text-gray-700">Conversions:</span>
+                                    <span id="high-conversions" class="font-bold text-green-700">2</span>
+                                </div>
+                                <div class="flex justify-between text-sm mt-1">
+                                    <span class="font-medium text-gray-700">Revenue:</span>
+                                    <span id="high-revenue" class="font-bold text-green-700">$994.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-lightbulb text-yellow-500 text-xl mt-1"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-yellow-800">Pro Tip</h3>
+                        <div class="mt-1 text-sm text-yellow-700">
+                            <p>Optimize your offer ladder by testing different price points and upsell sequences. The most profitable funnels often have:</p>
+                            <ul class="list-disc pl-5 mt-2 space-y-1">
+                                <li>Low-ticket offer conversion rate above 5%</li>
+                                <li>Mid-ticket upsell take rate between 15-30%</li>
+                                <li>High-ticket upsell take rate between 5-15%</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Funnel Summary</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">Performance Metrics</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Revenue:</span>
+                            <span id="total-revenue" class="font-bold text-gray-800">$3,314.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Profit:</span>
+                            <span id="total-profit" class="font-bold text-gray-800">$2,170.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Average Order Value:</span>
+                            <span id="avg-order-value" class="font-bold text-gray-800">$53.27</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Customer Lifetime Value:</span>
+                            <span id="cltv" class="font-bold text-gray-800">$53.27</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">Conversion Rates</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Front-End Conversion:</span>
+                            <span id="frontend-conversion" class="font-bold text-gray-800">5.00%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Mid-Ticket Take Rate:</span>
+                            <span id="mid-take-rate" class="font-bold text-gray-800">20.00%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">High-Ticket Take Rate:</span>
+                            <span id="high-take-rate" class="font-bold text-gray-800">20.00%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Overall Conversion:</span>
+                            <span id="overall-conversion" class="font-bold text-gray-800">6.20%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-indigo-50 p-4 rounded-lg">
+                <h3 class="text-lg font-medium text-indigo-800 mb-3">ROI Calculator</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="ad-spend" class="block text-sm font-medium text-gray-700 mb-1">Ad Spend ($)</label>
+                        <input type="number" id="ad-spend" value="500" min="0" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="cpa" class="block text-sm font-medium text-gray-700 mb-1">Cost Per Acquisition ($)</label>
+                        <input type="number" id="cpa" value="10" min="0" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" readonly>
+                    </div>
+                    
+                    <div class="bg-indigo-100 p-3 rounded-lg">
+                        <div class="flex justify-between">
+                            <span class="text-sm font-medium text-indigo-800">ROI:</span>
+                            <span id="roi" class="text-lg font-bold text-indigo-800">334.00%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get all input elements
+        const inputs = document.querySelectorAll('input[type="number"]');
+        
+        // Add event listeners to all inputs
+        inputs.forEach(input => {
+            input.addEventListener('input', calculateMetrics);
+        });
+        
+        // Reset button
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            document.getElementById('total-traffic').value = 1000;
+            document.getElementById('base-conversion').value = 5;
+            document.getElementById('upsell-rate').value = 20;
+            
+            document.getElementById('low-price').value = 27;
+            document.getElementById('low-cost').value = 7;
+            
+            document.getElementById('mid-price').value = 97;
+            document.getElementById('mid-cost').value = 27;
+            
+            document.getElementById('high-price').value = 497;
+            document.getElementById('high-cost').value = 147;
+            
+            document.getElementById('ad-spend').value = 500;
+            
+            calculateMetrics();
+        });
+        
+        // Main calculation function
+        function calculateMetrics() {
+            // Get funnel metrics
+            const totalTraffic = parseFloat(document.getElementById('total-traffic').value) || 0;
+            const baseConversion = parseFloat(document.getElementById('base-conversion').value) / 100 || 0;
+            const upsellRate = parseFloat(document.getElementById('upsell-rate').value) / 100 || 0;
+            
+            // Get offer prices and costs
+            const lowPrice = parseFloat(document.getElementById('low-price').value) || 0;
+            const lowCost = parseFloat(document.getElementById('low-cost').value) || 0;
+            
+            const midPrice = parseFloat(document.getElementById('mid-price').value) || 0;
+            const midCost = parseFloat(document.getElementById('mid-cost').value) || 0;
+            
+            const highPrice = parseFloat(document.getElementById('high-price').value) || 0;
+            const highCost = parseFloat(document.getElementById('high-cost').value) || 0;
+            
+            // Calculate conversions
+            const lowConversions = Math.floor(totalTraffic * baseConversion);
+            const midConversions = Math.floor(lowConversions * upsellRate);
+            const highConversions = Math.floor(midConversions * upsellRate);
+            
+            // Calculate profits
+            const lowProfit = lowPrice - lowCost;
+            const midProfit = midPrice - midCost;
+            const highProfit = highPrice - highCost;
+            
+            // Calculate revenues
+            const lowRevenue = lowConversions * lowPrice;
+            const midRevenue = midConversions * midPrice;
+            const highRevenue = highConversions * highPrice;
+            
+            // Update low ticket offer
+            document.getElementById('low-profit').textContent = `$${lowProfit.toFixed(2)}`;
+            document.getElementById('low-conversions').textContent = lowConversions;
+            document.getElementById('low-revenue').textContent = `$${lowRevenue.toFixed(2)}`;
+            
+            // Update mid ticket offer
+            document.getElementById('mid-profit').textContent = `$${midProfit.toFixed(2)}`;
+            document.getElementById('mid-conversions').textContent = midConversions;
+            document.getElementById('mid-revenue').textContent = `$${midRevenue.toFixed(2)}`;
+            
+            // Update high ticket offer
+            document.getElementById('high-profit').textContent = `$${highProfit.toFixed(2)}`;
+            document.getElementById('high-conversions').textContent = highConversions;
+            document.getElementById('high-revenue').textContent = `$${highRevenue.toFixed(2)}`;
+            
+            // Calculate summary metrics
+            const totalRevenue = lowRevenue + midRevenue + highRevenue;
+            const totalProfit = (lowConversions * lowProfit) + (midConversions * midProfit) + (highConversions * highProfit);
+            const totalCustomers = lowConversions;
+            const avgOrderValue = totalRevenue / totalCustomers || 0;
+            
+            // Update summary
+            document.getElementById('total-revenue').textContent = `$${totalRevenue.toFixed(2)}`;
+            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
+            document.getElementById('avg-order-value').textContent = `$${avgOrderValue.toFixed(2)}`;
+            document.getElementById('cltv').textContent = `$${avgOrderValue.toFixed(2)}`;
+            
+            // Update conversion rates
+            document.getElementById('frontend-conversion').textContent = `${(baseConversion * 100).toFixed(2)}%`;
+            document.getElementById('mid-take-rate').textContent = `${(upsellRate * 100).toFixed(2)}%`;
+            document.getElementById('high-take-rate').textContent = `${(upsellRate * 100).toFixed(2)}%`;
+            
+            const overallConversion = ((lowConversions + midConversions + highConversions) / totalTraffic * 100) || 0;
+            document.getElementById('overall-conversion').textContent = `${overallConversion.toFixed(2)}%`;
+            
+            // Calculate ROI
+            const adSpend = parseFloat(document.getElementById('ad-spend').value) || 0;
+            const cpa = adSpend / totalCustomers || 0;
+            const roi = ((totalProfit - adSpend) / adSpend * 100) || 0;
+            
+            document.getElementById('cpa').value = cpa.toFixed(2);
+            document.getElementById('roi').textContent = `${roi.toFixed(2)}%`;
+        }
+        
+        // Initial calculation
+        calculateMetrics();
+    </script>
+<p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=tjmac1/ascendia-unit-economics-calculator" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p></body>
+</html>
