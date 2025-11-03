@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1021,4 +1020,334 @@
             state.variableCosts[index].included = e.target.checked;
             saveStateToHistory();
             recalculate();
-            updatePresenterOverlay(`Cost ${e.target.checked ? 'included
+            updatePresenterOverlay(`Cost ${e.target.checked ? 'included' : 'excluded'}: ${state.variableCosts[index].name}`);
+        }
+
+        // Render variable costs list
+        function renderVariableCosts() {
+            elements.variableCostsContainer.innerHTML = '';
+            
+            state.variableCosts.forEach((cost, index) => {
+                const costItem = document.createElement('div');
+                costItem.className = 'variable-cost-item';
+                costItem.innerHTML = `
+                    <input type="checkbox" ${cost.included ? 'checked' : ''}>
+                    <input type="text" value="${cost.name}" placeholder="Cost name">
+                    <input type="number" value="${cost.amount}" min="0" step="100">
+                    <button class="btn-secondary btn-small">×</button>
+                `;
+                
+                const checkbox = costItem.querySelector('input[type="checkbox"]');
+                const nameInput = costItem.querySelector('input[type="text"]');
+                const amountInput = costItem.querySelector('input[type="number"]');
+                const deleteBtn = costItem.querySelector('button');
+                
+                checkbox.addEventListener('change', (e) => handleCostIncludeChange(index, e));
+                nameInput.addEventListener('change', (e) => handleCostNameChange(index, e));
+                amountInput.addEventListener('change', (e) => handleCostAmountChange(index, e));
+                deleteBtn.addEventListener('click', () => {
+                    state.variableCosts.splice(index, 1);
+                    saveStateToHistory();
+                    renderVariableCosts();
+                    recalculate();
+                    updatePresenterOverlay(`Deleted cost: ${cost.name}`);
+                });
+                
+                elements.variableCostsContainer.appendChild(costItem);
+            });
+        }
+
+        // Render full UI
+        function renderUI() {
+            elements.currency.value = state.currency;
+            elements.revenue.value = state.revenue;
+            elements.showGrossProfit.checked = state.showGrossProfit;
+            elements.showFixedCosts.checked = state.showFixedCosts;
+            elements.cogs.value = state.cogs;
+            elements.fixedCosts.value = state.fixedCosts;
+            
+            elements.grossProfitSection.classList.toggle('hidden', !state.showGrossProfit);
+            elements.fixedCostsSection.classList.toggle('hidden', !state.showFixedCosts);
+            elements.grossProfitResults.classList.toggle('hidden', !state.showGrossProfit);
+            elements.operatingProfitResults.classList.toggle('hidden', !state.showFixedCosts);
+            
+            renderVariableCosts();
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return `${state.currency}${Math.round(value).toLocaleString()}`;
+        }
+
+        // Format percentage
+        function formatPercentage(value) {
+            return `${Math.round(value * 100)}%`;
+        }
+
+        // Recalculate all values
+        function recalculate() {
+            // Apply scenario adjustment
+            const adjustedRevenue = state.revenue * (1 + state.scenarioAdjustment / 100);
+            
+            // Calculate total variable costs
+            let totalVariableCosts = 0;
+            state.variableCosts.forEach(cost => {
+                if (cost.included) {
+                    totalVariableCosts += cost.amount;
+                }
+            });
+            
+            // Apply scenario to variable costs if needed (proportional)
+            const adjustedVariableCosts = totalVariableCosts * (1 + state.scenarioAdjustment / 100);
+            
+            // Contribution calculations
+            const contributionIncome = adjustedRevenue - adjustedVariableCosts;
+            const contributionMargin = adjustedRevenue > 0 ? contributionIncome / adjustedRevenue : 0;
+            
+            // Gross profit calculations
+            const grossProfit = adjustedRevenue - state.cogs;
+            const grossMargin = adjustedRevenue > 0 ? grossProfit / adjustedRevenue : 0;
+            
+            // Operating profit calculations
+            const operatingProfit = contributionIncome - state.fixedCosts;
+            const operatingMargin = adjustedRevenue > 0 ? operatingProfit / adjustedRevenue : 0;
+            
+            // Update UI
+            elements.contributionIncome.textContent = formatCurrency(contributionIncome);
+            elements.contributionMargin.textContent = formatPercentage(contributionMargin);
+            elements.revenueDisplay.textContent = formatCurrency(adjustedRevenue);
+            elements.variableCostsDisplay.textContent = formatCurrency(adjustedVariableCosts);
+            
+            if (state.showGrossProfit) {
+                elements.grossProfitDisplay.textContent = formatCurrency(grossProfit);
+                elements.grossMarginDisplay.textContent = formatPercentage(grossMargin);
+            }
+            
+            if (state.showFixedCosts) {
+                elements.operatingProfitDisplay.textContent = formatCurrency(operatingProfit);
+                elements.operatingMarginDisplay.textContent = formatPercentage(operatingMargin);
+            }
+            
+            // Color coding
+            elements.contributionIncome.className = 'kpi-value ' + 
+                (contributionIncome > 0 ? 'kpi-positive' : contributionIncome < 0 ? 'kpi-negative' : '');
+            elements.contributionMargin.className = 'kpi-value kpi-neutral';
+        }
+
+        // Save state to history
+        function saveStateToHistory() {
+            // Only save if different from last state
+            const lastState = state.history[state.history.length - 1];
+            if (JSON.stringify(lastState) !== JSON.stringify({...state, history: undefined})) {
+                state.history.push({...state, history: undefined});
+                // Limit history to 20 steps
+                if (state.history.length > 20) {
+                    state.history.shift();
+                }
+                elements.undoBtn.disabled = state.history.length <= 1;
+            }
+        }
+
+        // Undo last change
+        function undoLastChange() {
+            if (state.history.length > 1) {
+                state.history.pop(); // Remove current state
+                const prevState = state.history[state.history.length - 1];
+                Object.assign(state, prevState);
+                renderUI();
+                recalculate();
+                updatePresenterOverlay('Undid last change');
+            }
+        }
+
+        // Reset calculator
+        function resetCalculator() {
+            if (confirm('Reset all inputs to default?')) {
+                state = {
+                    currency: '$',
+                    revenue: 100000,
+                    variableCosts: [
+                        { name: 'Contractors', amount: 30000, included: true },
+                        { name: 'Paid Ads', amount: 20000, included: true },
+                        { name: 'Processing Fees', amount: 3000, included: true }
+                    ],
+                    cogs: 0,
+                    fixedCosts: 0,
+                    showGrossProfit: false,
+                    showFixedCosts: false,
+                    scenarioAdjustment: 0,
+                    history: []
+                };
+                renderUI();
+                recalculate();
+                saveStateToHistory();
+                updatePresenterOverlay('Calculator reset');
+            }
+        }
+
+        // Copy snapshot
+        function copySnapshot() {
+            const snapshot = {
+                revenue: state.revenue,
+                variableCosts: state.variableCosts,
+                cogs: state.cogs,
+                fixedCosts: state.fixedCosts,
+                contributionIncome: parseFloat(elements.contributionIncome.textContent.replace(/[^0-9.-]+/g,"")),
+                contributionMargin: parseFloat(elements.contributionMargin.textContent)
+            };
+            
+            navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2))
+                .then(() => {
+                    updatePresenterOverlay('Snapshot copied to clipboard');
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy snapshot');
+                });
+        }
+
+        // Download CSV
+        function downloadCSV() {
+            const headers = ['Metric', 'Value'];
+            const rows = [
+                ['Revenue', state.revenue],
+                ['Variable Costs', state.variableCosts.reduce((sum, cost) => sum + (cost.included ? cost.amount : 0), 0)],
+                ['Contribution Income', parseFloat(elements.contributionIncome.textContent.replace(/[^0-9.-]+/g,""))],
+                ['Contribution Margin %', parseFloat(elements.contributionMargin.textContent)]
+            ];
+            
+            if (state.showGrossProfit) {
+                rows.push(['COGS', state.cogs]);
+                rows.push(['Gross Profit', parseFloat(elements.grossProfitDisplay.textContent.replace(/[^0-9.-]+/g,""))]);
+                rows.push(['Gross Margin %', parseFloat(elements.grossMarginDisplay.textContent)]);
+            }
+            
+            if (state.showFixedCosts) {
+                rows.push(['Fixed Costs', state.fixedCosts]);
+                rows.push(['Operating Profit', parseFloat(elements.operatingProfitDisplay.textContent.replace(/[^0-9.-]+/g,""))]);
+                rows.push(['Operating Margin %', parseFloat(elements.operatingMarginDisplay.textContent)]);
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + headers.join(",") + "\n"
+                + rows.map(e => `"${e[0]}","${e[1]}"`).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "contribution-calculator.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            updatePresenterOverlay('CSV downloaded');
+        }
+
+        // Print calculator
+        function printCalculator() {
+            window.print();
+        }
+
+        // Show info modal
+        function showInfoModal() {
+            elements.infoModal.classList.add('active');
+        }
+
+        // Hide info modal
+        function hideInfoModal() {
+            elements.infoModal.classList.remove('active');
+        }
+
+        // Show help modal
+        function showHelpModal() {
+            elements.helpModal.classList.add('active');
+        }
+
+        // Hide help modal
+        function hideHelpModal() {
+            elements.helpModal.classList.remove('active');
+        }
+
+        // Toggle presenter mode
+        function togglePresenterMode() {
+            document.body.classList.toggle('presenter-mode', elements.presenterMode.checked);
+            updatePresenterOverlay(`Presenter Mode ${elements.presenterMode.checked ? 'enabled' : 'disabled'}`);
+        }
+
+        // Update presenter overlay
+        function updatePresenterOverlay(message) {
+            elements.presenterOverlay.textContent = `Last change: ${message}`;
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                if (document.body.classList.contains('presenter-mode')) {
+                    elements.presenterOverlay.textContent = 'Presenter Mode Active';
+                }
+            }, 3000);
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            const isDark = document.body.hasAttribute('data-theme');
+            if (isDark) {
+                document.body.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updatePresenterOverlay(`Theme switched to ${isDark ? 'light' : 'dark'}`);
+        }
+
+        // Check theme preference
+        function checkThemePreference() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // Save state to URL hash
+        function saveStateToHash() {
+            try {
+                const stateToSave = {
+                    revenue: state.revenue,
+                    variableCosts: state.variableCosts,
+                    cogs: state.cogs,
+                    fixedCosts: state.fixedCosts,
+                    showGrossProfit: state.showGrossProfit,
+                    showFixedCosts: state.showFixedCosts
+                };
+                window.location.hash = btoa(JSON.stringify(stateToSave));
+            } catch (e) {
+                console.warn('Could not save state to URL');
+            }
+        }
+
+        // Load state from URL hash
+        function loadStateFromHash() {
+            try {
+                if (window.location.hash) {
+                    const hash = window.location.hash.substring(1);
+                    const decoded = atob(hash);
+                    const savedState = JSON.parse(decoded);
+                    
+                    if (savedState.revenue) state.revenue = savedState.revenue;
+                    if (savedState.variableCosts) state.variableCosts = savedState.variableCosts;
+                    if (savedState.cogs) state.cogs = savedState.cogs;
+                    if (savedState.fixedCosts) state.fixedCosts = savedState.fixedCosts;
+                    if (savedState.showGrossProfit) state.showGrossProfit = savedState.showGrossProfit;
+                    if (savedState.showFixedCosts) state.showFixedCosts = savedState.showFixedCosts;
+                }
+            } catch (e) {
+                console.warn('Could not load state from URL');
+            }
+        }
+
+        // Initialize when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
