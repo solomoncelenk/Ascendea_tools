@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Anchor Effect Calculator | Ascendea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================================================= */
+        /* === ASCENDEA STYLE INHERITANCE: Variables, Base, and Glassmorphism === */
+        /* ========================================================================= */
+        :root {
+            /* Ascendea Brand Colors */
+            --asc-bg-tl: #11453f; 
+            --asc-bg-mid: #0a0e17; 
+            --asc-bg-br: #5e1b2d; 
+            
+            --asc-text-main: #ffffff;
+            --asc-text-muted: #949aa5;
+            
+            /* Sophisticated Glass Variables */
+            --asc-glass-bg: rgba(255, 255, 255, 0.05);
+            --asc-glass-border: rgba(255, 255, 255, 0.1);
+            --asc-glass-highlight: rgba(255, 255, 255, 0.18);
+            
+            --asc-accent: #fffcb7; /* Yellow/Cream Accent */
+            --asc-accent-glow: rgba(255, 252, 183, 0.3);
+
+            /* Strategic Status Colors */
+            --status-sweetspot: #27a353; /* Green */
+            --status-valuetrap: #cc9700; /* Orange */
+            --status-disruption: #922b39; /* Red */
+
+            /* Plotly Chart Colors (used in JS) */
+            --color-substitute: #922b39; 
+            --color-competitor: #cc9700; 
+            --color-offer: #27a353; 
+            --color-premium: #0088cc; 
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(115deg, var(--asc-bg-tl) 0%, var(--asc-bg-mid) 45%, var(--asc-bg-br) 100%);
+            color: var(--asc-text-main);
+            min-height: 100vh;
+        }
+
+        /* --- Layout Container --- */
+        .anchor-calculator-container {
+            display: flex;
+            flex-direction: column; 
+            gap: 25px; 
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Glass Card Style (Applied to all sections) --- */
+        .asc-glass-card {
+            background: var(--asc-glass-bg);
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--asc-glass-border);
+            border-top: 1px solid var(--asc-glass-highlight);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Typography --- */
+        h1 {
+            color: var(--asc-accent);
+            font-weight: 800;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: var(--asc-text-main);
+            font-weight: 600;
+            padding-bottom: 5px;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        
+        h3 {
+             color: var(--asc-text-main);
+            font-weight: 600;
+            margin: 0 0 10px;
+            font-size: 1.2em;
+        }
+
+        .caption {
+            color: var(--asc-text-muted);
+            font-size: 0.95em;
+            margin-bottom: 25px;
+        }
+
+        /* ========================================================================= */
+        /* === STEP 1: INPUTS (Top Section) === */
+        /* ========================================================================= */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .input-group label {
+            color: var(--asc-text-muted);
+        }
+
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2); 
+            color: var(--asc-text-main);
+            border: 1px solid var(--asc-glass-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-weight: 500;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-group input[type="number"]:focus {
+            border-color: var(--asc-accent); 
+            box-shadow: 0 0 0 3px var(--asc-accent-glow);
+            outline: none;
+        }
+
+        /* Dynamic Input Border for Offer Price */
+        #offerPrice {
+            border-color: var(--asc-accent);
+        }
+        .status-sweetspot #offerPrice { border-color: var(--status-sweetspot); }
+        .status-valuetrap #offerPrice { border-color: var(--status-valuetrap); }
+        .status-disruption #offerPrice { border-color: var(--status-disruption); }
+        
+
+        /* ========================================================================= */
+        /* === STEP 2: METRICS & STRATEGY (Middle Section) === */
+        /* ========================================================================= */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-box {
+            background-color: var(--asc-glass-bg); 
+            border: 1px solid var(--asc-glass-border);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--asc-accent);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: var(--asc-text-muted);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 1.8em; 
+            font-weight: 700;
+            color: var(--asc-accent);
+        }
+
+        /* --- Strategic Rating Box --- */
+        #strategicRatingBox {
+            grid-column: 1 / -1; 
+            padding: 25px;
+            text-align: center;
+            border-left: none;
+        }
+
+        #strategicRatingBox::before {
+            display: none;
+        }
+
+        .rating-title {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin: 0 0 5px;
+        }
+        
+        .rating-summary {
+            font-size: 1.05em;
+            color: var(--asc-text-main);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Dynamic Rating Colors */
+        .sweetspot .rating-title { color: var(--status-sweetspot); text-shadow: 0 0 10px rgba(39, 163, 83, 0.5); }
+        .valuetrap .rating-title { color: var(--status-valuetrap); text-shadow: 0 0 10px rgba(204, 151, 0, 0.5); }
+        .disruption .rating-title { color: var(--status-disruption); text-shadow: 0 0 10px rgba(146, 43, 57, 0.5); }
+
+
+        /* ========================================================================= */
+        /* === STEP 3: VISUALIZATION (Bottom Section) === */
+        /* ========================================================================= */
+        .chart-section {
+            padding: 30px;
+        }
+        
+        /* --- Plotly Chart Overrides for Dark Mode --- */
+        .chart-and-metrics-card {
+            background: rgba(255, 255, 255, 0); 
+        }
+        
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 900px) {
+            .input-grid, .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            .chart-section {
+                padding: 15px;
+            }
+            .rating-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body id="calculatorBody">
+
+<div class="anchor-calculator-container">
+    
+    <div class="asc-glass-card">
+        <h2>1. Define Your Price Anchors</h2>
+        <p class="caption">Enter the prices that define the ceiling and floor of your market's perception.</p>
+
+        <div class="input-grid">
+            <div class="input-group">
+                <label for="subPrice">Substitute Price ($) - The Floor</label>
+                <input type="number" id="subPrice" value="50" min="0" oninput="calculateAnchorEffect()">
+            </div>
+
+            <div class="input-group">
+                <label for="compPrice">Competitor Price ($) - The Primary Benchmark</label>
+                <input type="number" id="compPrice" value="500" min="0" oninput="calculateAnchorEffect()">
+            </div>
+
+            <div class="input-group">
+                <label for="premiumPrice">Premium Anchor ($) - The Ceiling</label>
+                <input type="number" id="premiumPrice" value="5000" min="0" oninput="calculateAnchorEffect()">
+            </div>
+
+            <div class="input-group">
+                <label for="offerPrice">Your Offer Price ($) - The Focal Point</label>
+                <input type="number" id="offerPrice" value="2000" min="0" oninput="calculateAnchorEffect()">
+            </div>
+        </div>
+    </div>
+    
+    <div class="asc-glass-card">
+        <h2>2. Strategic Insights & Metrics</h2>
+
+        <div class="metrics-grid">
+            
+            <div class="metric-box">
+                <div class="metric-label">Perceived Bargain Factor (0-1)</div>
+                <div class="metric-value" id="pbfDisplay"></div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-label">Competitor Gap (Vs. Primary Competitor)</div>
+                <div class="metric-value" id="compGapDisplay"></div>
+            </div>
+            
+            <div class="metric-box">
+                <div class="metric-label">Premium Proximity (To Max Value Ceiling)</div>
+                <div class="metric-value" id="premiumProximityDisplay"></div>
+            </div>
+
+            <div class="metric-box" id="strategicRatingBox">
+                <h3>Price Sensitivity Rating</h3>
+                <div class="rating-title" id="ratingTitle"></div>
+                <p class="rating-summary" id="ratingSummary"></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="asc-glass-card chart-section">
+        <h2>3. Price Spectrum Visualization</h2>
+        <p class="caption">Visualize the psychological distance between your offer and the market anchors.</p>
+        
+        <div id="anchorEffectChart" style="width: 100%; height: 350px;"></div>
+    </div>
+    
+</div>
+
+<script src="plotly.min.js"></script>
+
+<script>
+    // --- Utility Function to get CSS Variable Values ---
+    function getCssVar(name) {
+        // Fallback for getting CSS variables if the element doesn't exist yet
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    // --- JS Logic: Calculation and Metrics ---
+    function calculateAnchorEffect() {
+        const subPrice = parseFloat(document.getElementById('subPrice').value) || 0;
+        const compPrice = parseFloat(document.getElementById('compPrice').value) || 0;
+        const premiumPrice = parseFloat(document.getElementById('premiumPrice').value) || 0;
+        const offerPrice = parseFloat(document.getElementById('offerPrice').value) || 0;
+
+        // Basic validation and early exit
+        if (subPrice < 0 || compPrice < 0 || premiumPrice < 0 || offerPrice < 0) return;
+        
+        // Handle invalid range (Premium must be higher than Substitute)
+        if (premiumPrice <= subPrice) {
+            document.getElementById('pbfDisplay').textContent = "N/A";
+            document.getElementById('compGapDisplay').textContent = "N/A";
+            document.getElementById('premiumProximityDisplay').textContent = "N/A";
+            updateStrategicRating('Invalid Range', 'Premium Price must be greater than Substitute Price to define a spectrum.', 'disruption');
+            renderChart(subPrice, compPrice, premiumPrice, offerPrice);
+            return;
+        }
+
+        // 1. Perceived Bargain Factor (PBF)
+        const range = premiumPrice - subPrice;
+        let pbf = 1 - (offerPrice - subPrice) / range;
+        pbf = Math.max(0, Math.min(1, pbf)).toFixed(2);
+
+        // 2. Competitor Gap
+        let compGap = compPrice > 0 ? ((offerPrice / compPrice) * 100 - 100).toFixed(0) : "N/A";
+        
+        // 3. Premium Proximity
+        let premiumProximity = ((offerPrice - subPrice) / range * 100).toFixed(0);
+        
+        // --- Update Metric Displays ---
+        document.getElementById('pbfDisplay').textContent = pbf;
+        document.getElementById('compGapDisplay').textContent = `${compGap}%`;
+        document.getElementById('premiumProximityDisplay').textContent = `${premiumProximity}%`;
+
+        // --- Strategic Rating ---
+        const rating = getStrategicRating(pbf, offerPrice, compPrice, premiumPrice);
+        updateStrategicRating(rating.title, rating.summary, rating.status);
+        
+        // --- Chart Update ---
+        if (typeof Plotly !== 'undefined') {
+             renderChart(subPrice, compPrice, premiumPrice, offerPrice);
+        } else {
+             console.warn("Plotly not loaded yet. Chart rendering skipped.");
+        }
+    }
+    
+    function getStrategicRating(pbf, offerPrice, compPrice, premiumPrice) {
+        let title, summary, status;
+
+        const pbfNum = parseFloat(pbf);
+
+        if (offerPrice < compPrice * 0.95 && pbfNum > 0.75) {
+            title = "Value Trap ⚠️";
+            summary = `Your price is significantly lower than the competitor, resulting in a high PBF (${pbf}). You are likely leaving significant margin on the table. **Raise your price or enhance justification.**`;
+            status = 'valuetrap';
+        } else if (offerPrice > premiumPrice * 0.9 || pbfNum < 0.25) {
+            title = "Disruption Point 🚩";
+            summary = `Your price is too close to the Premium Anchor (or beyond it). You need an **exceptionally strong value proposition** to justify this price point.`;
+            status = 'disruption';
+        } else {
+            title = "Sweet Spot ✅";
+            summary = `Your price is optimally positioned in the perceived value zone. The PBF (${pbf}) balances value delivery with premium aspiration. **Proceed with confidence.**`;
+            status = 'sweetspot';
+        }
+
+        return { title, summary, status };
+    }
+
+    function updateStrategicRating(title, summary, status) {
+        document.getElementById('ratingTitle').textContent = title;
+        document.getElementById('ratingSummary').textContent = summary;
+        
+        const ratingBox = document.getElementById('strategicRatingBox');
+        const body = document.getElementById('calculatorBody');
+        
+        ratingBox.className = 'metric-box asc-glass-card ' + status; 
+        body.className = status;
+    }
+
+    // --- JS Logic: Plotly Chart Generation ---
+    function renderChart(subPrice, compPrice, premiumPrice, offerPrice) {
+        if (typeof Plotly === 'undefined') {
+            return;
+        }
+
+        const prices = [subPrice, compPrice, offerPrice, premiumPrice];
+        const labels = ["Substitute", "Competitor", "Your Offer", "Premium"];
+        
+        const colors = [
+            getCssVar('--color-substitute'),
+            getCssVar('--color-competitor'),
+            getCssVar('--color-offer'),
+            getCssVar('--color-premium')
+        ];
+
+        // Chart Styling Variables (Matching Ascendea Dark Theme)
+        const chartBgColor = 'rgba(255, 255, 255, 0)'; 
+        const chartGridColor = 'rgba(255, 255, 255, 0.1)';
+        const chartTextColor = getCssVar('--asc-text-muted');
+        const darkBackground = getCssVar('--asc-bg-mid');
+
+        const traceRange = {
+            x: [subPrice, premiumPrice],
+            y: [0, 0],
+            mode: 'lines',
+            line: { color: chartGridColor, width: 4 },
+            hoverinfo: 'none',
+            showlegend: false
+        };
+
+        const tracePoints = {
+            x: prices,
+            y: [0, 0, 0.1, 0], 
+            text: labels.map((l, i) => `${l}<br>($${prices[i].toLocaleString()})`),
+            mode: 'markers+text',
+            marker: {
+                size: 18, 
+                color: colors,
+                line: {
+                    color: darkBackground, 
+                    width: 3
+                }
+            },
+            textposition: 'top center',
+            name: 'Prices',
+            textfont: {
+                family: 'Inter, sans-serif',
+                size: 13,
+                color: chartTextColor
+            }
+        };
+
+        const data = [traceRange, tracePoints];
+
+        const layout = {
+            title: false,
+            xaxis: {
+                title: false,
+                range: [
+                    Math.min(...prices) * 0.9, 
+                    Math.max(...prices) * 1.1
+                ],
+                tickformat: '$,.0f',
+                tickfont: { color: chartTextColor },
+                linecolor: chartGridColor,
+                showgrid: false,
+                zeroline: false
+            },
+            yaxis: {
+                visible: false,
+                range: [-0.5, 0.5], 
+                zeroline: false
+            },
+            showlegend: false,
+            hovermode: 'closest', 
+            margin: { t: 50, b: 50, l: 30, r: 30 },
+            plot_bgcolor: chartBgColor, 
+            paper_bgcolor: chartBgColor 
+        };
+
+        Plotly.react('anchorEffectChart', data, layout, {responsive: true, displayModeBar: false}); 
+    }
+
+    // Initial run on load
+    document.addEventListener('DOMContentLoaded', calculateAnchorEffect);
+</script>
+</body>
+</html>
