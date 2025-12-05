@@ -18,6 +18,8 @@ ASCENDEA_STYLES = {
     'color_offer': '#27a353', 
     'color_premium': '#0088cc', 
     'chart_grid': 'rgba(255, 255, 255, 0.1)',
+    # FIX: Added the missing 'bg_mid' key for Plotly line coloring
+    'bg_mid': '#0a0e17', 
 }
 
 # Injecting Custom CSS to mimic the Ascendea theme
@@ -196,6 +198,7 @@ def generate_plotly_figure(metrics):
         marker={
             'size': 18, 
             'color': colors,
+            # FIX applied here: ASCENDEA_STYLES['bg_mid'] is now available
             'line': {'color': ASCENDEA_STYLES['bg_mid'], 'width': 3} 
         },
         textposition='top center',
