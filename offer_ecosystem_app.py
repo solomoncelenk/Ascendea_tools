@@ -4,21 +4,169 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-# Optional Mermaid support
-try:
-    from streamlit_mermaid import mermaid  # optional; if missing, we fall back
-    HAS_MERMAID = True
-except ImportError:
-    HAS_MERMAID = False
-
+# -----------------------
+# Global visual defaults
+# -----------------------
 px.defaults.template = "plotly_dark"
 
-st.set_page_config(page_title="Offer Ecosystem Map", layout="wide")
-st.title("Offer Ecosystem Map — Tiers, Flows, Finance & Strategy")
+ASC_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-st.caption(
-    "Visualise Entry → Core → Premium → Upsell → Recurring, add psychology, "
-    "and run tier-level financial diagnostics."
+html, body, [class*="stApp"] {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* App background */
+.stApp {
+  background: #000000;
+}
+
+.main {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(78,191,176,0.35) 0, transparent 45%),
+    radial-gradient(circle at 90% 100%, rgba(242,0,60,0.35) 0, transparent 55%),
+    radial-gradient(circle at 50% 20%, #151a30 0, #050814 60%, #000000 100%);
+}
+
+/* Layout */
+.block-container {
+  max-width: 1200px;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+  background: linear-gradient(160deg, #050814 0%, #090f1f 40%, #141a32 100%);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+section[data-testid="stSidebar"] * {
+  color: #ffffff;
+}
+
+/* Headings & text */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff;
+}
+p, span, label {
+  color: rgba(255,255,255,0.88);
+}
+
+/* Cards */
+.asc-card {
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(78,191,176,0.18) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(242,0,60,0.18) 0, transparent 55%),
+    rgba(7,10,24,0.96);
+  padding: 1.5rem 1.75rem;
+  box-shadow:
+    0 26px 90px rgba(0,0,0,0.85),
+    0 0 0 1px rgba(255,255,255,0.02);
+  margin-bottom: 1.5rem;
+}
+
+.asc-eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.78);
+}
+
+.asc-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+  margin-bottom: 0.4rem;
+  color: #ffffff;
+}
+
+.asc-title span {
+  color: #00E4AB;
+}
+
+.asc-subtitle {
+  font-size: 0.98rem;
+  color: rgba(255,255,255,0.78);
+  max-width: 780px;
+}
+
+/* Dataframes */
+.dataframe tbody tr th {
+  color: #ffffff;
+}
+.dataframe thead th {
+  background: rgba(11,16,35,0.9);
+  color: #ffffff;
+}
+.dataframe tbody tr:nth-child(even) {
+  background: rgba(6,9,24,0.85);
+}
+.dataframe tbody tr:nth-child(odd) {
+  background: rgba(9,13,28,0.95);
+}
+.dataframe td, .dataframe th {
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+/* Buttons (Ascendea style) */
+.stButton > button, .stDownloadButton > button {
+  background: #00E4AB !important;
+  color: #393939 !important;
+  border: 1px solid #FFFDD1 !important;
+  border-radius: 999px;
+  padding: 0.45rem 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+.stButton > button:hover, .stDownloadButton > button:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.65);
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .block-container {
+    padding-left: 1.0rem;
+    padding-right: 1.0rem;
+  }
+  .asc-card {
+    padding: 1.1rem 1.1rem;
+  }
+  .asc-title {
+    font-size: 1.5rem;
+  }
+  .asc-subtitle {
+    font-size: 0.9rem;
+  }
+}
+</style>
+"""
+
+# -----------------------
+# Page config
+# -----------------------
+st.set_page_config(page_title="Offer Ecosystem Map", layout="wide")
+st.markdown(ASC_CSS, unsafe_allow_html=True)
+
+st.markdown(
+    """
+    <div class="asc-card">
+      <div class="asc-eyebrow">Ascendea Revenue Architecture</div>
+      <div class="asc-title">Offer Ecosystem <span>Map</span></div>
+      <div class="asc-subtitle">
+        Map Entry → Core → Premium → Upsell → Recurring, overlay movement, and read tier-level revenue &
+        margin in one view.
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 TIERS = ["Entry", "Core", "Premium", "Upsell", "Recurring"]
@@ -65,7 +213,7 @@ sample_flows = pd.DataFrame({
 })
 
 # -----------------------
-# Sidebar data mode
+# Sidebar – data mode
 # -----------------------
 with st.sidebar:
     st.header("Data")
@@ -138,7 +286,7 @@ else:
     # Offers editor
     st.subheader("Offers (tiers & economics)")
     st.caption(
-        "Columns: tier (Entry/Core/Premium/Upsell/Recurring), price (one-time), "
+        "tier (Entry/Core/Premium/Upsell/Recurring), price (one-time), "
         "mrr (monthly), term_months (recurring), margin_pct (0–1)"
     )
     st.session_state.eco_frames["offers"] = st.data_editor(
@@ -164,15 +312,9 @@ else:
         num_rows="dynamic",
         use_container_width=True,
         column_config={
-            "source_tier": st.column_config.SelectboxColumn(
-                "source_tier", options=TIERS
-            ),
-            "target_tier": st.column_config.SelectboxColumn(
-                "target_tier", options=TIERS
-            ),
-            "prob": st.column_config.NumberColumn(
-                "prob", min_value=0.0, max_value=1.0, step=0.05
-            ),
+            "source_tier": st.column_config.SelectboxColumn("source_tier", options=TIERS),
+            "target_tier": st.column_config.SelectboxColumn("target_tier", options=TIERS),
+            "prob": st.column_config.NumberColumn("prob", min_value=0.0, max_value=1.0, step=0.05),
         },
     )
 
@@ -182,7 +324,7 @@ offers = frames["offers"].copy()
 flows = frames["flows"].copy()
 
 # -----------------------
-# Assumptions
+# Sidebar – assumptions
 # -----------------------
 with st.sidebar:
     st.header("Assumptions")
@@ -273,10 +415,10 @@ rev_df = pd.DataFrame({
 })
 
 # -----------------------
-# Sankey flow map
+# Branded Offer Ecosystem Map (Sankey)
 # -----------------------
 st.markdown("---")
-st.subheader("Flow Map (Sankey)")
+st.subheader("Offer Ecosystem Map (Branded Flow)")
 
 links = flows.copy()
 links = links.merge(
@@ -295,31 +437,50 @@ source_idx = links["source_tier"].map(lab_to_idx).tolist()
 target_idx = links["target_tier"].map(lab_to_idx).tolist()
 values = links["value"].tolist()
 
+# Brand node colours
+node_colors = {
+    "Entry":     "#00E4AB",  # teal
+    "Core":      "#4F46E5",  # indigo-ish
+    "Premium":   "#F2003C",  # red
+    "Upsell":    "#fd7232",  # orange
+    "Recurring": "#8B5CF6",  # purple
+}
+node_color_list = [node_colors.get(t, "#999999") for t in labels]
+
 sankey_fig = go.Figure(
     data=[
         go.Sankey(
             arrangement="snap",
-            node=dict(label=labels, pad=20, thickness=18),
+            node=dict(
+                label=labels,
+                pad=25,
+                thickness=20,
+                color=node_color_list,
+            ),
             link=dict(
                 source=source_idx,
                 target=target_idx,
                 value=values,
                 label=links["label"],
+                color="rgba(255,255,255,0.35)",
             ),
         )
     ]
 )
 sankey_fig.update_layout(
-    title_text="Tier-to-Tier Movement (expected customers)", font_size=12
+    title_text="Tier-to-Tier Movement (Expected Customers)",
+    font=dict(family="Inter", size=12, color="#ffffff"),
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
 )
 st.plotly_chart(sankey_fig, use_container_width=True)
 
 try:
     sankey_png = sankey_fig.to_image(format="png", scale=2)
     st.download_button(
-        "🖼️ Download Sankey as PNG",
+        "🖼️ Download Ecosystem Map (PNG)",
         data=sankey_png,
-        file_name="ecosystem_sankey.png",
+        file_name="offer_ecosystem_map.png",
         mime="image/png",
     )
 except Exception:
@@ -328,12 +489,19 @@ except Exception:
 # -----------------------
 # Revenue & margin charts
 # -----------------------
+st.markdown("---")
 st.subheader("Revenue & Margin Dashboard")
+
 colA, colB = st.columns(2)
 
 with colA:
     bar_rev = px.bar(
         rev_df, x="tier", y="revenue", title="Expected Revenue by Tier"
+    )
+    bar_rev.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(7,10,24,1)",
+        font_color="#ffffff",
     )
     st.plotly_chart(bar_rev, use_container_width=True)
     try:
@@ -355,6 +523,11 @@ with colB:
         title="Contribution Margin by Tier",
         hover_data=["avg_margin_pct"],
     )
+    bar_contrib.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(7,10,24,1)",
+        font_color="#ffffff",
+    )
     st.plotly_chart(bar_contrib, use_container_width=True)
     try:
         png2 = bar_contrib.to_image(format="png", scale=2)
@@ -368,57 +541,6 @@ with colB:
         pass
 
 st.dataframe(rev_df.round(2), use_container_width=True)
-
-# -----------------------
-# Mermaid map (diagram if possible, fallback to code)
-# -----------------------
-st.markdown("---")
-st.subheader("Offer Ecosystem Mermaid Map")
-
-mermaid_lines = ["graph LR"]
-
-id_map = {"Entry": "A", "Core": "B", "Premium": "C", "Upsell": "D", "Recurring": "E"}
-
-# Edges from flows
-for _, r in flows.iterrows():
-    s = id_map.get(r["source_tier"], "A")
-    t = id_map.get(r["target_tier"], "B")
-    lab = str(r.get("label", ""))
-    mermaid_lines.append(
-        f'{s}["{r["source_tier"]} Offers"] -->|{lab}| {t}["{r["target_tier"]} Offers"]'
-    )
-
-# Class assignments
-for tier, code in id_map.items():
-    cls = tier.lower()
-    mermaid_lines.append(f"{code}:::{cls}")
-
-# Class definitions
-mermaid_lines.append("classDef entry fill:#d6f5d6,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("classDef core fill:#b3d9ff,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("classDef premium fill:#ffcccc,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("classDef upsell fill:#fff0b3,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("classDef recurring fill:#e6ccff,stroke:#333,stroke-width:1px;")
-
-# Ensure single 'graph LR' header
-mermaid_code = "graph LR\n" + "\n".join(mermaid_lines[1:])
-
-if HAS_MERMAID:
-    mermaid(mermaid_code)
-else:
-    st.info(
-        "To render this as a live diagram inside the app, "
-        "install `streamlit-mermaid`. For now, here's the Mermaid code."
-    )
-    st.markdown(f"```mermaid\n{mermaid_code}\n```")
-
-# Download as .md for Notion / wiki
-st.download_button(
-    "⬇️ Download Mermaid (.md)",
-    data=f"```mermaid\n{mermaid_code}\n```",
-    file_name="offer_ecosystem_mermaid.md",
-    mime="text/markdown",
-)
 
 # -----------------------
 # Psychology table
