@@ -1,4 +1,4 @@
-# Blue Ocean Strategy Canvas – Ascendea UI (with numeric editor)
+# Blue Ocean Strategy Canvas – Ascendea UI (stable editor, Chrome-friendly)
 
 import streamlit as st
 import pandas as pd
@@ -370,10 +370,10 @@ if mode == "Upload CSV":
     with st.sidebar:
         uploaded = st.file_uploader("Upload strategy_canvas_data.csv", type=["csv"])
     if uploaded is not None:
-        df = pd.read_csv(uploaded)
+        df_raw = pd.read_csv(uploaded)
     else:
         st.info("No file uploaded — using sample data.")
-        df = sample_df.copy()
+        df_raw = sample_df.copy()
 else:
     if "bo_df" not in st.session_state:
         st.session_state.bo_df = sample_df.copy()
@@ -405,7 +405,7 @@ else:
                 mime="text/csv",
             )
 
-    # ---------- Numeric-aware editor ----------
+    # Editor: keep constraints light to avoid fighting Chrome
     col_config = {
         "value_factor": st.column_config.TextColumn(
             "value_factor",
@@ -419,37 +419,39 @@ else:
                 help=f"Score for {c} (0–10).",
                 min_value=0,
                 max_value=10,
-                step=1,
-                format="%d",
             )
 
-    df = st.data_editor(
+    df_raw = st.data_editor(
         st.session_state.bo_df,
         num_rows="dynamic",
         use_container_width=True,
         column_config=col_config,
     )
-    st.session_state.bo_df = df.copy()
+    st.session_state.bo_df = df_raw.copy()
 
-# ---------- Validate & clean ----------
-if "value_factor" not in df.columns:
+# ---------- Validate & build numeric copy ----------
+if "value_factor" not in df_raw.columns:
     st.error("Your data needs a 'value_factor' column.")
     st.stop()
 
-series_cols = [c for c in df.columns if c != "value_factor"]
+series_cols = [c for c in df_raw.columns if c != "value_factor"]
 if len(series_cols) < 2:
     st.error("Add at least two series columns (e.g., 'Our Offer' and one competitor).")
     st.stop()
 
+# Work on a separate numeric copy so we don't interfere with the editor
+df_calc = df_raw.copy()
+
 for col in series_cols:
-    df[col] = pd.to_numeric(df[col], errors="coerce")
-df = df.dropna(subset=series_cols, how="all")
-if df.empty:
+    df_calc[col] = pd.to_numeric(df_calc[col], errors="coerce")
+
+df_calc = df_calc.dropna(subset=series_cols, how="all")
+if df_calc.empty:
     st.error("No valid numeric scores found.")
     st.stop()
 
 for col in series_cols:
-    df[col] = df[col].clip(0, 10)
+    df_calc[col] = df_calc[col].clip(0, 10)
 
 our_guess = next((c for c in series_cols if "our" in c.lower()), series_cols[0])
 with st.sidebar:
@@ -462,7 +464,7 @@ with st.sidebar:
 # ---------- Strategy canvas chart ----------
 st.subheader("Strategy Canvas")
 
-long = df.melt(id_vars="value_factor", var_name="Series", value_name="Score")
+long = df_calc.melt(id_vars="value_factor", var_name="Series", value_name="Score")
 
 # Branded colour mapping: Our Offer = teal, Competitor 1 = red, Competitor 2 = orange
 base_colors = {
@@ -495,7 +497,6 @@ fig = px.line(
     color_discrete_map=color_discrete_map,
 )
 
-# Axis + title colours
 axis_color = "#ffffff" if theme_choice == "Dark" else "#393939"
 
 fig.update_layout(
@@ -517,13 +518,13 @@ st.subheader("ERRC Grid (Eliminate · Reduce · Raise · Create)")
 
 competitor_cols = [c for c in series_cols if c != our_label_select]
 if competitor_cols:
-    comp_mean = df[competitor_cols].mean(axis=1)
+    comp_mean = df_calc[competitor_cols].mean(axis=1)
 else:
-    comp_mean = pd.Series([np.nan] * len(df), index=df.index)
+    comp_mean = pd.Series([np.nan] * len(df_calc), index=df_calc.index)
 
-gap = df[our_label_select] - comp_mean
+gap = df_calc[our_label_select] - comp_mean
 suggest = []
-for i, row in df.iterrows():
+for i, row in df_calc.iterrows():
     factor = row["value_factor"]
     g = gap.loc[i] if not np.isnan(gap.loc[i]) else 0
     if g <= -1.0:
@@ -562,7 +563,7 @@ errc_editable = st.data_editor(
 st.markdown("---")
 st.subheader("Offer Differentiation Report")
 
-df_tmp = df.copy()
+df_tmp = df_calc.copy()
 df_tmp["comp_mean"] = comp_mean
 df_tmp["gap_vs_comp"] = df_tmp[our_label_select] - df_tmp["comp_mean"]
 under = df_tmp.nsmallest(3, "gap_vs_comp")[["value_factor", "gap_vs_comp"]]
