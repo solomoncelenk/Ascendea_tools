@@ -1,4 +1,4 @@
-# Blue Ocean Strategy Canvas – Ascendea UI
+# Blue Ocean Strategy Canvas – Ascendea UI (with numeric editor)
 
 import streamlit as st
 import pandas as pd
@@ -405,13 +405,29 @@ else:
                 mime="text/csv",
             )
 
+    # ---------- Numeric-aware editor ----------
+    col_config = {
+        "value_factor": st.column_config.TextColumn(
+            "value_factor",
+            help="Buyer value factor (e.g. Price, Speed, Support).",
+        )
+    }
+    for c in st.session_state.bo_df.columns:
+        if c != "value_factor":
+            col_config[c] = st.column_config.NumberColumn(
+                c,
+                help=f"Score for {c} (0–10).",
+                min_value=0,
+                max_value=10,
+                step=1,
+                format="%d",
+            )
+
     df = st.data_editor(
         st.session_state.bo_df,
         num_rows="dynamic",
         use_container_width=True,
-        column_config={
-            "value_factor": st.column_config.TextColumn("value_factor"),
-        }
+        column_config=col_config,
     )
     st.session_state.bo_df = df.copy()
 
@@ -480,10 +496,7 @@ fig = px.line(
 )
 
 # Axis + title colours
-if theme_choice == "Dark":
-    axis_color = "#ffffff"
-else:
-    axis_color = "#393939"
+axis_color = "#ffffff" if theme_choice == "Dark" else "#393939"
 
 fig.update_layout(
     xaxis_title="Buyer value factors",
