@@ -570,9 +570,9 @@ alt.themes.enable("none")
 
 # Axis + title colours:
 if theme_choice == "Dark":
-    axis_label_color = "#ffffff"
-    axis_title_color = "#ffffff"
-    chart_title_color = "#ffffff"
+    axis_label_color = "#393939"
+    axis_title_color = "#393939"
+    chart_title_color = "#393939"
 else:
     axis_label_color = "#393939"
     axis_title_color = "#393939"
