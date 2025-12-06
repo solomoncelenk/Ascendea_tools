@@ -8,8 +8,8 @@ import altair as alt
 # ---------- Theme Tokens ----------
 DARK_TOKENS = {
     "PRIMARY": "#ffffff",
-    "MUTED": "rgba(255,255,255,0.78)",
-    "DISABLED": "rgba(255,255,255,0.45)",
+    "MUTED": "rgba(57,57,60,0.78)",
+    "DISABLED": "rgba(57,57,60,0.45)",
     "BG": "#050814",
 }
 
