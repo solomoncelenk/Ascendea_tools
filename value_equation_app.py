@@ -1,15 +1,28 @@
-# Value Equation App (Ascendea UI)
+# Value Equation App (Ascendea UI) – Dark/Light, Tokens, Contrast
 
 import numpy as np
 import pandas as pd
 import streamlit as st
 import altair as alt
 
-ASC_TEAL = "#4ebfb0"
-ASC_RED = "#ee4128"
-ASC_BG = "#050814"
-ASC_WHITE = "#ffffff"
-ASC_MUTED = "rgba(255,255,255,0.75)"
+# ---------- Theme Tokens ----------
+DARK_TOKENS = {
+    "PRIMARY": "#ffffff",
+    "MUTED": "rgba(255,255,255,0.78)",
+    "DISABLED": "rgba(255,255,255,0.45)",
+    "BG": "#050814",
+    "TEAL": "#4ebfb0",
+    "RED": "#ee4128",
+}
+
+LIGHT_TOKENS = {
+    "PRIMARY": "#0b1020",
+    "MUTED": "#4b5563",
+    "DISABLED": "#9ca3af",
+    "BG": "#f5f7fb",
+    "TEAL": "#059669",
+    "RED": "#dc2626",
+}
 
 st.set_page_config(
     page_title="Ascendea - Value Equation Calculator",
@@ -17,12 +30,36 @@ st.set_page_config(
     layout="wide",
 )
 
-CUSTOM_CSS = """
+# ---------- Sidebar: Theme + Weights ----------
+st.sidebar.header("Display & Weights")
+
+theme_choice = st.sidebar.radio("Theme", ["Dark", "Light"], index=0, horizontal=True)
+
+TOKENS = DARK_TOKENS if theme_choice == "Dark" else LIGHT_TOKENS
+
+st.sidebar.markdown("---")
+st.sidebar.header("⚙️ Factor Weights")
+st.sidebar.caption("1.0 = neutral. Adjust weights to match your market reality.")
+
+w_outcome = st.sidebar.slider("Dream Outcome weight", 0.2, 3.0, 1.0, 0.1)
+w_likelihood = st.sidebar.slider("Likelihood weight", 0.2, 3.0, 1.0, 0.1)
+w_time = st.sidebar.slider("Time Delay penalty", 0.2, 3.0, 1.0, 0.1)
+w_effort = st.sidebar.slider("Effort & Sacrifice penalty", 0.2, 3.0, 1.0, 0.1)
+
+st.sidebar.markdown("---")
+st.sidebar.caption(
+    "Lower Time Delay and Effort & Sacrifice scores mean less friction. "
+    "If your data inverts that meaning, normalise before upload."
+)
+
+# ---------- CSS per Theme (no f-strings, no brace issues) ----------
+DARK_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 html, body, [class*="stApp"] {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #ffffff;
 }
 
 .stApp {
@@ -42,18 +79,19 @@ html, body, [class*="stApp"] {
   padding-bottom: 3rem;
 }
 
+/* Sidebar */
 section[data-testid="stSidebar"] {
   background: linear-gradient(160deg, #050814 0%, #090f1f 40%, #141a32 100%);
   border-right: 1px solid rgba(255,255,255,0.08);
 }
-
-section[data-testid="stSidebar"] .sidebar-content {
-  padding-top: 1.5rem;
+section[data-testid="stSidebar"] * {
+  color: #ffffff;
 }
 
+/* Cards */
 .asc-card {
   border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
   background:
     radial-gradient(circle at 0% 0%, rgba(78,191,176,0.18) 0, transparent 50%),
     radial-gradient(circle at 100% 100%, rgba(238,65,40,0.18) 0, transparent 50%),
@@ -65,11 +103,12 @@ section[data-testid="stSidebar"] .sidebar-content {
   margin-bottom: 1.5rem;
 }
 
+/* Typography */
 .asc-eyebrow {
   font-size: 0.78rem;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.78);
+  color: rgba(255,255,255,0.9);
 }
 
 .asc-title {
@@ -79,6 +118,7 @@ section[data-testid="stSidebar"] .sidebar-content {
   text-transform: uppercase;
   margin-top: 0.35rem;
   margin-bottom: 0.4rem;
+  color: #ffffff;
 }
 
 .asc-title span {
@@ -87,16 +127,18 @@ section[data-testid="stSidebar"] .sidebar-content {
 
 .asc-subtitle {
   font-size: 0.98rem;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.78);
   max-width: 720px;
 }
 
+/* Dataframes */
 .dataframe tbody tr th {
   color: #ffffff;
 }
 
 .dataframe thead th {
   background: rgba(11,16,35,0.9);
+  color: #ffffff;
 }
 
 .dataframe tbody tr:nth-child(even) {
@@ -108,13 +150,20 @@ section[data-testid="stSidebar"] .sidebar-content {
 }
 
 .dataframe td, .dataframe th {
-  border-color: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.12) !important;
 }
 
+/* Download button */
 .asc-download-wrap {
   margin-top: 0.75rem;
 }
 
+/* General text contrast */
+h1, h2, h3, h4, h5, h6, p, span, label {
+  color: #ffffff;
+}
+
+/* Mobile */
 @media (max-width: 900px) {
   .block-container {
     padding-left: 1.0rem;
@@ -133,12 +182,138 @@ section[data-testid="stSidebar"] .sidebar-content {
 </style>
 """
 
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+LIGHT_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+html, body, [class*="stApp"] {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #0b1020;
+}
+
+.stApp {
+  background: #e5ebf5;
+}
+
+.main {
+  background: linear-gradient(145deg, #eef2ff 0%, #f5f7fb 40%, #e5ebf5 100%);
+}
+
+.block-container {
+  max-width: 1120px;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+  background: #ffffff;
+  border-right: 1px solid rgba(15,23,42,0.08);
+}
+section[data-testid="stSidebar"] * {
+  color: #111827;
+}
+
+/* Cards */
+.asc-card {
+  border-radius: 24px;
+  border: 1px solid rgba(15,23,42,0.06);
+  background: radial-gradient(circle at 0% 0%, rgba(78,191,176,0.14) 0, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(238,65,40,0.14) 0, transparent 50%),
+              #ffffff;
+  padding: 1.5rem 1.75rem;
+  box-shadow:
+    0 18px 60px rgba(15,23,42,0.15),
+    0 0 0 1px rgba(15,23,42,0.02);
+  margin-bottom: 1.5rem;
+}
+
+/* Typography */
+.asc-eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
+.asc-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+  margin-bottom: 0.4rem;
+  color: #0b1020;
+}
+
+.asc-title span {
+  color: #059669;
+}
+
+.asc-subtitle {
+  font-size: 0.98rem;
+  color: #4b5563;
+  max-width: 720px;
+}
+
+/* Dataframes */
+.dataframe tbody tr th {
+  color: #111827;
+}
+
+.dataframe thead th {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.dataframe tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.dataframe tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+.dataframe td, .dataframe th {
+  border-color: rgba(15,23,42,0.08) !important;
+}
+
+/* Download button */
+.asc-download-wrap {
+  margin-top: 0.75rem;
+}
+
+/* General text contrast */
+h1, h2, h3, h4, h5, h6, p, span, label {
+  color: #0b1020;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .block-container {
+    padding-left: 1.0rem;
+    padding-right: 1.0rem;
+  }
+  .asc-card {
+    padding: 1.1rem 1.1rem;
+  }
+  .asc-title {
+    font-size: 1.4rem;
+  }
+  .asc-subtitle {
+    font-size: 0.9rem;
+  }
+}
+</style>
+"""
+
+st.markdown(DARK_CSS if theme_choice == "Dark" else LIGHT_CSS, unsafe_allow_html=True)
+
+# ---------- Data helpers ----------
 REQUIRED_COLS = ["offer", "dream_outcome", "likelihood", "time_delay", "effort_sacrifice"]
 OPTIONAL_COLS = ["group"]
 
-def canonicalize_columns(df):
+def canonicalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     mapping = {
         "offer": "offer",
         "name": "offer",
@@ -163,17 +338,22 @@ def canonicalize_columns(df):
     df.rename(columns={c: mapping.get(c, c) for c in df.columns}, inplace=True)
     return df
 
-def coerce_numeric(df, cols):
+def coerce_numeric(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
     df = df.copy()
     for c in cols:
         df[c] = pd.to_numeric(df[c], errors="coerce")
     return df
 
-def validate_required_columns(df):
-    missing = [c for c in REQUIRED_COLS if c not in df.columns]
-    return missing
+def validate_required_columns(df: pd.DataFrame) -> list[str]:
+    return [c for c in REQUIRED_COLS if c not in df.columns]
 
-def compute_value_score(df, w_outcome=1.0, w_likelihood=1.0, w_time=1.0, w_effort=1.0):
+def compute_value_score(
+    df: pd.DataFrame,
+    w_outcome: float = 1.0,
+    w_likelihood: float = 1.0,
+    w_time: float = 1.0,
+    w_effort: float = 1.0,
+) -> pd.DataFrame:
     df = df.copy()
     for col in ["dream_outcome", "likelihood", "time_delay", "effort_sacrifice"]:
         df[col] = df[col].replace([np.inf, -np.inf], np.nan)
@@ -190,7 +370,7 @@ def compute_value_score(df, w_outcome=1.0, w_likelihood=1.0, w_time=1.0, w_effor
     df["value_score"] = num / den
     return df
 
-def starter_dataframe():
+def starter_dataframe() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "offer": ["Core Coaching", "Premium Sprint", "Enterprise Advisory"],
@@ -202,7 +382,7 @@ def starter_dataframe():
         }
     )
 
-def clean_and_prepare(df):
+def clean_and_prepare(df: pd.DataFrame) -> pd.DataFrame:
     df = canonicalize_columns(df)
     miss = validate_required_columns(df)
     if miss:
@@ -222,7 +402,7 @@ def clean_and_prepare(df):
     df["offer"] = df["offer"].astype(str).str.strip()
     return df
 
-def download_csv_button(df, filename="value_equation_results.csv"):
+def download_csv_button(df: pd.DataFrame, filename: str = "value_equation_results.csv"):
     csv_bytes = df.to_csv(index=False).encode("utf-8")
     with st.container():
         st.markdown('<div class="asc-download-wrap">', unsafe_allow_html=True)
@@ -234,37 +414,39 @@ def download_csv_button(df, filename="value_equation_results.csv"):
         )
         st.markdown("</div>", unsafe_allow_html=True)
 
-# Sidebar
-st.sidebar.header("⚙️ Factor Weights")
-st.sidebar.caption("1.0 = neutral. Adjust weights to match your market reality.")
-
-w_outcome = st.sidebar.slider("Dream Outcome weight", 0.2, 3.0, 1.0, 0.1)
-w_likelihood = st.sidebar.slider("Likelihood weight", 0.2, 3.0, 1.0, 0.1)
-w_time = st.sidebar.slider("Time Delay penalty", 0.2, 3.0, 1.0, 0.1)
-w_effort = st.sidebar.slider("Effort & Sacrifice penalty", 0.2, 3.0, 1.0, 0.1)
-
-st.sidebar.markdown("---")
-st.sidebar.caption(
-    "Lower Time Delay and Effort & Sacrifice scores mean less friction. "
-    "If your data inverts that meaning, normalise before upload."
-)
-
-# Header card
+# ---------- Header + Intro ("How this equation works" at top) ----------
 st.markdown(
     """
     <div class="asc-card">
       <div class="asc-eyebrow">Ascendea Value Architecture</div>
       <div class="asc-title">The <span>Value Equation</span> Calculator</div>
       <div class="asc-subtitle">
-        Rank every offer on perceived value: how big the outcome is, how likely it is to happen,
-        and how much time and effort it really costs your buyer.
+        This simulator ranks every offer on perceived value – how big the outcome is,
+        how likely it is to happen, and how much time and effort it really costs your buyer.
       </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-# Data ingest
+st.markdown(
+    """
+    <div class="asc-card">
+      <div class="asc-eyebrow">How this equation works</div>
+      <div class="asc-subtitle" style="margin-top:0.5rem;">
+        <strong>Value Equation</strong> =
+        (Dream Outcome × Likelihood of Achievement) ÷ (Time Delay × Effort & Sacrifice).
+        <br/><br/>
+        • Push perceived value up by increasing <strong>Dream Outcome</strong> and <strong>Likelihood</strong>.<br/>
+        • Push perceived value up by reducing <strong>Time Delay</strong> and <strong>Effort & Sacrifice</strong>.<br/>
+        • Use the weights in the sidebar when your market is more sensitive to speed, certainty, or friction.
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------- Data ingest ----------
 with st.container():
     upload_col, _ = st.columns([3, 2])
     with upload_col:
@@ -280,19 +462,20 @@ if uploaded is not None:
         df_in = clean_and_prepare(raw)
         st.success("CSV loaded successfully.")
     except Exception as e:
-        st.error("Error reading CSV: {}".format(e))
+        st.error(f"Error reading CSV: {e}")
         st.stop()
 else:
     st.info("No CSV uploaded. Using the starter offers below.")
     df_in = starter_dataframe()
 
-# Edit / review
+# ---------- Edit / review ----------
 st.markdown(
     """
     <div class="asc-eyebrow" style="margin-top:1.25rem;">Step 2</div>
     <h3 style="margin-top:0.25rem;">Review and edit your inputs</h3>
-    <p style="color:rgba(255,255,255,0.78);font-size:0.95rem;">
-      Keep everything on a 1–10 scale. Higher is better for outcome and likelihood. Lower is better for time and effort.
+    <p style="font-size:0.95rem;">
+      Keep everything on a 1–10 scale. Higher is better for outcome and likelihood.
+      Lower is better for time and effort.
     </p>
     """,
     unsafe_allow_html=True,
@@ -315,10 +498,10 @@ edited = st.data_editor(
 try:
     df_clean = clean_and_prepare(edited)
 except Exception as e:
-    st.error("Data validation error: {}".format(e))
+    st.error(f"Data validation error: {e}")
     st.stop()
 
-# Compute
+# ---------- Compute ----------
 df_scored = compute_value_score(
     df_clean,
     w_outcome=w_outcome,
@@ -330,7 +513,7 @@ df_scored = compute_value_score(
 df_scored["rank"] = df_scored["value_score"].rank(ascending=False, method="dense").astype(int)
 df_scored = df_scored.sort_values(["rank", "value_score"], ascending=[True, False]).reset_index(drop=True)
 
-# Outputs
+# ---------- Outputs ----------
 st.markdown("#### 3. Ranked value scores")
 st.caption("Higher scores indicate higher perceived value after friction.")
 
@@ -354,6 +537,9 @@ st.markdown("#### 4. Visual comparison")
 
 alt.themes.enable("none")
 
+axis_label_color = TOKENS["PRIMARY"]
+axis_title_color = TOKENS["MUTED"]
+
 chart = (
     alt.Chart(df_scored)
     .mark_bar()
@@ -364,7 +550,7 @@ chart = (
             "group:N",
             title="Group",
             scale=alt.Scale(
-                range=[ASC_TEAL, ASC_RED, "#7b61ff", "#f5b700"]
+                range=[TOKENS["TEAL"], TOKENS["RED"], "#7b61ff", "#f5b700"]
             ),
         ),
         tooltip=[
@@ -380,14 +566,14 @@ chart = (
     .properties(height=380)
     .configure_view(stroke=None, fill="rgba(0,0,0,0)")
     .configure_axis(
-        labelColor=ASC_WHITE,
-        titleColor=ASC_MUTED,
-        gridColor="rgba(255,255,255,0.08)",
-        domainColor="rgba(255,255,255,0.35)",
+        labelColor=axis_label_color,
+        titleColor=axis_title_color,
+        gridColor="rgba(148,163,184,0.25)",
+        domainColor="rgba(148,163,184,0.55)",
     )
     .configure_legend(
-        labelColor=ASC_WHITE,
-        titleColor=ASC_MUTED,
+        labelColor=axis_label_color,
+        titleColor=axis_title_color,
         orient="top",
     )
 )
@@ -397,19 +583,7 @@ st.altair_chart(chart, use_container_width=True)
 st.markdown("#### 5. Export results")
 download_csv_button(df_scored)
 
-with st.expander("How this equation works"):
-    st.write(
-        """
-        Ascendea Value Equation
-
-        Perceived value = (Dream Outcome × Likelihood of Achievement) ÷ (Time Delay × Effort & Sacrifice).
-
-        - Increase perceived value by raising Dream Outcome and Likelihood.
-        - Increase perceived value by reducing Time Delay and Effort & Sacrifice.
-        - If your market cares more about speed or certainty, adjust the weights in the sidebar.
-        """
-    )
-
+# ---------- CSV example only (kept as helper, not core intro) ----------
 with st.expander("CSV format example"):
     st.code(
         "offer,dream_outcome,likelihood,time_delay,effort_sacrifice,group\n"
