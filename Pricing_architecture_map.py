@@ -171,6 +171,29 @@ p {
 st.markdown(ASCENDEA_CSS, unsafe_allow_html=True)
 
 # --- HELPER FUNCTIONS ---
+def df_to_markdown_basic(df: pd.DataFrame) -> str:
+    """
+    FIX: Creates a simple Markdown table string from a DataFrame using to_csv.
+    This avoids the to_markdown() method which requires the 'tabulate' package.
+    """
+    if df.empty:
+        return ""
+        
+    # Use to_csv to get a comma-separated string, then split into lines
+    csv_string = df.to_csv(index=False)
+    lines = csv_string.strip().split('\n')
+    
+    # Replace commas with pipes for a basic Markdown format
+    markdown_lines = ["|" + line.replace(",", "|") + "|" for line in lines]
+    
+    # Insert the header separator line (---) after the first line (header)
+    if len(markdown_lines) > 0:
+        header_separator = "|" + "---|" * len(df.columns)
+        markdown_lines.insert(1, header_separator)
+    
+    return "\n".join(markdown_lines)
+
+
 def generate_vrio_summary(df: pd.DataFrame) -> str:
     """Generates a markdown summary for the VRIO assessment."""
     if df.empty:
@@ -542,8 +565,7 @@ with st.container():
         "**Definitive Playbook Notes (Actionable Advice)**",
         height=260,
         value=f"""
-**Client: [Insert Client Name]**  
-**Date: {datetime.now().strftime('%Y-%m-%d')}**
+**Client: [Insert Client Name]** **Date: {datetime.now().strftime('%Y-%m-%d')}**
 
 ### 1. Pricing Floor and Ceiling
 * **Pricing Floor (Substitutes):** The average price of substitutes is ${floor_avg:.2f}. The core offer should not undercut this without a deliberate scope reduction.
@@ -562,21 +584,21 @@ with st.container():
 
     st.markdown("---")
 
-    # --- SAVE/EXPORT BUTTON ---
+    # --- SAVE/EXPORT BUTTON (FIXED) ---
     export_md = (
         f"# Pricing Architecture Audit Report\n\n"
         f"## Client: [Client Name]\n"
         f"## Date: {datetime.now().strftime('%Y-%m-%d')}\n\n"
         f"### 1. Pricing Map\n\n"
         f"#### Direct Competitors (Baseline)\n"
-        f"{st.session_state.direct_competitors.to_markdown(index=False)}\n\n"
+        f"{df_to_markdown_basic(st.session_state.direct_competitors)}\n\n"
         f"#### Substitutes (Floor)\n"
-        f"{st.session_state.substitutes.to_markdown(index=False)}\n\n"
+        f"{df_to_markdown_basic(st.session_state.substitutes)}\n\n"
         f"#### Premium Benchmarks (Ceiling)\n"
-        f"{st.session_state.premium_benchmarks.to_markdown(index=False)}\n\n"
+        f"{df_to_markdown_basic(st.session_state.premium_benchmarks)}\n\n"
         f"### 2. Strategic Analysis (VRIO)\n\n"
         f"#### VRIO Assessment\n"
-        f"{st.session_state.vrio_analysis.to_markdown(index=False)}\n\n"
+        f"{df_to_markdown_basic(st.session_state.vrio_analysis)}\n\n"
         f"{generate_vrio_summary(st.session_state.vrio_analysis)}\n\n"
         f"### 3. Final Playbook Synthesis\n\n"
         f"{final_playbook}\n"
