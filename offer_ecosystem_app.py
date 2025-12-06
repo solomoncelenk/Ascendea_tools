@@ -3,13 +3,14 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+from streamlit_mermaid import mermaid  # for actual diagram rendering
 
 px.defaults.template = "plotly_dark"
 
 st.set_page_config(page_title="Offer Ecosystem Map", layout="wide")
 st.title("Offer Ecosystem Map — Tiers, Flows, Finance & Strategy")
 
-st.caption("Visualise Entry → Core → Premium → Upsell → Recurring, layer Blue Ocean & Psychology, and run financial diagnostics.")
+st.caption("Visualise Entry → Core → Premium → Upsell → Recurring, layer psychology, and run financial diagnostics.")
 
 TIERS = ["Entry","Core","Premium","Upsell","Recurring"]
 
@@ -38,26 +39,19 @@ sample_flows = pd.DataFrame({
     "notes": ["Entry→Core conversion","Core→Premium","Cross-sell rate","Premium to Retainer","Core to Retainer","Premium to Retainer","Entry→Core repeat"]
 })
 
-sample_errc = pd.DataFrame({
-    "offer": ["Free Workshop","Core Program","Premium Advisory","Cross-sell Addon","Growth Retainer"],
-    "action": ["Create","Raise","Create","Reduce","Raise"],
-    "rationale": ["Add more pain-specific themes","Strengthen proof & speed","Anchor Core via exec layer","Bundle to increase take rate","Make retainer default post-core"]
-})
-
 # -----------------------
 # Sidebar data mode
 # -----------------------
 with st.sidebar:
     st.header("Data")
     mode = st.radio("Choose data mode", ["Manual editor", "Upload CSVs"], index=0)
-    st.caption("Upload `offers.csv`, `flows.csv`, (optional) `errc.csv`.")
+    st.caption("Upload `offers.csv` and `flows.csv` (optional).")
 
 def read_or_default(uploaded_list):
-    frames = {"offers": None, "flows": None, "errc": None}
+    frames = {"offers": None, "flows": None}
     sigs = {
         "offers": {"offer","tier","price","mrr","term_months","margin_pct","anchor","scarcity","positioning_frame","enabled","notes"},
         "flows": {"source_tier","target_tier","label","prob","notes"},
-        "errc": {"offer","action","rationale"}
     }
     if uploaded_list:
         for f in uploaded_list:
@@ -76,7 +70,6 @@ def read_or_default(uploaded_list):
                 frames["offers"] = df
     frames["offers"] = frames["offers"] or sample_offers.copy()
     frames["flows"]  = frames["flows"]  or sample_flows.copy()
-    frames["errc"]   = frames["errc"]   or sample_errc.copy()
     return frames
 
 if mode == "Upload CSVs":
@@ -88,7 +81,6 @@ else:
         st.session_state.eco_frames = {
             "offers": sample_offers.copy(),
             "flows": sample_flows.copy(),
-            "errc": sample_errc.copy()
         }
 
     with st.sidebar:
@@ -97,7 +89,6 @@ else:
             st.session_state.eco_frames = {
                 "offers": sample_offers.copy(),
                 "flows": sample_flows.copy(),
-                "errc": sample_errc.copy()
             }
         st.download_button(
             "⬇️ Download offers.csv",
@@ -109,12 +100,6 @@ else:
             "⬇️ Download flows.csv",
             st.session_state.eco_frames["flows"].to_csv(index=False),
             "flows.csv",
-            "text/csv"
-        )
-        st.download_button(
-            "⬇️ Download errc.csv",
-            st.session_state.eco_frames["errc"].to_csv(index=False),
-            "errc.csv",
             "text/csv"
         )
 
@@ -148,25 +133,10 @@ else:
         }
     )
 
-    # ERRC editor
-    st.subheader("ERRC grid (offer-level)")
-    st.session_state.eco_frames["errc"] = st.data_editor(
-        st.session_state.eco_frames["errc"],
-        num_rows="dynamic",
-        use_container_width=True,
-        column_config={
-            "action": st.column_config.SelectboxColumn(
-                "action",
-                options=["Eliminate","Reduce","Raise","Create","Keep"]
-            )
-        }
-    )
-
     frames = st.session_state.eco_frames
 
 offers = frames["offers"].copy()
 flows  = frames["flows"].copy()
-errc   = frames["errc"].copy()
 
 # -----------------------
 # Assumptions
@@ -321,7 +291,7 @@ with colB:
 st.dataframe(rev_df.round(2), use_container_width=True)
 
 # -----------------------
-# Mermaid map (rendered)
+# Mermaid map (rendered with streamlit-mermaid)
 # -----------------------
 st.markdown("---")
 st.subheader("Offer Ecosystem Mermaid Map")
@@ -330,30 +300,29 @@ mermaid_lines = ["graph LR"]
 
 id_map = {"Entry": "A", "Core": "B", "Premium": "C", "Upsell": "D", "Recurring": "E"}
 
-# Edges
+# Edges from flows
 for _, r in flows.iterrows():
     s = id_map.get(r["source_tier"], "A")
     t = id_map.get(r["target_tier"], "B")
-    lab = r.get("label", "")
-    mermaid_lines.append(f'    {s}["{r["source_tier"]} Offers"] -->|{lab}| {t}["{r["target_tier"]} Offers"]')
+    lab = str(r.get("label", ""))
+    mermaid_lines.append(f'{s}["{r["source_tier"]} Offers"] -->|{lab}| {t}["{r["target_tier"]} Offers"]')
 
 # Class assignments
 for tier, code in id_map.items():
     cls = tier.lower()
-    mermaid_lines.append(f"    {code}:::{cls}")
+    mermaid_lines.append(f"{code}:::{cls}")
 
 # Class definitions
-mermaid_lines.append("")
-mermaid_lines.append("    classDef entry fill:#d6f5d6,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("    classDef core fill:#b3d9ff,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("    classDef premium fill:#ffcccc,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("    classDef upsell fill:#fff0b3,stroke:#333,stroke-width:1px;")
-mermaid_lines.append("    classDef recurring fill:#e6ccff,stroke:#333,stroke-width:1px;")
+mermaid_lines.append("classDef entry fill:#d6f5d6,stroke:#333,stroke-width:1px;")
+mermaid_lines.append("classDef core fill:#b3d9ff,stroke:#333,stroke-width:1px;")
+mermaid_lines.append("classDef premium fill:#ffcccc,stroke:#333,stroke-width:1px;")
+mermaid_lines.append("classDef upsell fill:#fff0b3,stroke:#333,stroke-width:1px;")
+mermaid_lines.append("classDef recurring fill:#e6ccff,stroke:#333,stroke-width:1px;")
 
-mermaid_code = "\n".join(mermaid_lines)
+mermaid_code = "graph LR\n" + "\n".join(mermaid_lines[1:])  # ensure single 'graph LR' at top
 
-# This will render as a diagram in Streamlit environments that support Mermaid in markdown.
-st.markdown(f"```mermaid\n{mermaid_code}\n```")
+# Render the diagram
+mermaid(mermaid_code)
 
 # Download as .md for Notion / wiki
 st.download_button(
@@ -376,59 +345,6 @@ anchor_list = offers[offers["anchor"]]["offer"].tolist()
 scarce_list = offers[offers["scarcity"]]["offer"].tolist()
 st.write("**Anchors (set the frame):** ", ", ".join(anchor_list) if anchor_list else "None")
 st.write("**Scarcity/Exclusivity:** ", ", ".join(scarce_list) if scarce_list else "None")
-
-# -----------------------
-# ERRC grid
-# -----------------------
-st.markdown("---")
-st.subheader("ERRC Grid (Eliminate · Reduce · Raise · Create)")
-
-mix = rev_df.set_index("tier")["revenue"]
-mix = mix / mix.sum() if mix.sum() > 0 else mix
-
-auto = []
-for _, r in offers.iterrows():
-    tier = r["tier"]
-    margin = r["margin_pct"]
-    revenue_share = float(mix.get(tier, 0.0))
-    if tier == "Entry" and margin < 0.3 and revenue_share == 0:
-        action = "Create"
-        rationale = "Make Entry irresistible (specific problem, genuine lead magnet)."
-    elif margin < 0.4 and tier != "Recurring":
-        action = "Reduce"
-        rationale = "Low margin; streamline delivery or reposition."
-    elif tier in ["Core", "Recurring"] and revenue_share < 0.2:
-        action = "Raise"
-        rationale = "Underweight for core/recurring; boost proof, packaging, or pathways."
-    else:
-        action = "Keep"
-        rationale = "Healthy economics or strategic role."
-    auto.append({"offer": r["offer"], "action": action, "rationale": rationale})
-
-errc_auto = pd.DataFrame(auto)
-errc_join = errc_auto.merge(errc, on="offer", how="left", suffixes=("_auto",""))
-errc_join["action"] = errc_join["action"].fillna(errc_join["action_auto"])
-errc_join["rationale"] = errc_join["rationale"].fillna(errc_join["rationale_auto"])
-errc_view = errc_join[["offer","action","rationale"]].copy()
-
-errc_edit = st.data_editor(
-    errc_view,
-    num_rows="dynamic",
-    use_container_width=True,
-    column_config={
-        "action": st.column_config.SelectboxColumn(
-            "action",
-            options=["Eliminate","Reduce","Raise","Create","Keep"]
-        )
-    }
-)
-
-st.download_button(
-    "⬇️ Download ERRC (CSV)",
-    data=errc_edit.to_csv(index=False),
-    file_name="errc_grid.csv",
-    mime="text/csv"
-)
 
 # -----------------------
 # Narrative
