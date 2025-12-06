@@ -41,8 +41,6 @@ ASCENDEA_CSS = """
 .block-container {
   padding-top: 2.4rem;
   padding-bottom: 3rem;
-  /* FIX 1: Add overflow hidden to prevent elements from bleeding out of the main area */
-  overflow: hidden; 
 }
 
 /* Sidebar */
@@ -123,16 +121,6 @@ h1 {
   border: 1px solid rgba(255,255,255,0.16);
   background-color: rgba(6,10,22,0.96);
 }
-
-/* FIX 2: Ensure Data Editor content within the tab container is constrained */
-.stTabs > div > div > div > div[data-testid="stVerticalBlock"] {
-    overflow: visible; 
-}
-.stTabs [data-testid="stVerticalBlock"] > .element-container {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-/* End of FIX 2 */
 
 /* Inputs and widgets */
 .stTextInput > div > div > input,
