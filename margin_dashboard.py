@@ -174,7 +174,7 @@ st.markdown(
 )
 
 # --- Sidebar for file upload ---
-st.sidebar.header("📁 Data Input")
+st.sidebar.header("Data Input")
 uploaded_file = st.sidebar.file_uploader("Upload client_revenue.csv", type=["csv"])
 
 # --- Default sample data (if no file uploaded) ---
@@ -201,10 +201,13 @@ df["gross_margin"] = (df["revenue"] - df["cogs"]) / df["revenue"]
 df["contribution_margin"] = (df["revenue"] - df["cogs"] - df["channel_costs"]) / df["revenue"]
 
 summary = df.groupby("product")[["gross_margin", "contribution_margin"]].mean().reset_index()
-summary["gross_margin"] = summary["gross_margin"].round(3)
-summary["contribution_margin"] = summary["contribution_margin"].round(3)
 
-st.dataframe(summary.style.format("{:.1%}"), use_container_width=True)
+# Create display-friendly percentage strings (no Styler to avoid errors)
+summary_display = summary.copy()
+for col in ["gross_margin", "contribution_margin"]:
+    summary_display[col] = (summary_display[col] * 100).round(1).astype(str) + "%"
+
+st.dataframe(summary_display, use_container_width=True)
 
 # Branded bar chart
 fig1 = px.bar(
