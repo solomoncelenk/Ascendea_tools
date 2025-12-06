@@ -1,4 +1,4 @@
-# Value Equation App (Ascendea UI) – Dark/Light, Tokens, Contrast
+# Value Equation App (Ascendea UI) – Themed, High-Contrast, Branded Chart
 
 import numpy as np
 import pandas as pd
@@ -11,8 +11,6 @@ DARK_TOKENS = {
     "MUTED": "rgba(255,255,255,0.78)",
     "DISABLED": "rgba(255,255,255,0.45)",
     "BG": "#050814",
-    "TEAL": "#4ebfb0",
-    "RED": "#ee4128",
 }
 
 LIGHT_TOKENS = {
@@ -20,8 +18,6 @@ LIGHT_TOKENS = {
     "MUTED": "#4b5563",
     "DISABLED": "#9ca3af",
     "BG": "#f5f7fb",
-    "TEAL": "#059669",
-    "RED": "#dc2626",
 }
 
 st.set_page_config(
@@ -52,7 +48,7 @@ st.sidebar.caption(
     "If your data inverts that meaning, normalise before upload."
 )
 
-# ---------- CSS per Theme (no f-strings, no brace issues) ----------
+# ---------- CSS per Theme ----------
 DARK_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -153,9 +149,26 @@ section[data-testid="stSidebar"] * {
   border-color: rgba(255,255,255,0.12) !important;
 }
 
-/* Download button */
+/* Download / buttons */
 .asc-download-wrap {
   margin-top: 0.75rem;
+}
+
+/* Ascendea button styling */
+.stButton > button, .stDownloadButton > button {
+  background: #00E4AB !important;
+  color: #393939 !important;
+  border: 1px solid #FFFDD1 !important;
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+.stButton > button:hover, .stDownloadButton > button:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.45);
 }
 
 /* General text contrast */
@@ -278,9 +291,26 @@ section[data-testid="stSidebar"] * {
   border-color: rgba(15,23,42,0.08) !important;
 }
 
-/* Download button */
+/* Download / buttons */
 .asc-download-wrap {
   margin-top: 0.75rem;
+}
+
+/* Ascendea button styling */
+.stButton > button, .stDownloadButton > button {
+  background: #00E4AB !important;
+  color: #393939 !important;
+  border: 1px solid #FFFDD1 !important;
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.25);
+}
+.stButton > button:hover, .stDownloadButton > button:hover {
+  filter: brightness(1.03);
+  box-shadow: 0 14px 40px rgba(15,23,42,0.35);
 }
 
 /* General text contrast */
@@ -414,7 +444,7 @@ def download_csv_button(df: pd.DataFrame, filename: str = "value_equation_result
         )
         st.markdown("</div>", unsafe_allow_html=True)
 
-# ---------- Header + Intro ("How this equation works" at top) ----------
+# ---------- Header + Intro ----------
 st.markdown(
     """
     <div class="asc-card">
@@ -437,8 +467,8 @@ st.markdown(
         <strong>Value Equation</strong> =
         (Dream Outcome × Likelihood of Achievement) ÷ (Time Delay × Effort & Sacrifice).
         <br/><br/>
-        • Push perceived value up by increasing <strong>Dream Outcome</strong> and <strong>Likelihood</strong>.<br/>
-        • Push perceived value up by reducing <strong>Time Delay</strong> and <strong>Effort & Sacrifice</strong>.<br/>
+        • Increase perceived value by raising <strong>Dream Outcome</strong> and <strong>Likelihood</strong>.<br/>
+        • Increase perceived value by reducing <strong>Time Delay</strong> and <strong>Effort & Sacrifice</strong>.<br/>
         • Use the weights in the sidebar when your market is more sensitive to speed, certainty, or friction.
       </div>
     </div>
@@ -513,7 +543,7 @@ df_scored = compute_value_score(
 df_scored["rank"] = df_scored["value_score"].rank(ascending=False, method="dense").astype(int)
 df_scored = df_scored.sort_values(["rank", "value_score"], ascending=[True, False]).reset_index(drop=True)
 
-# ---------- Outputs ----------
+# ---------- Outputs: table ----------
 st.markdown("#### 3. Ranked value scores")
 st.caption("Higher scores indicate higher perceived value after friction.")
 
@@ -533,12 +563,20 @@ st.dataframe(
     use_container_width=True,
 )
 
+# ---------- Outputs: chart ----------
 st.markdown("#### 4. Visual comparison")
 
 alt.themes.enable("none")
 
-axis_label_color = TOKENS["PRIMARY"]
-axis_title_color = TOKENS["MUTED"]
+# Axis + title colours:
+if theme_choice == "Dark":
+    axis_label_color = "#ffffff"
+    axis_title_color = "#ffffff"
+    chart_title_color = "#ffffff"
+else:
+    axis_label_color = "#393939"
+    axis_title_color = "#393939"
+    chart_title_color = "#393939"
 
 chart = (
     alt.Chart(df_scored)
@@ -550,7 +588,8 @@ chart = (
             "group:N",
             title="Group",
             scale=alt.Scale(
-                range=[TOKENS["TEAL"], TOKENS["RED"], "#7b61ff", "#f5b700"]
+                domain=["Company", "Competitor 1", "Competitor 2"],
+                range=["#00E4AB", "#F2003C", "#fd7232"],
             ),
         ),
         tooltip=[
@@ -563,7 +602,17 @@ chart = (
             alt.Tooltip("value_score:Q", title="Value score", format=".3f"),
         ],
     )
-    .properties(height=380)
+    .properties(
+        height=380,
+        title="Value score by offer",
+    )
+    .configure_title(
+        color=chart_title_color,
+        font="Inter",
+        fontSize=16,
+        anchor="start",
+        fontWeight="bold",
+    )
     .configure_view(stroke=None, fill="rgba(0,0,0,0)")
     .configure_axis(
         labelColor=axis_label_color,
@@ -580,15 +629,16 @@ chart = (
 
 st.altair_chart(chart, use_container_width=True)
 
+# ---------- Download ----------
 st.markdown("#### 5. Export results")
 download_csv_button(df_scored)
 
-# ---------- CSV example only (kept as helper, not core intro) ----------
+# ---------- CSV helper ----------
 with st.expander("CSV format example"):
     st.code(
         "offer,dream_outcome,likelihood,time_delay,effort_sacrifice,group\n"
         "Core Coaching,8,7,6,5,Company\n"
         "Premium Sprint,10,8,4,4,Company\n"
-        "Competitor A,9,7,5,6,Competitor",
+        "Competitor 1,9,7,5,6,Competitor 1",
         language="csv",
     )
