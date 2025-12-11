@@ -24,12 +24,12 @@
 body {
   background:#000;
   display:flex;
-  flex-direction:column; /* Added to stack card and controls */
+  flex-direction:column;
   justify-content:center;
   align-items:center;
   font-family:"Inter",system-ui,sans-serif;
   color:var(--white);
-  padding:40px; /* Added padding */
+  padding:40px;
 }
 .card {
   width:1080px;
@@ -42,7 +42,6 @@ body {
   background:linear-gradient(135deg, #050509 0%, #020308 40%, #050509 100%);
   position:relative;
   overflow:hidden;
-  /* Added ID for conversion targeting */
   z-index: 10;
 }
 .card::before {
@@ -146,7 +145,7 @@ body {
     margin-bottom: 20px;
     display: flex;
     gap: 15px;
-    z-index: 20; /* Ensure controls are above the card's pseudo-elements */
+    z-index: 20; 
 }
 .btn {
     padding: 12px 25px;
@@ -220,7 +219,7 @@ const contentCard = document.getElementById('content-card');
 const downloadPdfBtn = document.getElementById('downloadPdf');
 const downloadJpgBtn = document.getElementById('downloadJpg');
 
-/* --- 1. PDF Conversion Function --- */
+/* --- 1. PDF Conversion Function (Unchanged from initial version) --- */
 downloadPdfBtn.addEventListener('click', () => {
     // html2pdf configuration object
     const options = {
@@ -239,13 +238,16 @@ downloadPdfBtn.addEventListener('click', () => {
 });
 
 
-/* --- 2. High-Res JPEG Conversion Function --- */
+/* --- 2. High-Res JPEG Conversion Function (UPDATED) --- */
 downloadJpgBtn.addEventListener('click', () => {
-    // html2canvas configuration for high resolution
+    // html2canvas configuration for high resolution (Scale reduced to 2 for stability)
     html2canvas(contentCard, {
-        scale: 3, // Use scale 3 for a very high resolution JPEG output
+        scale: 2, // Using scale 2 to prevent rendering layout issues
         useCORS: true, 
-        backgroundColor: '#050509', // Match background color for areas not covered by linear gradient
+        backgroundColor: '#050509', // Match background color
+        scrollX: 0, // Explicitly set scroll positions for better rendering
+        scrollY: 0,
+        logging: false 
     }).then(canvas => {
         // Convert the canvas to a data URL (JPEG format, 95% quality)
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -253,7 +255,7 @@ downloadJpgBtn.addEventListener('click', () => {
         // Create a temporary link element to trigger the download
         const link = document.createElement('a');
         link.href = imgData;
-        link.download = 'ascendea-load-distribution-highres.jpg';
+        link.download = 'ascendea-load-distribution-fixed.jpg';
 
         // Simulate a click to start the download
         document.body.appendChild(link);
