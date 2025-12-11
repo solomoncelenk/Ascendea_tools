@@ -39,22 +39,15 @@ body {
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+  /* UPDATED: Simplified background for conversion stability */
   background:linear-gradient(135deg, #050509 0%, #020308 40%, #050509 100%);
   position:relative;
   overflow:hidden;
   z-index: 10;
 }
-.card::before {
-  content:"";
-  position:absolute;
-  inset:-20%;
-  background:
-    radial-gradient(circle at top left, rgba(33,48,82,0.8), transparent 60%),
-    radial-gradient(circle at bottom right, rgba(0,228,171,0.4), transparent 60%),
-    radial-gradient(circle at bottom, rgba(255,187,0,0.4), transparent 60%);
-  opacity:0.9;
-  pointer-events:none;
-}
+
+/* REMOVED: The entire .card::before block which contained the main radial gradients */
+/* .card::before { ... } */
 
 .top {
   position:relative; z-index:1;
@@ -102,7 +95,8 @@ body {
 
 .inner {
   max-width:820px; padding:56px 64px; border-radius:40px;
-  background:radial-gradient(circle at top left, rgba(0,228,171,0.32), rgba(0,0,0,0.96));
+  /* UPDATED: Removed radial-gradient that caused the block */
+  background:rgba(0,0,0,0.96); 
   box-shadow:0 26px 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.12);
 }
 .label {
@@ -219,7 +213,7 @@ const contentCard = document.getElementById('content-card');
 const downloadPdfBtn = document.getElementById('downloadPdf');
 const downloadJpgBtn = document.getElementById('downloadJpg');
 
-/* --- 1. PDF Conversion Function (Unchanged from initial version) --- */
+/* --- 1. PDF Conversion Function --- */
 downloadPdfBtn.addEventListener('click', () => {
     // html2pdf configuration object
     const options = {
@@ -227,25 +221,24 @@ downloadPdfBtn.addEventListener('click', () => {
         filename: 'ascendea-load-distribution.pdf',
         image: { type: 'jpeg', quality: 0.95 },
         html2canvas: { 
-            scale: 2, // Use scale 2 for a higher resolution input to the PDF
+            scale: 2, 
             useCORS: true 
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     
-    // Use the library to generate the PDF and force the download
     html2pdf().set(options).from(contentCard).save();
 });
 
 
 /* --- 2. High-Res JPEG Conversion Function (UPDATED) --- */
 downloadJpgBtn.addEventListener('click', () => {
-    // html2canvas configuration for high resolution (Scale reduced to 2 for stability)
+    // html2canvas configuration for high resolution (Scale 2 for stability)
     html2canvas(contentCard, {
-        scale: 2, // Using scale 2 to prevent rendering layout issues
+        scale: 2, 
         useCORS: true, 
-        backgroundColor: '#050509', // Match background color
-        scrollX: 0, // Explicitly set scroll positions for better rendering
+        backgroundColor: '#050509', 
+        scrollX: 0, 
         scrollY: 0,
         logging: false 
     }).then(canvas => {
