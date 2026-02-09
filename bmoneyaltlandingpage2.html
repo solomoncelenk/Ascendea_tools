@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | How We Choose Property</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* The Sovereign Grid */
+        .bg-grid {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+
+        /* Cinematic Video Header (Shorter for Page B) */
+        .video-container {
+            position: relative;
+            height: 60vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            opacity: 0.35;
+            filter: grayscale(100%) contrast(110%);
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.8) 0%, #F8FAFC 100%);
+        }
+
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+
+        .case-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+    </style>
+</head>
+<body class="antialiased bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-black/5">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em] uppercase">BMONEY</div>
+        </div>
+        <a href="#briefing" class="mono text-[10px] uppercase font-bold tracking-widest border-b-2 border-black/20 hover:border-blue-600 transition-all">Request_a_Briefing</a>
+    </nav>
+
+    <header class="video-container">
+        <video autoplay muted loop playsinline shadow-xl>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-city-skyscrapers-and-blue-sky-with-clouds-4850-large.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            <h1 class="text-white text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-[1.1]">
+                How professionals make <br>confident property decisions.
+            </h1>
+            <p class="text-slate-300 text-xl max-w-2xl font-light mb-10 leading-relaxed">
+                A walkthrough of how we actually choose assets, the trade-offs involved, and why most people earning well still feel stuck.
+            </p>
+            <a href="#walkthrough" class="btn-primary px-12 py-5 text-lg font-bold rounded-sm">
+                Watch the Full Walkthrough
+            </a>
+        </div>
+    </header>
+
+    <section class="py-32 px-8 bg-white border-y border-black/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+                <div>
+                    <div class="mono text-blue-600 text-[10px] font-bold uppercase mb-6 tracking-widest">// Briefing Points</div>
+                    <h2 class="text-4xl font-bold mb-8">Seeing past the hype.</h2>
+                    <p class="text-lg text-slate-500 font-light italic">"This isn't about property tips. It's about seeing why most investors get stuck despite having the money to move forward."</p>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="p-8 case-card border-l-4 border-l-blue-600">
+                        <p class="text-sm font-bold mb-2">Why most "good deals" fail our tests</p>
+                        <p class="text-xs text-slate-500">We look for reasons to say no before we ever look for a reason to say yes.</p>
+                    </div>
+                    <div class="p-8 case-card border-l-4 border-l-blue-600">
+                        <p class="text-sm font-bold mb-2">Thinking about the downside first</p>
+                        <p class="text-xs text-slate-500">How to handle the risks that sales agents usually try to hide or ignore.</p>
+                    </div>
+                    <div class="p-8 case-card border-l-4 border-l-blue-600">
+                        <p class="text-sm font-bold mb-2">Ruling out markets</p>
+                        <p class="text-xs text-slate-500">How we check a location's safety before we even look at a single house.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="walkthrough" class="py-32 px-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="aspect-video bg-slate-900 shadow-2xl rounded-sm flex items-center justify-center relative overflow-hidden group border border-white/10">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-12">
+                    <p class="mono text-[10px] text-blue-400 mb-2 uppercase">Currently Playing // Case_Study_01</p>
+                    <h3 class="text-white text-2xl font-bold">The $2.4M Decision Audit</h3>
+                </div>
+                <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                    <svg class="w-8 h-8 text-white fill-current ml-1" viewBox="0 0 20 20"><path d="M4.5 2.691l12 7.309-12 7.309V2.691z"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-slate-950 text-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-20">
+                <div class="mono text-blue-400 text-[10px] mb-4 uppercase tracking-widest">Real Scenario</div>
+                <h2 class="text-3xl font-bold italic">The Medical Specialist's Search</h2>
+            </div>
+            
+            <div class="space-y-16">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 mono text-[10px] text-slate-500 uppercase tracking-widest">01 / The Profile</div>
+                    <div class="md:col-span-8 text-lg text-slate-300">A senior medical professional looking for long-term safety. They were considering a newer build in a high-growth area.</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 mono text-[10px] text-slate-500 uppercase tracking-widest">02 / What we found</div>
+                    <div class="md:col-span-8 text-lg text-slate-300">Our audit showed that while the area was popular, 800 new homes were planned for the same street. This would have killed the growth for a decade.</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 mono text-[10px] text-red-500 uppercase tracking-widest">03 / The Rejection</div>
+                    <div class="md:col-span-8 text-lg text-slate-300">We ruled out the entire market. It looked good on the surface, but the facts showed it was a trap.</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 mono text-[10px] text-blue-400 uppercase tracking-widest">04 / The Decision</div>
+                    <div class="md:col-span-8 text-lg text-slate-300">We redirected to an established house in a street where no new homes could be built. The capital was protected and the owner-occupier demand was high.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="w-48 h-48 bg-slate-200 grayscale rounded-sm overflow-hidden flex-shrink-0">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400" alt="Founder" class="w-full h-full object-cover">
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-6">Why I work with professionals.</h3>
+                <p class="text-slate-600 mb-6 leading-relaxed">
+                    I started BMONEY because I saw too many people earning strong incomes getting pushed into property by people who only cared about the commission.
+                </p>
+                <p class="text-slate-600 mb-6 font-bold">
+                    We have zero interest in developer deals or off-the-plan incentives. We only care about the facts.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="briefing" class="py-32 px-8 border-t border-black/5">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-8 text-slate-950">Ready to take the next step?</h2>
+            <p class="text-slate-500 text-lg mb-12">If this way of working makes sense to you, the best thing to do is have a talk about your own situation.</p>
+            <a href="/lp3" class="btn-primary px-16 py-6 text-xl font-bold inline-block">Request a Strategy Conversation</a>
+            <p class="mt-8 text-[10px] mono text-slate-400 uppercase tracking-widest italic">No property pitch. No obligation. Just a professional chat.</p>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-slate-50 border-t border-black/5 text-center">
+        <div class="mono text-[10px] text-slate-400 tracking-[0.6em] uppercase font-bold">
+            BMONEY PROPERTY // &copy; 2026
+        </div>
+    </footer>
+
+</body>
+</html>
