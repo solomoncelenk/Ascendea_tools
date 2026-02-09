@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | Institutional Property Acquisition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-slate: #1E293B;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Cinematic Video Header */
+        .video-container {
+            position: relative;
+            height: 95vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            opacity: 0.4;
+            filter: grayscale(100%) contrast(120%);
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.2) 50%, #F8FAFC 100%);
+        }
+
+        /* Institutional Styling */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.25);
+        }
+        .audit-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center glass-panel border-b border-black/5">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em] uppercase">BMONEY</div>
+        </div>
+        <div class="flex items-center gap-8">
+            <a href="#briefing" class="mono text-[10px] uppercase font-bold tracking-widest border-b-2 border-black/10 hover:border-blue-600 transition-all py-1">Start_Briefing</a>
+        </div>
+    </nav>
+
+    <header class="video-container">
+        <video autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11005-large.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            <div class="mono text-blue-500 text-[11px] font-bold tracking-[0.4em] mb-8 uppercase animate-pulse">
+                [ High-Intent Decision Environment ]
+            </div>
+            <h1 class="text-white text-5xl md:text-8xl font-extrabold tracking-tighter mb-10 leading-[0.9]">
+                Decisions without <br><span class="text-blue-500 italic">guesswork.</span>
+            </h1>
+            <p class="text-slate-300 text-xl max-w-2xl font-light mb-12 leading-relaxed">
+                A data-led acquisition process built for professionals who value clinical evidence and risk mitigation over industry sales pressure.
+            </p>
+            <div class="flex flex-col items-center gap-8">
+                <a href="#briefing" class="btn-primary px-16 py-6 text-xl font-bold">
+                    Initiate Technical Briefing
+                </a>
+                <div class="flex items-center gap-8 mono text-[10px] text-slate-400 uppercase tracking-widest">
+                    <span>✓ No Properties Pitched</span>
+                    <span class="opacity-30">|</span>
+                    <span>✓ Institutional Standards</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-16 bg-white border-y border-black/5">
+        <div class="max-w-7xl mx-auto px-8">
+            <p class="mono text-[10px] text-center text-slate-400 uppercase tracking-[0.4em] mb-12">Trusted by professionals at</p>
+            <div class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-30 grayscale">
+                <span class="text-2xl font-black italic tracking-tighter">MACQUARIE</span>
+                <span class="text-2xl font-black italic tracking-tighter">ATLASSIAN</span>
+                <span class="text-2xl font-black italic tracking-tighter">GOLDMAN_SACHS</span>
+                <span class="text-2xl font-black italic tracking-tighter">PwC</span>
+                <span class="text-2xl font-black italic tracking-tighter">DELOITTE</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+                
+                <div class="lg:col-span-5 p-12 audit-card rounded-sm bg-slate-50 relative overflow-hidden">
+                    <div class="mono text-[10px] text-slate-400 mb-10 uppercase tracking-widest text-center italic">Institutional Exclusion Pipeline</div>
+                    
+                    <svg viewBox="0 0 400 320" class="w-full h-auto">
+                        <path d="M40,20 L360,20 L275,300 L125,300 Z" fill="#E2E8F0" opacity="0.6"/>
+                        <line x1="65" y1="90" x2="335" y2="90" stroke="#CBD5E1" stroke-dasharray="4" />
+                        <line x1="95" y1="160" x2="305" y2="160" stroke="#CBD5E1" stroke-dasharray="4" />
+                        <line x1="115" y1="230" x2="285" y2="230" stroke="#CBD5E1" stroke-dasharray="4" />
+                        <path d="M200,20 L200,300" stroke="#2563EB" stroke-width="2" />
+                        <circle cx="200" cy="300" r="4" fill="#2563EB" />
+                        <text x="375" y="55" font-family="JetBrains Mono" font-size="9" fill="#94A3B8">1,240+ [AUDITED]</text>
+                        <text x="345" y="125" font-family="JetBrains Mono" font-size="9" fill="#64748B">180 [INSPECTED]</text>
+                        <text x="315" y="195" font-family="JetBrains Mono" font-size="9" fill="#1E293B">12 [DUE DILIGENCE]</text>
+                        <text x="215" y="305" font-family="JetBrains Mono" font-size="11" fill="#2563EB" font-weight="bold">1 [RECOMMENDED]</text>
+                    </svg>
+
+                    <div class="mt-12 pt-8 border-t border-black/5">
+                        <h4 class="font-bold text-sm mb-3 uppercase mono tracking-widest text-blue-600">The Efficiency of Rejection</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-light italic">
+                            "We are paid to say no. Our data funnel kills 82% of assets before you ever see them, ensuring only clinical-grade assets enter your portfolio."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div class="mono text-blue-600 text-xs mb-6 font-bold uppercase tracking-[0.3em]">// The Evidence Audit</div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 leading-tight">We hunt for risk, <br>so you don't have to.</h2>
+                    <p class="text-xl text-slate-500 mb-10 leading-relaxed font-light">
+                        Public listings are marketing brochures. We provide the <strong>underlying data audit</strong>—analyzing supply patterns, owner-occupier demand, and historical market resistance.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="p-8 border border-black/5 bg-slate-50">
+                            <h4 class="font-bold text-lg mb-2 italic">Supply-Side Risk</h4>
+                            <p class="text-sm text-slate-500">Clinical audit of new development pipelines within a 5km radius to prevent yield dilution.</p>
+                        </div>
+                        <div class="p-8 border border-black/5 bg-slate-50">
+                            <h4 class="font-bold text-lg mb-2 italic">Liquidity Resiliency</h4>
+                            <p class="text-sm text-slate-500">Analysis of resale velocity and owner-occupier ratios to protect capital stability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-slate-900 text-white relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <div class="mono text-[10px] text-blue-400 mb-4 uppercase tracking-widest font-bold">// Acquisition Showcase</div>
+                <h2 class="text-4xl font-bold italic">The Anatomy of a 'Yes'</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2 relative group overflow-hidden bg-black aspect-video rounded-sm">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200" alt="Acquired Asset" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 p-10 flex flex-col justify-end">
+                        <div class="flex gap-4 mb-4">
+                            <span class="bg-blue-600 text-white mono text-[10px] px-3 py-1">ACQUIRED OFF-MARKET</span>
+                            <span class="bg-white/10 text-white mono text-[10px] px-3 py-1">2.4M ASSET</span>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-4">Inner-West Strategic Hold</h4>
+                        <p class="text-slate-400 text-sm max-w-lg leading-relaxed font-light">
+                            Purchased $180k below peak valuation through a private off-market channel. Passed our 42-point resiliency audit with a supply-resistance score of 4.8/5.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 p-10 border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <h5 class="mono text-[10px] text-blue-400 mb-8 uppercase tracking-widest text-center font-bold">Rejection Log // Client #402</h5>
+                        <div class="space-y-8">
+                            <div>
+                                <div class="text-red-500 mono text-[9px] font-bold mb-1">[REJECTED]</div>
+                                <div class="font-bold text-sm">Property A: Main Road exposure.</div>
+                                <p class="text-[11px] text-slate-500 italic mt-1">Noise-to-value ratio exceeded 15% threshold.</p>
+                            </div>
+                            <div>
+                                <div class="text-red-500 mono text-[9px] font-bold mb-1">[REJECTED]</div>
+                                <div class="font-bold text-sm">Property B: Supply Overshoot.</div>
+                                <p class="text-[11px] text-slate-500 italic mt-1">400+ new apartments pending within 500m radius.</p>
+                            </div>
+                            <div>
+                                <div class="text-red-500 mono text-[9px] font-bold mb-1">[REJECTED]</div>
+                                <div class="font-bold text-sm">Property C: Strata Warning.</div>
+                                <p class="text-[11px] text-slate-500 italic mt-1">Major remedial work detected in 5-year sinking fund audit.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="mt-12 text-center text-blue-400 mono text-[11px] font-bold uppercase hover:underline tracking-[0.2em]">View_All_Audits</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white border-b border-black/5">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row gap-20 items-center">
+                <div class="md:w-1/3 text-center md:text-left">
+                    <div class="flex justify-center md:justify-start gap-1 mb-6">
+                        <svg class="w-6 h-6 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-6 h-6 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-6 h-6 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-6 h-6 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-6 h-6 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                    </div>
+                    <h3 class="text-5xl font-black italic tracking-tighter mb-4 text-slate-950">5.0 / 5.0</h3>
+                    <p class="mono text-[10px] text-slate-400 uppercase tracking-widest font-bold">Verified Client Audit Log</p>
+                    <div class="mt-6 inline-flex items-center gap-2 px-4 py-1.5 bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Live Google Source
+                    </div>
+                </div>
+                <div class="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-10 border border-black/5 rounded-sm hover:border-blue-600 transition-colors">
+                        <p class="text-sm italic text-slate-600 mb-8 leading-relaxed">"What stood out wasn’t the property—it was the decision logic. I’m a risk manager by trade, and their framework is clinical."</p>
+                        <p class="mono text-[10px] font-bold uppercase text-slate-950">Director of Risk, Big 4 Bank</p>
+                    </div>
+                    <div class="p-10 border border-black/5 rounded-sm hover:border-blue-600 transition-colors">
+                        <p class="text-sm italic text-slate-600 mb-8 leading-relaxed">"Within 4 weeks of the briefing, they had filtered 200 options down to one off-market asset that was statistically perfect."</p>
+                        <p class="mono text-[10px] font-bold uppercase text-slate-950">Senior Partner, Medical Specialist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="briefing" class="py-32 px-8 bg-white">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-16 text-center">
+                <div class="mono text-[10px] text-blue-600 mb-6 uppercase tracking-widest font-bold">Initiation Briefing</div>
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-8 text-slate-950">Start a conversation.</h2>
+                <p class="text-slate-500 text-lg font-light leading-relaxed">
+                    This is not a sales call. It is a technical assessment of your current situation and constraints. <strong>No properties will be pitched.</strong>
+                </p>
+            </div>
+
+            <form class="space-y-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                        <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Identity</label>
+                        <input type="text" placeholder="Full Name" class="w-full bg-transparent outline-none font-bold text-lg">
+                    </div>
+                    <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                        <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Current Role</label>
+                        <input type="text" placeholder="e.g. Senior Counsel" class="w-full bg-transparent outline-none font-bold text-lg">
+                    </div>
+                </div>
+                <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                    <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Email Address</label>
+                    <input type="email" placeholder="email@address.com" class="w-full bg-transparent outline-none font-bold text-lg">
+                </div>
+                <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                    <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">The Bottleneck</label>
+                    <textarea rows="3" placeholder="What has stopped you from investing until now?" class="w-full bg-transparent outline-none font-bold text-lg"></textarea>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between gap-10 pt-8">
+                    <p class="text-[10px] text-slate-400 leading-relaxed uppercase mono tracking-tighter max-w-sm">
+                        Submitting this brief implies an understanding of our selective intake process.
+                    </p>
+                    <button type="submit" class="btn-primary px-16 py-6 text-xl font-bold w-full md:w-auto">
+                        Submit Technical Brief
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="py-24 bg-slate-950 text-white text-center">
+        <div class="mono text-[10px] text-slate-500 tracking-[0.5em] uppercase font-bold mb-6">
+            BMONEY PROPERTY // PRECISION ACQUISITION
+        </div>
+        <div class="text-[10px] text-slate-600 mono">&copy; 2026 // ALL RIGHTS RESERVED</div>
+    </footer>
+
+</body>
+</html>
