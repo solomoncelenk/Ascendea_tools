@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | Property Help for Professionals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .video-container {
+            position: relative;
+            height: 90vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            opacity: 0.4;
+            filter: grayscale(100%) contrast(115%);
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, #F8FAFC 100%);
+        }
+
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+
+        .bg-grid {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+
+        .stress-test-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+        }
+    </style>
+</head>
+<body class="antialiased bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-black/5">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em]">BMONEY</div>
+        </div>
+        <a href="#briefing" class="mono text-[10px] uppercase font-bold tracking-widest border-b-2 border-black/20 hover:border-blue-600 transition-all">Request_a_Briefing</a>
+    </nav>
+
+    <div class="video-container">
+        <video autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11005-large.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            <div class="mono text-blue-500 text-[11px] font-bold tracking-[0.4em] mb-8 uppercase">
+                [ For professionals who don't guess ]
+            </div>
+            <h1 class="text-white text-5xl md:text-8xl font-extrabold tracking-tighter mb-10 leading-[0.9]">
+                Property decisions without the <br><span class="text-blue-500 italic">risk you can't see coming.</span>
+            </h1>
+            <p class="text-slate-300 text-xl max-w-2xl font-light mb-12">
+                Most buyers worry they're missing something important. We've built a service that finds what everyone else overlooks.
+            </p>
+            <div class="flex flex-col items-center gap-8">
+                <a href="#briefing" class="btn-primary px-14 py-6 text-lg font-bold rounded-sm">
+                    Request a Briefing
+                </a>
+                <div class="flex items-center gap-8 mono text-[10px] text-slate-400 uppercase tracking-widest">
+                    <span>No sales pitch</span>
+                    <span class="opacity-20">•</span>
+                    <span>Zero obligation</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="py-20 px-8 bg-white border-y border-black/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="space-y-4">
+                    <div class="mono text-4xl font-bold text-blue-600 italic">82%</div>
+                    <p class="text-sm text-slate-500">of properties we assess don't make it through our initial review. We're here to protect your time.</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="mono text-4xl font-bold text-blue-600 italic">$75M+</div>
+                    <p class="text-sm text-slate-500">in transactions completed for clients who needed someone to manage the parts they couldn't see.</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="mono text-4xl font-bold text-blue-600 italic">80%</div>
+                    <p class="text-sm text-slate-500">bought before the property was listed publicly. Our job is access you don't have.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+                <div>
+                    <div class="mono text-[10px] font-bold text-blue-600 mb-6 uppercase tracking-widest">The Real Problem</div>
+                    <h2 class="text-4xl font-bold mb-8 leading-tight">If you're successful, this isn't a money problem. <br><span class="text-slate-400">It's a decision environment problem.</span></h2>
+                </div>
+                <div class="space-y-8">
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        The property industry runs on optimism and sales targets. Agents are paid to close deals. Developers are paid to sell stock. No one gets paid to tell you "this isn't right for you."
+                    </p>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        We've built the opposite. A service that says no far more often than yes. Where the default position is rejection until an asset proves it belongs in your portfolio.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-slate-950 text-white relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-20 text-center">
+                <div class="mono text-[10px] text-blue-400 mb-4 uppercase tracking-[0.3em]">Decision Support Framework</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 italic">The Property Decision Stress Test</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    A constraint-based way to ground the conversation. We don't use projections or best-case scenarios. We look for where assumptions break.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="p-6 bg-white/5 border border-white/10 rounded-sm">
+                        <div class="mono text-[9px] text-blue-400 uppercase mb-4">Context Details</div>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-[10px] text-slate-500 uppercase mb-2">Household Income Range</label>
+                                <div class="flex gap-2 text-[10px] mono">
+                                    <span class="px-3 py-1 border border-white/20">$300k–$400k</span>
+                                    <span class="px-3 py-1 border border-blue-600 text-blue-400 bg-blue-400/10">$400k+</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 uppercase mb-2">Risk Posture</label>
+                                <div class="flex gap-2 text-[10px] mono">
+                                    <span class="px-3 py-1 border border-blue-600 text-blue-400 bg-blue-400/10">Conservative</span>
+                                    <span class="px-3 py-1 border border-white/20">Growth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-8 bg-white/5 border border-white/10">
+                        <h4 class="font-bold text-sm mb-6 uppercase tracking-widest">Cashflow Tolerance</h4>
+                        <div class="space-y-6">
+                            <div class="flex justify-between text-[10px] mono">
+                                <span>Monthly Holding Band</span>
+                                <span class="text-blue-400 font-bold">$2,800 - $3,400</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-white/10 flex">
+                                <div class="h-full bg-blue-600 w-1/3"></div>
+                                <div class="h-full bg-slate-800 w-2/3"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-500 italic">Based on your details, ongoing costs sit in this band.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-8 bg-white/5 border border-white/10">
+                        <h4 class="font-bold text-sm mb-6 uppercase tracking-widest">Rate Sensitivity</h4>
+                        <div class="space-y-6">
+                            <div class="flex justify-between text-[10px] mono">
+                                <span>Critical Point</span>
+                                <span class="text-red-400 font-bold">+1.5% Movement</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden flex">
+                                <div class="h-full bg-emerald-500 w-1/2"></div>
+                                <div class="h-full bg-yellow-500 w-1/4"></div>
+                                <div class="h-full bg-red-500 w-1/4"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-500 italic">Shows where rate movement becomes uncomfortable.</p>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 p-8 border border-blue-600/30 bg-blue-600/5">
+                        <h4 class="font-bold text-sm mb-4 uppercase tracking-widest text-blue-400 underline decoration-blue-600 underline-offset-8">Decision Breakpoints</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-[11px] text-slate-300 mono uppercase tracking-tighter">
+                            <p class="flex items-start gap-3"><span class="text-blue-600">!!</span> Vacancy exceeds 4 weeks</p>
+                            <p class="flex items-start gap-3"><span class="text-blue-600">!!</span> Rates exceed Y band</p>
+                            <p class="flex items-start gap-3"><span class="text-blue-600">!!</span> Income changes materially</p>
+                            <p class="flex items-start gap-3"><span class="text-blue-600">!!</span> Market flat growth > 48 months</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 py-8 border-t border-white/10 text-center">
+                <p class="text-xs text-slate-500 italic max-w-2xl mx-auto">
+                    This stress test does not tell you what to buy. It shows where assumptions matter — and where professional judgment is required.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-24">
+                <div class="mono text-blue-600 text-[10px] font-bold uppercase mb-4">How we operate</div>
+                <h2 class="text-4xl font-bold">We are paid to say no far more often than yes.</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-20">
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="md:w-1/3 mono text-xs text-blue-600 font-bold uppercase tracking-widest">[ Step 01 ]</div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-2xl font-bold mb-4">We don't look for "good" properties</h3>
+                        <p class="text-slate-600">We hunt for reasons to disqualify them. If an asset fails a single test in our review, it's removed from consideration. This keeps you away from properties that look fine on the surface but carry hidden risk.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="md:w-1/3 mono text-xs text-blue-600 font-bold uppercase tracking-widest">[ Step 02 ]</div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-2xl font-bold mb-4">Every recommendation is backed by evidence</h3>
+                        <p class="text-slate-600">We audit supply patterns, owner-occupier demand, and historical market behavior. You get a written report showing exactly why we believe an asset is worth your consideration.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="md:w-1/3 mono text-xs text-blue-600 font-bold uppercase tracking-widest">[ Step 03 ]</div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-2xl font-bold mb-4">You see what gets rejected and why</h3>
+                        <p class="text-slate-600">Most services only show you what they want you to buy. We share the rejection log so you understand what we've already ruled out on your behalf.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-slate-50 border-y border-black/5">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-20 italic">What changes when you work with us</h2>
+            
+            <div class="bg-white border border-black/5 overflow-hidden">
+                <div class="grid grid-cols-2 p-8 border-b border-slate-100 items-center">
+                    <div class="text-slate-400 text-[10px] uppercase font-bold mono">Typical Service</div>
+                    <div class="text-blue-600 text-[10px] uppercase font-bold mono text-right">BMONEY Approach</div>
+                </div>
+                <div class="grid grid-cols-2 p-8 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <div class="text-slate-500 text-sm">Finding properties you might like</div>
+                    <div class="text-slate-900 font-bold text-right italic text-sm">Finding properties that won't hurt you</div>
+                </div>
+                <div class="grid grid-cols-2 p-8 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <div class="text-slate-500 text-sm">Marketing brochures and optimistic forecasts</div>
+                    <div class="text-slate-900 font-bold text-right italic text-sm">Written audit reports and rejection logs</div>
+                </div>
+                <div class="grid grid-cols-2 p-8 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <div class="text-slate-500 text-sm">Agents incentivized to close deals</div>
+                    <div class="text-slate-900 font-bold text-right italic text-sm">Advisors paid to manage risk</div>
+                </div>
+                <div class="grid grid-cols-2 p-8 hover:bg-slate-50 transition-colors">
+                    <div class="text-slate-500 text-sm">Competing with other buyers at auction</div>
+                    <div class="text-slate-900 font-bold text-right italic text-sm">Access before the property is listed</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="briefing" class="py-32 px-8 bg-white">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-16 text-center">
+                <h2 class="text-4xl font-bold mb-6">Start a conversation about what you're working through.</h2>
+                <p class="text-slate-500 text-lg font-light italic">
+                    This is not a sales call. It's a technical assessment of your current situation and investment objectives.
+                </p>
+            </div>
+
+            <form class="space-y-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                        <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Identity</label>
+                        <input type="text" placeholder="Full Name" class="w-full bg-transparent outline-none font-bold text-lg">
+                    </div>
+                    <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                        <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Current Role</label>
+                        <input type="text" placeholder="e.g. Senior Partner" class="w-full bg-transparent outline-none font-bold text-lg">
+                    </div>
+                </div>
+                <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                    <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Email Address</label>
+                    <input type="email" placeholder="email@address.com" class="w-full bg-transparent outline-none font-bold text-lg">
+                </div>
+                <div class="border-b-2 border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                    <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">The Bottleneck</label>
+                    <textarea rows="3" placeholder="What has stopped you from investing until now?" class="w-full bg-transparent outline-none font-bold text-lg"></textarea>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between gap-10 pt-8">
+                    <p class="text-[10px] text-slate-400 leading-relaxed uppercase mono tracking-tighter max-w-sm">
+                        By submitting, you acknowledge that BMONEY Property operates a selective intake to ensure service standards.
+                    </p>
+                    <button type="submit" class="btn-primary px-16 py-6 text-xl font-bold w-full md:w-auto">
+                        Submit Brief
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="py-20 bg-slate-50 text-center border-t border-black/5">
+        <div class="mono text-[10px] text-slate-400 tracking-[0.5em] uppercase font-bold mb-4">
+            BMONEY PROPERTY // &copy; 2026
+        </div>
+    </footer>
+
+</body>
+</html>
