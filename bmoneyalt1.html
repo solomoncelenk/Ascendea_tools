@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | Property Decision Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* The Grid Optics */
+        .bg-grid {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-1px);
+        }
+
+        /* SVG Graph Animation styling */
+        .path-animate {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 3s ease-in-out forwards;
+        }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+    </style>
+</head>
+<body class="antialiased bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center glass-panel border-b border-black/5 bg-white/50 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em] uppercase">BMONEY</div>
+        </div>
+        <div class="mono text-[10px] text-slate-400 uppercase tracking-widest">Decision_Resource_v2</div>
+    </nav>
+
+    <section class="relative pt-48 pb-32 px-8">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="mono text-blue-600 text-[11px] font-bold tracking-[0.3em] mb-6 uppercase">
+                // Free Resource for Professionals
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-[1.1]">
+                Stress-test your property strategy <br><span class="text-blue-600 italic">before you commit a dollar.</span>
+            </h1>
+            <p class="text-xl text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed font-light">
+                A data-led property decision report built for professionals who want to see the facts before they act.
+            </p>
+            <a href="#get-report" class="btn-primary px-12 py-5 text-lg font-bold rounded-sm">
+                Get the Free Decision Report
+            </a>
+        </div>
+    </section>
+
+    <section class="pb-32 px-8">
+        <div class="max-w-4xl mx-auto glass-card p-4 rounded-sm shadow-2xl">
+            <div class="bg-slate-950 p-10 rounded-sm">
+                <div class="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
+                    <div class="mono text-[10px] text-blue-400 uppercase tracking-widest">Sample_Report_Extract</div>
+                    <div class="text-white font-bold text-xs uppercase tracking-tighter">BMONEY Property Audit</div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <div class="mono text-[9px] text-slate-500 uppercase">Rate Movement Sensitivity</div>
+                        <svg viewBox="0 0 200 100" class="w-full h-auto">
+                            <line x1="0" y1="100" x2="200" y2="100" stroke="white" stroke-width="0.5" opacity="0.1"/>
+                            <path d="M0,90 Q50,95 100,50 T200,10" fill="none" stroke="#2563EB" stroke-width="2" class="path-animate" />
+                            <circle cx="200" cy="10" r="3" fill="#2563EB" />
+                        </svg>
+                        <div class="flex justify-between mono text-[9px] text-slate-400">
+                            <span>0% Movement</span>
+                            <span>+2.5% Stress Point</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="h-1 w-full bg-white/5"><div class="h-full bg-blue-600 w-3/4"></div></div>
+                        <p class="text-xs text-slate-300 font-light italic">"At this level, holding costs sit in the 4.2% band."</p>
+                        <div class="h-1 w-full bg-white/5"><div class="h-full bg-emerald-600 w-1/2"></div></div>
+                        <p class="text-xs text-slate-300 font-light italic">"Market resistance remains stable for established stock."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white border-y border-black/5">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl font-bold">What this report does (and doesn’t do)</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div class="space-y-8">
+                    <h4 class="mono text-[10px] text-blue-600 font-bold uppercase tracking-widest underline decoration-blue-600 underline-offset-8">It does:</h4>
+                    <ul class="space-y-6 text-slate-600">
+                        <li class="flex items-start gap-4">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <p>Highlight risk areas most buyers miss</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <p>Show how your own details change the outcome</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <p>Help you understand where decisions might break</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-y-8">
+                    <h4 class="mono text-[10px] text-slate-400 font-bold uppercase tracking-widest underline decoration-slate-200 underline-offset-8">It does NOT:</h4>
+                    <ul class="space-y-6 text-slate-400 italic">
+                        <li class="flex items-start gap-4">
+                            <span>✕</span>
+                            <p>Pick specific properties for you</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span>✕</span>
+                            <p>Try to predict future returns</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span>✕</span>
+                            <p>Take the place of professional help</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold italic">What’s inside the report:</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-8 glass-card border-l-4 border-l-blue-600">
+                    <h5 class="font-bold mb-4">Decision Snapshot</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">A custom look at your current situation as a one-page PDF.</p>
+                </div>
+                <div class="p-8 glass-card border-l-4 border-l-blue-600">
+                    <h5 class="font-bold mb-4">Market Risks</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">An overview of what to look out for in the current market.</p>
+                </div>
+                <div class="p-8 glass-card border-l-4 border-l-blue-600">
+                    <h5 class="font-bold mb-4">Cost Ranges</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">How your monthly costs respond when things change.</p>
+                </div>
+                <div class="p-8 glass-card border-l-4 border-l-blue-600">
+                    <h5 class="font-bold mb-4">The Checklist</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">A plain-English list of things to watch out for before you buy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-slate-50 border-y border-black/5">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="mono text-[10px] text-slate-400 uppercase tracking-widest mb-10">Used by professionals across</p>
+            <div class="flex flex-wrap justify-center gap-12 font-bold text-slate-300 italic mb-16">
+                <span>LAW</span>
+                <span>MEDICINE</span>
+                <span>CORPORATE</span>
+                <span>CONSULTING</span>
+            </div>
+            <p class="text-xl text-slate-600 italic">"Finally, a way to see the facts without being sold a property on the first page."</p>
+        </div>
+    </section>
+
+    <section id="get-report" class="py-32 px-8 bg-white">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold mb-6">Get your decision report.</h2>
+                <p class="text-slate-500">We’ll send the PDF directly to your email.</p>
+            </div>
+
+            <form class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="border-b border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                        <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">First Name</label>
+                        <input type="text" placeholder="Your name" class="w-full bg-transparent outline-none font-bold text-lg">
+                    </div>
+                    <div class="border-b border-black/10 py-4 focus-within:border-blue-600 transition-all">
+                        <label class="mono text-[10px] uppercase block mb-1 text-slate-400 font-bold">Email Address</label>
+                        <input type="email" placeholder="you@example.com" class="w-full bg-transparent outline-none font-bold text-lg">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="border-b border-black/10 py-4">
+                        <label class="mono text-[10px] uppercase block mb-3 text-slate-400 font-bold">Household Income</label>
+                        <select class="w-full bg-transparent outline-none font-bold text-sm">
+                            <option>$200k – $300k</option>
+                            <option>$300k – $400k</option>
+                            <option>$400k+</option>
+                        </select>
+                    </div>
+                    <div class="border-b border-black/10 py-4">
+                        <label class="mono text-[10px] uppercase block mb-3 text-slate-400 font-bold">Primary Goal</label>
+                        <select class="w-full bg-transparent outline-none font-bold text-sm">
+                            <option>Growth Focus</option>
+                            <option>Balance</option>
+                            <option>Risk Control</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-8">
+                    <button type="submit" class="btn-primary w-full py-6 text-xl font-bold">Get the Free Decision Report</button>
+                    <p class="text-center text-[10px] text-slate-400 uppercase tracking-widest mt-6">Report arrives via email within 5 minutes.</p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-slate-50 border-t border-black/5 text-center mono text-[10px] text-slate-400 tracking-[0.4em]">
+        BMONEY PROPERTY // &copy; 2026
+    </footer>
+
+</body>
+</html>
