@@ -4,278 +4,881 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Buyer Readiness Assessment — Lower North Shore | BMONEY Property</title>
-<meta name="description" content="See where you stand as a Lower North Shore buyer. A 2-minute private assessment — no calls, no obligation, just clarity.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --brand-navy: #161f38;
-    --brand-blue: #2563EB;
-    --brand-gray: #F8FAFC;
-    --brand-teal: #5fc3db;
-    --mono: 'JetBrains Mono', monospace;
+    --navy: #202c4e;
+    --navy-deep: #161f38;
+    --teal: #5fc3db;
+    --teal-deep: #417d9a;
+    --teal-glow: rgba(95,195,219,0.15);
+    --teal-subtle: rgba(95,195,219,0.06);
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --text-primary: #202c4e;
+    --text-body: #414141;
+    --text-muted: #6b7a8e;
+    --text-light: #9aa3b0;
+    --border: #e2e8eb;
+    --border-light: #eef1f3;
+    --red: #c04040;
+    --amber: #d4930c;
+    --green: #2d8a5e;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', 'Trebuchet MS', Helvetica, sans-serif;
+    --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
   }
 
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--brand-gray);
-    color: #1a1a1a;
-    -webkit-font-smoothing: antialiased;
+    font-family: var(--sans); color: var(--text-body);
+    background: var(--off-white); line-height: 1.7;
+    overflow-x: hidden; min-height: 100vh;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ============================================ */
+  /* STICKY PROGRESS BAR */
+  /* ============================================ */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .progress-bar-inner {
+    max-width: 640px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .progress-logo {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 700; color: var(--navy);
+    white-space: nowrap;
+  }
+  .progress-track {
+    flex: 1; height: 3px; background: var(--border-light);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--teal); border-radius: 2px;
+    width: 0%; transition: width 0.6s var(--ease-out);
+  }
+  .progress-pct {
+    font-family: var(--sans); font-size: 12px; color: var(--teal-deep);
+    font-weight: 600; min-width: 32px; text-align: right;
   }
 
-  /* Grid Layout Fix */
-  .page-layout {
-    display: grid;
-    grid-template-columns: 400px 1fr;
-    min-height: 100vh;
+  /* Step dots row */
+  .step-dots {
+    max-width: 640px; margin: 0 auto;
+    padding: 0 24px 10px;
+    display: flex; gap: 6px; justify-content: center;
   }
-
-  .sidebar {
-    background: var(--brand-navy);
-    padding: 120px 48px 48px;
-    position: fixed;
-    height: 100vh;
-    width: 400px;
-    color: white;
-    z-index: 20;
-  }
-
-  .main-content {
-    margin-left: 400px;
-    padding: 120px 64px 64px;
-    display: flex;
-    justify-content: center;
-    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-    background-size: 30px 30px;
-  }
-
-  /* Question Screen Transitions */
-  .screen {
-    display: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.4s ease;
-  }
-  .screen.active {
-    display: block;
-  }
-  .screen.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Assessment Elements */
-  .choice-card {
-    background: white;
-    border: 1.5px solid #E2E8F0;
-    padding: 24px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-  }
-  .choice-card:hover {
-    border-color: var(--brand-blue);
-    background: #F0F7FF;
-  }
-  .choice-card.selected {
-    border-color: var(--brand-blue);
-    background: #EFF6FF;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
-  }
-
-  .btn-primary {
-    background: var(--brand-navy);
-    color: white;
-    padding: 18px 36px;
-    font-weight: 700;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-  .btn-primary:hover:not(.disabled) {
-    background: var(--brand-blue);
-    transform: translateY(-1px);
-  }
-  .btn-primary.disabled {
-    background: #cbd5e1;
-    cursor: not-allowed;
-  }
-
-  /* Progress Tracker */
   .step-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    transition: all 0.3s ease;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: all 0.3s var(--ease);
   }
-  .step-dot.active { background: var(--brand-teal); box-shadow: 0 0 10px var(--brand-teal); }
-  .step-dot.completed { background: var(--brand-teal); opacity: 0.5; }
+  .step-dot.active { background: var(--teal); transform: scale(1.25); box-shadow: 0 0 8px rgba(95,195,219,0.4); }
+  .step-dot.completed { background: var(--teal-deep); }
 
-  /* Responsive Adjustments */
-  @media (max-width: 1024px) {
-    .page-layout { grid-template-columns: 1fr; }
-    .sidebar { position: relative; width: 100%; height: auto; padding: 100px 24px 40px; }
-    .main-content { margin-left: 0; padding: 40px 24px; }
+  /* ============================================ */
+  /* HERO HEADER */
+  /* ============================================ */
+  .hero {
+    background: var(--navy);
+    padding: 88px 24px 56px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(95,195,219,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 60%, rgba(65,125,154,0.05) 0%, transparent 50%);
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 20px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 20px; height: 1.5px; background: rgba(95,195,219,0.4);
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: 34px; line-height: 1.2;
+    font-weight: 300; color: var(--white); margin-bottom: 16px;
+  }
+  .hero h1 em { font-style: italic; color: var(--teal); font-weight: 400; }
+  .hero-desc {
+    font-family: var(--sans); font-size: 15px; line-height: 1.7;
+    color: rgba(255,255,255,0.45); margin-bottom: 24px;
+  }
+  .hero-meta {
+    display: inline-flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+  }
+  .hero-meta-item {
+    font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.3);
+    font-weight: 500; display: flex; align-items: center; gap: 6px;
+  }
+  .hero-meta-item span { color: var(--teal); font-weight: 700; }
+
+  /* ============================================ */
+  /* ASSESSMENT CONTAINER */
+  /* ============================================ */
+  .assessment {
+    max-width: 640px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ============================================ */
+  /* SCREENS */
+  /* ============================================ */
+  .screen {
+    display: none; opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease-out);
+  }
+  .screen.active { display: block; }
+  .screen.visible { opacity: 1; transform: translateY(0); }
+
+  .q-number {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal-deep); font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: var(--serif); font-size: 30px; line-height: 1.22;
+    font-weight: 400; color: var(--text-primary); margin-bottom: 8px;
+  }
+  .q-helper {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    margin-bottom: 32px; line-height: 1.6;
+  }
+
+  /* ============================================ */
+  /* OPTION CARDS */
+  /* ============================================ */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    padding: 20px 24px; border: 1.5px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    transition: all 0.25s var(--ease);
+    display: flex; align-items: flex-start; gap: 16px;
+    background: var(--white); position: relative; overflow: hidden;
+  }
+  .opt::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+    width: 3px; background: var(--teal);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform 0.3s var(--ease);
+  }
+  .opt:hover { border-color: rgba(95,195,219,0.5); background: var(--teal-subtle); }
+  .opt:hover::before { transform: scaleY(1); }
+  .opt.selected {
+    border-color: var(--teal); background: var(--teal-glow);
+    box-shadow: 0 4px 20px rgba(95,195,219,0.12);
+  }
+  .opt.selected::before { transform: scaleY(1); }
+  .opt-radio {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid var(--border); margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s var(--ease);
+  }
+  .opt:hover .opt-radio { border-color: var(--teal); }
+  .opt.selected .opt-radio { border-color: var(--teal); background: var(--teal); }
+  .opt-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--white);
+    opacity: 0; transform: scale(0); transition: all 0.2s var(--ease);
+  }
+  .opt.selected .opt-dot { opacity: 1; transform: scale(1); }
+  .opt-body { flex: 1; }
+  .opt-label {
+    font-family: var(--sans); font-size: 15px; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 2px; line-height: 1.4;
+  }
+  .opt-desc {
+    font-family: var(--sans); font-size: 13px; color: var(--text-muted); line-height: 1.5;
+  }
+
+  /* ============================================ */
+  /* NAV BUTTONS */
+  /* ============================================ */
+  .btns {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border-light);
+  }
+  .btn-back {
+    font-family: var(--sans); font-size: 13px; color: var(--text-muted);
+    font-weight: 500; cursor: pointer; padding: 10px 0; background: none; border: none;
+    display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+  }
+  .btn-back:hover { color: var(--text-primary); }
+  .btn-next {
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; padding: 14px 28px;
+    border-radius: 6px; cursor: pointer; border: none;
+    transition: all 0.3s var(--ease); display: flex; align-items: center; gap: 8px;
+  }
+  .btn-next.primary { background: var(--teal); color: var(--navy); }
+  .btn-next.primary:hover {
+    background: var(--teal-deep); color: var(--white);
+    transform: translateY(-1px); box-shadow: 0 4px 16px rgba(65,125,154,0.3);
+  }
+  .btn-next.disabled {
+    background: var(--border-light); color: var(--text-light);
+    cursor: not-allowed; pointer-events: none;
+  }
+
+  /* ============================================ */
+  /* EMAIL CAPTURE */
+  /* ============================================ */
+  .email-wrap { text-align: center; }
+  .email-icon {
+    width: 56px; height: 56px; background: var(--teal-glow);
+    border-radius: 50%; margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .email-group {
+    max-width: 380px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .email-input {
+    padding: 16px 20px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-family: var(--sans); font-size: 15px;
+    color: var(--text-primary); background: var(--white); outline: none;
+    transition: border-color 0.3s; text-align: center;
+  }
+  .email-input::placeholder { color: var(--text-light); }
+  .email-input:focus { border-color: var(--teal); }
+  .email-btn {
+    padding: 16px 32px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; border: none;
+    border-radius: 8px; cursor: pointer; transition: all 0.3s var(--ease);
+  }
+  .email-btn:hover { background: var(--teal-deep); color: var(--white); }
+  .email-fine {
+    font-family: var(--sans); font-size: 12px; color: var(--text-light);
+    margin-top: 12px; line-height: 1.6;
+  }
+
+  /* ============================================ */
+  /* RESULTS */
+  /* ============================================ */
+  .results { display: none; }
+  .results.active { display: block; }
+
+  .res-header { text-align: center; margin-bottom: 40px; }
+  .score-ring { width: 130px; height: 130px; margin: 0 auto 20px; position: relative; }
+  .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--border-light); stroke-width: 6; }
+  .ring-fill {
+    fill: none; stroke: var(--teal); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 377; stroke-dashoffset: 377;
+    transition: stroke-dashoffset 1.5s var(--ease-out) 0.3s;
+  }
+  .ring-fill.green-r { stroke: var(--green); }
+  .ring-fill.amber-r { stroke: var(--amber); }
+  .score-num {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-family: var(--sans); font-size: 34px; font-weight: 800;
+    color: var(--text-primary); letter-spacing: -1px;
+  }
+  .score-tier {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 8px;
+  }
+  .res-title {
+    font-family: var(--serif); font-size: 28px; line-height: 1.2;
+    font-weight: 400; color: var(--text-primary); margin-bottom: 12px;
+  }
+  .res-subtitle {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    line-height: 1.7; max-width: 460px; margin: 0 auto;
+  }
+
+  /* Result cards grid */
+  .res-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px;
+  }
+  .res-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 18px;
+    transition: box-shadow 0.3s;
+  }
+  .res-card:hover { box-shadow: 0 4px 16px rgba(32,44,78,0.06); }
+  .res-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .res-card-label {
+    font-family: var(--sans); font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 700;
+  }
+  .badge {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; padding: 3px 8px; border-radius: 4px;
+  }
+  .badge-g { background: #eaf7f0; color: var(--green); }
+  .badge-a { background: #fef6e7; color: var(--amber); }
+  .badge-r { background: #fdeaea; color: var(--red); }
+  .res-card-val {
+    font-family: var(--sans); font-size: 18px; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 4px;
+  }
+  .res-card-detail {
+    font-family: var(--sans); font-size: 12px; color: var(--text-muted); line-height: 1.5;
+  }
+
+  /* Insights */
+  .res-insights {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px; margin-bottom: 32px;
+  }
+  .insights-head {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal-deep); font-weight: 700;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .insights-head::before { content: ''; width: 20px; height: 2px; background: var(--teal); }
+  .insight {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border-light);
+  }
+  .insight:last-child { border-bottom: none; }
+  .insight-ico { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .insight-txt {
+    font-family: var(--sans); font-size: 14px; line-height: 1.65; color: var(--text-body);
+  }
+  .insight-txt strong { color: var(--text-primary); font-weight: 600; }
+
+  /* CTA block */
+  .res-cta {
+    background: var(--navy); border-radius: 12px; padding: 36px 28px;
+    text-align: center;
+  }
+  .res-cta-label {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .res-cta-title {
+    font-family: var(--serif); font-size: 24px; line-height: 1.3;
+    font-weight: 400; color: var(--white); margin-bottom: 12px;
+  }
+  .res-cta-text {
+    font-family: var(--sans); font-size: 14px; color: rgba(255,255,255,0.4);
+    line-height: 1.7; margin-bottom: 24px;
+  }
+  .res-cta-btns {
+    display: flex; flex-direction: column; gap: 10px;
+    max-width: 320px; margin: 0 auto;
+  }
+  .cta-pri {
+    padding: 15px 28px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; border: none;
+    border-radius: 6px; cursor: pointer; transition: all 0.3s var(--ease);
+    display: block; text-align: center;
+  }
+  .cta-pri:hover { background: var(--teal-deep); color: var(--white); box-shadow: 0 4px 16px rgba(65,125,154,0.3); }
+  .cta-sec {
+    padding: 13px 28px; background: transparent; color: rgba(255,255,255,0.45);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 600;
+    border: 1.5px solid rgba(255,255,255,0.1); border-radius: 6px;
+    cursor: pointer; transition: all 0.3s var(--ease);
+    display: block; text-align: center;
+  }
+  .cta-sec:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+  .res-cta-fine {
+    font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 14px;
+  }
+
+  /* ============================================ */
+  /* RESPONSIVE */
+  /* ============================================ */
+  @media (max-width: 520px) {
+    .hero h1 { font-size: 28px; }
+    .q-text { font-size: 26px; }
+    .res-grid { grid-template-columns: 1fr; }
+    .hero-meta { gap: 16px; }
+    .progress-logo { display: none; }
   }
 </style>
 </head>
 <body>
 
-  <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-black/5 px-8 py-5 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <div class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
-      <div class="font-bold text-xs tracking-[0.3em] uppercase">BMONEY</div>
+<!-- ============================================ -->
+<!-- STICKY PROGRESS BAR -->
+<!-- ============================================ -->
+<div class="progress-bar">
+  <div class="progress-bar-inner">
+    <div class="progress-logo">BMONEY</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="pFill"></div>
     </div>
-    <div class="font-mono text-[10px] text-slate-400 uppercase tracking-widest">Lower_North_Shore_Audit</div>
-  </nav>
+    <div class="progress-pct" id="pPct">0%</div>
+  </div>
+  <div class="step-dots" id="stepDots">
+    <div class="step-dot active" data-s="1"></div>
+    <div class="step-dot" data-s="2"></div>
+    <div class="step-dot" data-s="3"></div>
+    <div class="step-dot" data-s="4"></div>
+    <div class="step-dot" data-s="5"></div>
+    <div class="step-dot" data-s="6"></div>
+  </div>
+</div>
 
-  <div class="page-layout">
-    
-    <aside class="sidebar flex flex-col justify-between">
-      <div>
-        <div class="font-mono text-blue-400 text-[10px] uppercase tracking-widest mb-6">Orientation Tool</div>
-        <h1 class="text-3xl font-light leading-tight mb-8">See where you stand — <span class="text-blue-400 italic">before you act.</span></h1>
-        <p class="text-slate-400 text-sm leading-relaxed mb-12">Six questions. Two minutes. A private look at how you compare to buyers currently moving in the Lower North Shore.</p>
-        
-        <div class="space-y-4">
-          <div class="flex items-center gap-4">
-            <div class="step-dot active" id="dot1"></div>
-            <span class="text-xs uppercase tracking-widest font-bold opacity-30" id="label1">Buying Timeline</span>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="step-dot" id="dot2"></div>
-            <span class="text-xs uppercase tracking-widest font-bold opacity-30" id="label2">Budget Position</span>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="step-dot" id="dot3"></div>
-            <span class="text-xs uppercase tracking-widest font-bold opacity-30" id="label3">Market Exposure</span>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="step-dot" id="dot4"></div>
-            <span class="text-xs uppercase tracking-widest font-bold opacity-30" id="label4">Risk Posture</span>
-          </div>
+<!-- ============================================ -->
+<!-- HERO -->
+<!-- ============================================ -->
+<section class="hero" id="heroSection">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Buyer Assessment</div>
+    <h1>See where you stand — <em>before you call anyone.</em></h1>
+    <p class="hero-desc">Six situational questions. A private readiness snapshot based on how Lower North Shore buyers at your stage typically perform.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span>&#9201;</span> 2 minutes</div>
+      <div class="hero-meta-item"><span>&#128274;</span> Private</div>
+      <div class="hero-meta-item"><span>2,400+</span> completed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- ASSESSMENT -->
+<!-- ============================================ -->
+<div class="assessment" id="assessmentArea">
+
+  <!-- Q1: TIMELINE -->
+  <div class="screen active visible" data-screen="1">
+    <div class="q-number">Question 01 of 06</div>
+    <h2 class="q-text">Where are you in the buying process?</h2>
+    <p class="q-helper">This helps calibrate the assessment to your stage.</p>
+    <div class="options" data-q="timeline">
+      <div class="opt" data-v="browsing" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Just starting to look</div>
+          <div class="opt-desc">Researching suburbs and getting a feel for the market</div>
         </div>
       </div>
-      
-      <div class="pt-8 border-t border-white/5 text-[10px] text-slate-500 uppercase tracking-tighter">
-        Verified Assessment // Private & Secure
+      <div class="opt" data-v="active" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Actively inspecting properties</div>
+          <div class="opt-desc">Attending open homes, comparing options each weekend</div>
+        </div>
       </div>
-    </aside>
-
-    <main class="main-content">
-      <div class="w-full max-w-xl">
-
-        <div class="screen active visible" id="screen1">
-          <div class="font-mono text-blue-600 text-[10px] uppercase font-bold mb-4 tracking-widest">Question 01 of 06</div>
-          <h2 class="text-3xl font-bold mb-4">Where are you in the buying process?</h2>
-          <p class="text-slate-500 mb-10">This helps us understand your current timeframe.</p>
-          
-          <div class="space-y-3">
-            <div class="choice-card" onclick="selectOption(1, 'ready')">
-              <p class="font-bold text-sm mb-1">Ready to make a decision</p>
-              <p class="text-xs text-slate-400 uppercase font-mono">Next 4–8 weeks</p>
-            </div>
-            <div class="choice-card" onclick="selectOption(1, 'active')">
-              <p class="font-bold text-sm mb-1">Actively inspecting properties</p>
-              <p class="text-xs text-slate-400 uppercase font-mono">Attending open homes weekly</p>
-            </div>
-            <div class="choice-card" onclick="selectOption(1, 'browsing')">
-              <p class="font-bold text-sm mb-1">Just starting to look</p>
-              <p class="text-xs text-slate-400 uppercase font-mono">Suburb research & planning</p>
-            </div>
-          </div>
-
-          <div class="mt-12 flex justify-end">
-            <button class="btn-primary disabled" id="next1" onclick="nextScreen(2)" disabled>Continue</button>
-          </div>
+      <div class="opt" data-v="ready" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Ready to make a decision</div>
+          <div class="opt-desc">Finance in place, shortlist defined, looking to move in 4–8 weeks</div>
         </div>
-
-        <div class="screen" id="screen2">
-          <div class="font-mono text-blue-600 text-[10px] uppercase font-bold mb-4 tracking-widest">Question 02 of 06</div>
-          <h2 class="text-3xl font-bold mb-4">What is your total budget position?</h2>
-          <p class="text-slate-500 mb-10">Including equity and pre-approval. This sets the playing field.</p>
-          
-          <div class="space-y-3">
-            <div class="choice-card" onclick="selectOption(2, '2to3')">
-              <p class="font-bold text-sm mb-1">$2.5M – $3.5M</p>
-              <p class="text-xs text-slate-400 uppercase font-mono">Entry-level houses / Premium Apartments</p>
-            </div>
-            <div class="choice-card" onclick="selectOption(2, '3to5')">
-              <p class="font-bold text-sm mb-1">$3.5M – $5M</p>
-              <p class="text-xs text-slate-400 uppercase font-mono">Established Family Homes</p>
-            </div>
-            <div class="choice-card" onclick="selectOption(2, '5plus')">
-              <p class="font-bold text-sm mb-1">$5M+</p>
-              <p class="text-xs text-slate-400 uppercase font-mono">Trophy / Harbour-adjacent assets</p>
-            </div>
-          </div>
-
-          <div class="mt-12 flex justify-between items-center">
-            <button class="text-xs font-bold uppercase text-slate-400 hover:text-black" onclick="nextScreen(1)">Back</button>
-            <button class="btn-primary disabled" id="next2" onclick="nextScreen(3)" disabled>Continue</button>
-          </div>
-        </div>
-
-        <div class="screen" id="screen3">
-            <div class="text-center py-20">
-                <div class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-8"></div>
-                <h2 class="text-2xl font-bold mb-4">Preparing your snapshot...</h2>
-                <p class="text-slate-500">We're reviewing your details against current Lower North Shore market factors.</p>
-            </div>
-        </div>
-
       </div>
-    </main>
-
+      <div class="opt" data-v="missed" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">I've already missed one or two</div>
+          <div class="opt-desc">Lost at auction or moved too slowly on a property I wanted</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <div></div>
+      <button class="btn-next disabled" data-btn="1">Continue →</button>
+    </div>
   </div>
 
-  <script>
-    function selectOption(questionNum, val) {
-      // Find the screen and cards
-      const screen = document.getElementById('screen' + questionNum);
-      const cards = screen.querySelectorAll('.choice-card');
-      const btn = document.getElementById('next' + questionNum);
+  <!-- Q2: BUDGET -->
+  <div class="screen" data-screen="2">
+    <div class="q-number">Question 02 of 06</div>
+    <h2 class="q-text">What's your total budget position?</h2>
+    <p class="q-helper">Including equity, pre-approval, and available capital. We don't need exact numbers.</p>
+    <div class="options" data-q="budget">
+      <div class="opt" data-v="under2m" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Under $2M</div>
+          <div class="opt-desc">Apartments and some townhouses in select pockets</div>
+        </div>
+      </div>
+      <div class="opt" data-v="2to3.5m" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$2M – $3.5M</div>
+          <div class="opt-desc">Entry-level houses, premium apartments, wider suburb range</div>
+        </div>
+      </div>
+      <div class="opt" data-v="3.5to5m" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$3.5M – $5M</div>
+          <div class="opt-desc">Quality established homes across most LNS suburbs</div>
+        </div>
+      </div>
+      <div class="opt" data-v="over5m" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$5M+</div>
+          <div class="opt-desc">Premium positions, trophy homes, harbour-adjacent</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(1)">← Back</button>
+      <button class="btn-next disabled" data-btn="2">Continue →</button>
+    </div>
+  </div>
 
-      // Deselect others, select this one
-      cards.forEach(c => c.classList.remove('selected'));
-      event.currentTarget.classList.add('selected');
+  <!-- Q3: EXPERIENCE -->
+  <div class="screen" data-screen="3">
+    <div class="q-number">Question 03 of 06</div>
+    <h2 class="q-text">How many LNS properties have you inspected?</h2>
+    <p class="q-helper">Including open homes and private inspections in the last 6 months.</p>
+    <div class="options" data-q="experience">
+      <div class="opt" data-v="none" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">None yet</div>
+          <div class="opt-desc">Still researching online and from listings</div>
+        </div>
+      </div>
+      <div class="opt" data-v="few" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">1 – 5 properties</div>
+          <div class="opt-desc">Getting a sense of what's available at different price points</div>
+        </div>
+      </div>
+      <div class="opt" data-v="moderate" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">6 – 15 properties</div>
+          <div class="opt-desc">Familiar with the market, refining criteria</div>
+        </div>
+      </div>
+      <div class="opt" data-v="many" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">15+ and still looking</div>
+          <div class="opt-desc">Extensive search, haven't secured the right one yet</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(2)">← Back</button>
+      <button class="btn-next disabled" data-btn="3">Continue →</button>
+    </div>
+  </div>
 
-      // Enable button
-      btn.classList.remove('disabled');
-      btn.disabled = false;
+  <!-- Q4: AUCTION -->
+  <div class="screen" data-screen="4">
+    <div class="q-number">Question 04 of 06</div>
+    <h2 class="q-text">Have you bid at auction on the Lower North Shore?</h2>
+    <p class="q-helper">Auction experience significantly affects outcomes in this market.</p>
+    <div class="options" data-q="auction">
+      <div class="opt" data-v="never" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Never attended an auction</div>
+          <div class="opt-desc">Planning to go but haven't been to one yet</div>
+        </div>
+      </div>
+      <div class="opt" data-v="watched" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Watched but never bid</div>
+          <div class="opt-desc">Attended as an observer, haven't participated</div>
+        </div>
+      </div>
+      <div class="opt" data-v="bid-lost" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Bid and lost</div>
+          <div class="opt-desc">Participated but was outbid or withdrew</div>
+        </div>
+      </div>
+      <div class="opt" data-v="experienced" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Multiple auction experiences</div>
+          <div class="opt-desc">Comfortable in the room, understand the dynamics</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(3)">← Back</button>
+      <button class="btn-next disabled" data-btn="4">Continue →</button>
+    </div>
+  </div>
 
-      // Update sidebar visual
-      document.getElementById('dot' + questionNum).classList.add('completed');
-    }
+  <!-- Q5: CLARITY -->
+  <div class="screen" data-screen="5">
+    <div class="q-number">Question 05 of 06</div>
+    <h2 class="q-text">How clear is your buying criteria?</h2>
+    <p class="q-helper">This affects how fast you can move when the right property appears.</p>
+    <div class="options" data-q="clarity">
+      <div class="opt" data-v="exploring" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Still exploring what I want</div>
+          <div class="opt-desc">Open to different property types, suburbs, and configurations</div>
+        </div>
+      </div>
+      <div class="opt" data-v="general" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">General idea, flexible on details</div>
+          <div class="opt-desc">Know the suburb and type, flexible on specifics</div>
+        </div>
+      </div>
+      <div class="opt" data-v="specific" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Very specific — I know exactly what I want</div>
+          <div class="opt-desc">Street-level preferences, non-negotiables defined, deal-breakers clear</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(4)">← Back</button>
+      <button class="btn-next disabled" data-btn="5">Continue →</button>
+    </div>
+  </div>
 
-    function nextScreen(num) {
-      // Hide all
-      document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('visible');
-        setTimeout(() => s.classList.remove('active'), 300);
+  <!-- Q6: CONCERN -->
+  <div class="screen" data-screen="6">
+    <div class="q-number">Question 06 of 06</div>
+    <h2 class="q-text">What's your biggest concern about buying here?</h2>
+    <p class="q-helper">The one that keeps you up at night.</p>
+    <div class="options" data-q="concern">
+      <div class="opt" data-v="overpay" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Overpaying at auction</div>
+          <div class="opt-desc">Getting caught up in the moment and exceeding fair value</div>
+        </div>
+      </div>
+      <div class="opt" data-v="missing" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Missing the right property</div>
+          <div class="opt-desc">Not finding out about it, or finding out too late</div>
+        </div>
+      </div>
+      <div class="opt" data-v="hidden" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Hidden problems after purchase</div>
+          <div class="opt-desc">Structural, strata, zoning, or market issues I can't see</div>
+        </div>
+      </div>
+      <div class="opt" data-v="timing" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Market timing</div>
+          <div class="opt-desc">Whether now is the right time or if I should wait</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(5)">← Back</button>
+      <button class="btn-next disabled" data-btn="6">See My Results →</button>
+    </div>
+  </div>
+
+  <!-- EMAIL CAPTURE -->
+  <div class="screen" data-screen="email">
+    <div class="email-wrap">
+      <div class="email-icon">&#128274;</div>
+      <div class="q-number">Almost there</div>
+      <h2 class="q-text">Where should we send your results?</h2>
+      <p class="q-helper">Your full readiness breakdown and personalised insights — delivered privately to your inbox.</p>
+      <div class="email-group">
+        <input type="email" class="email-input" id="emailIn" placeholder="Your email address">
+        <button class="email-btn" id="emailBtn">Show My Results</button>
+      </div>
+      <p class="email-fine">No spam. No sales calls. Unsubscribe anytime.</p>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="resScreen">
+    <div class="res-header">
+      <div class="score-ring">
+        <svg viewBox="0 0 130 130">
+          <circle class="ring-bg" cx="65" cy="65" r="60"/>
+          <circle class="ring-fill" id="ringFill" cx="65" cy="65" r="60"/>
+        </svg>
+        <div class="score-num" id="scoreNum">—</div>
+      </div>
+      <div class="score-tier" id="scoreTier" style="color:var(--teal)">READINESS SCORE</div>
+      <h2 class="res-title" id="resTitle">Calculating...</h2>
+      <p class="res-subtitle" id="resSub"></p>
+    </div>
+    <div class="res-grid" id="resGrid"></div>
+    <div class="res-insights">
+      <div class="insights-head">What this means for you</div>
+      <div id="insList"></div>
+    </div>
+    <div class="res-cta">
+      <div class="res-cta-label">Your next step</div>
+      <h3 class="res-cta-title">See how this applies to specific properties</h3>
+      <p class="res-cta-text">Based on your profile, a 15-minute walkthrough would cover the gaps that matter most at your stage.</p>
+      <div class="res-cta-btns">
+        <a href="#" class="cta-pri">Watch the Walkthrough — 15 mins</a>
+        <a href="#" class="cta-sec">Download the Buyer's Roadmap</a>
+      </div>
+      <p class="res-cta-fine">No obligation. No sales pitch on the other end.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================ -->
+<!-- JS -->
+<!-- ============================================ -->
+<script>
+const ans = {};
+const total = 6;
+
+// Option selection
+document.querySelectorAll('.opt').forEach(card => {
+  card.addEventListener('click', function() {
+    this.closest('.options').querySelectorAll('.opt').forEach(c => c.classList.remove('selected'));
+    this.classList.add('selected');
+    ans[this.closest('.options').dataset.q] = { v: this.dataset.v, s: +this.dataset.sc };
+    const btn = this.closest('.screen').querySelector('.btn-next');
+    if (btn) { btn.classList.remove('disabled'); btn.classList.add('primary'); }
+  });
+});
+
+// Next buttons
+document.querySelectorAll('.btn-next').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (this.classList.contains('disabled')) return;
+    const n = +this.dataset.btn;
+    go(n < total ? n + 1 : 'email');
+  });
+});
+
+// Email
+document.getElementById('emailBtn').addEventListener('click', () => {
+  const v = document.getElementById('emailIn').value;
+  if (v && v.includes('@')) showResults();
+});
+document.getElementById('emailIn').addEventListener('keypress', e => {
+  if (e.key === 'Enter') document.getElementById('emailBtn').click();
+});
+
+function go(num) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('visible');
+    setTimeout(() => s.classList.remove('active'), 350);
+  });
+  setTimeout(() => {
+    const t = document.querySelector(`[data-screen="${num}"]`);
+    if (t) { t.classList.add('active'); setTimeout(() => t.classList.add('visible'), 30); }
+    if (typeof num === 'number') {
+      const pct = Math.round(((num - 1) / total) * 100);
+      document.getElementById('pFill').style.width = pct + '%';
+      document.getElementById('pPct').textContent = pct + '%';
+      document.querySelectorAll('.step-dot').forEach(d => {
+        const s = +d.dataset.s;
+        d.classList.remove('active','completed');
+        if (s === num) d.classList.add('active');
+        else if (s < num) d.classList.add('completed');
       });
-
-      // Show target
-      setTimeout(() => {
-        const target = document.getElementById('screen' + num);
-        target.classList.add('active');
-        setTimeout(() => target.classList.add('visible'), 50);
-
-        // Update sidebar tracking
-        if (num <= 4) {
-            document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active'));
-            document.getElementById('dot' + num).classList.add('active');
-            document.getElementById('label' + num).classList.remove('opacity-30');
-            document.getElementById('label' + num).classList.add('opacity-100');
-        }
-      }, 350);
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById('pFill').style.width = '100%';
+      document.getElementById('pPct').textContent = '100%';
+      document.querySelectorAll('.step-dot').forEach(d => d.classList.add('completed'));
     }
-  </script>
+    // Hide hero once past Q1
+    const hero = document.getElementById('heroSection');
+    if (num !== 1 && num !== undefined) hero.style.display = 'none';
+    else hero.style.display = '';
+  }, 370);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('visible','active'); });
+  document.getElementById('heroSection').style.display = 'none';
+
+  let sc = 0, mx = 0;
+  Object.values(ans).forEach(a => { sc += a.s; mx += 3; });
+  const pct = Math.round((sc / mx) * 100);
+
+  let tier, col, rc, title, sub;
+  if (pct >= 75) {
+    tier='HIGH'; col='var(--green)'; rc='green-r';
+    title="You're in a strong position";
+    sub="Your readiness indicators are above average for Lower North Shore buyers. The main risk at your stage is execution — moving decisively on the right property while avoiding overpayment.";
+  } else if (pct >= 50) {
+    tier='MODERATE'; col='var(--amber)'; rc='amber-r';
+    title='Solid foundation, some gaps to close';
+    sub="You have good fundamentals, but there are specific areas where additional preparation would significantly reduce your risk and improve outcomes.";
+  } else {
+    tier='BUILDING'; col='var(--teal)'; rc='';
+    title="You're early — that's actually an advantage";
+    sub="Most buyers who overpay on the Lower North Shore rushed in before they were prepared. Taking time now puts you ahead.";
+  }
+
+  const res = document.getElementById('resScreen');
+  res.classList.add('active');
+
+  setTimeout(() => {
+    const rf = document.getElementById('ringFill');
+    rf.className = 'ring-fill ' + rc;
+    rf.style.strokeDashoffset = 377 - (pct / 100) * 377;
+    document.getElementById('scoreNum').textContent = pct;
+    document.getElementById('scoreTier').style.color = col;
+    document.getElementById('scoreTier').textContent = tier + ' READINESS';
+    document.getElementById('resTitle').textContent = title;
+    document.getElementById('resSub').textContent = sub;
+
+    const cards = [
+      { l:'TIMELINE', v: ans.timeline?.v==='ready'?'Active':ans.timeline?.v==='active'?'Engaged':ans.timeline?.v==='missed'?'Re-entering':'Early',
+        b: ans.timeline?.s>=3?'g':ans.timeline?.s>=2?'a':'a', bt: ans.timeline?.s>=3?'READY':ans.timeline?.s>=2?'ON TRACK':'EARLY',
+        d: 'Your timing position relative to current market conditions' },
+      { l:'AUCTION PREP', v: ans.auction?.v==='experienced'?'Experienced':ans.auction?.v==='bid-lost'?'Some exposure':ans.auction?.v==='watched'?'Observer':'No exposure',
+        b: ans.auction?.s>=3?'g':ans.auction?.s>=2?'a':'r', bt: ans.auction?.s>=3?'STRONG':ans.auction?.s>=2?'DEVELOPING':'GAP',
+        d: '73% of LNS properties sell at auction — critical competency' },
+      { l:'CRITERIA', v: ans.clarity?.v==='specific'?'Defined':ans.clarity?.v==='general'?'General':'Exploring',
+        b: ans.clarity?.s>=3?'g':ans.clarity?.s>=2?'a':'r', bt: ans.clarity?.s>=3?'CLEAR':ans.clarity?.s>=2?'REFINING':'BROAD',
+        d: 'Specificity reduces decision fatigue and improves speed' },
+      { l:'RISK FOCUS', v: ans.concern?.v==='overpay'?'Pricing':ans.concern?.v==='missing'?'Access':ans.concern?.v==='hidden'?'Due diligence':'Timing',
+        b: 'a', bt: 'NOTED', d: 'The area where tailored guidance adds the most value' }
+    ];
+    document.getElementById('resGrid').innerHTML = cards.map(c => `
+      <div class="res-card"><div class="res-card-head"><div class="res-card-label">${c.l}</div><div class="badge badge-${c.b}">${c.bt}</div></div>
+      <div class="res-card-val">${c.v}</div><div class="res-card-detail">${c.d}</div></div>`).join('');
+
+    const ins = [];
+    if (ans.auction?.s < 3) ins.push({ i:'⚠️', t:'<strong>Auction preparation is your highest-leverage improvement.</strong> The gap between prepared and unprepared bidders averages $80–150k in overpayment on the Lower North Shore.' });
+    if (ans.experience?.v==='many') ins.push({ i:'🔍', t:'<strong>Extended searches often indicate a criteria or strategy issue</strong> rather than availability. Buyers who inspect 15+ without securing one typically benefit from recalibrating.' });
+    if (ans.concern?.v==='overpay') ins.push({ i:'💰', t:'<strong>Your instinct about overpayment risk is well-founded.</strong> The average emotional premium at competitive LNS auctions is $185k above fair value.' });
+    if (ans.concern?.v==='missing') ins.push({ i:'💡', t:'<strong>Access to pre-market inventory</strong> comes from agent relationships, not listing alerts. 18% of LNS properties transact without public campaigns.' });
+    if (ans.concern?.v==='hidden') ins.push({ i:'🔎', t:'<strong>Due diligence gaps are the most expensive mistakes here.</strong> Strata issues, DA exposure, and micro-location risks are rarely visible from listings.' });
+    if (ans.clarity?.s < 3) ins.push({ i:'🎯', t:'<strong>Sharper criteria means faster execution.</strong> The best LNS properties move within 7–10 days. Clarity before your next inspection cycle is critical.' });
+    ins.push({ i:'📈', t:'<strong>Buyers who prepare before they act</strong> consistently secure better outcomes. The cost of education is always less than the cost of a mistake at this price point.' });
+    document.getElementById('insList').innerHTML = ins.map(i => `
+      <div class="insight"><div class="insight-ico">${i.i}</div><div class="insight-txt">${i.t}</div></div>`).join('');
+  }, 100);
+}
+</script>
 
 </body>
 </html>
