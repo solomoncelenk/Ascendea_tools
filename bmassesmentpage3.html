@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | Property Decision Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Sovereign Grid Optics */
+        .bg-grid {
+            background-size: 35px 35px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+
+        .video-container {
+            position: relative;
+            height: 60vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+            filter: grayscale(100%) contrast(120%);
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.8) 0%, #F8FAFC 100%);
+        }
+
+        /* Tool UI Components */
+        .assessment-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border-radius: 4px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #E2E8F0;
+            width: 100%;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--brand-blue);
+            width: 25%; /* Initial state */
+            transition: width 0.5s ease;
+        }
+
+        .choice-button {
+            border: 1.5px solid #E2E8F0;
+            padding: 1.25rem;
+            width: 100%;
+            text-align: left;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .choice-button:hover {
+            border-color: var(--brand-blue);
+            background: #F0F7FF;
+        }
+        .choice-button.selected {
+            border-color: var(--brand-blue);
+            background: #EFF6FF;
+            box-shadow: 0 0 0 1px var(--brand-blue);
+        }
+
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="antialiased bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-black/5">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em] uppercase">BMONEY</div>
+        </div>
+        <div class="mono text-[10px] text-slate-400 uppercase tracking-widest italic">Decision_Support_v2.06</div>
+    </nav>
+
+    <header class="video-container">
+        <video autoplay muted loop playsinline shadow-xl>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-city-traffic-at-night-aerial-view-11005-large.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            <div class="mono text-blue-500 text-[10px] font-bold tracking-[0.4em] mb-6 uppercase">
+                // Self-Assessment Framework
+            </div>
+            <h1 class="text-white text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-[1.1]">
+                Is your current position suited <br><span class="text-blue-500 italic">to property investment?</span>
+            </h1>
+            <p class="text-slate-300 text-xl max-w-2xl font-light mb-10 leading-relaxed">
+                Answer a few questions to understand where you stand, what to watch out for, and what typically holds buyers back.
+            </p>
+            <div class="flex flex-col items-center gap-6">
+                <a href="#tool" class="btn-primary px-12 py-5 text-lg font-bold">
+                    Start the free assessment
+                </a>
+                <div class="flex items-center gap-6 mono text-[10px] text-slate-500 uppercase tracking-widest italic">
+                    <span>Takes 2–3 minutes</span>
+                    <span>No sales pitch</span>
+                    <span>No obligations</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-32 px-8 bg-white border-y border-black/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div>
+                <div class="mono text-blue-600 text-[10px] font-bold uppercase mb-6 tracking-widest">// Intention</div>
+                <h2 class="text-4xl font-bold mb-8 leading-tight">What this assessment <br>helps you find out.</h2>
+                <p class="text-lg text-slate-500 font-light italic leading-relaxed">
+                    "This is about seeing your situation through a different lens before you commit capital."
+                </p>
+            </div>
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <span class="text-blue-600 font-bold">✓</span>
+                    <p class="text-slate-600">Whether your current position aligns with buying property</p>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="text-blue-600 font-bold">✓</span>
+                    <p class="text-slate-600">The types of risks that matter most for buyers like you</p>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="text-blue-600 font-bold">✓</span>
+                    <p class="text-slate-600">Common assumptions that create problems later</p>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="text-blue-600 font-bold">✓</span>
+                    <p class="text-slate-600">What usually needs to be cleared up before you act</p>
+                </div>
+                <div class="pt-6 border-t border-slate-100">
+                    <p class="text-[11px] text-slate-400 italic mono uppercase">This assessment does not recommend properties or predict outcomes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-center text-3xl font-bold mb-20 italic">How it works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mono font-bold">01</div>
+                    <p class="text-sm font-bold uppercase tracking-tighter">Answer Questions</p>
+                    <p class="text-xs text-slate-500 leading-relaxed px-4">Share a few details about your situation and what you're looking for.</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mono font-bold">02</div>
+                    <p class="text-sm font-bold uppercase tracking-tighter">Review Context</p>
+                    <p class="text-xs text-slate-500 leading-relaxed px-4">Your responses are looked at alongside common decision factors.</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mono font-bold">03</div>
+                    <p class="text-sm font-bold uppercase tracking-tighter">Get Your Summary</p>
+                    <p class="text-xs text-slate-500 leading-relaxed px-4">Receive a personal note highlighting strengths and risk areas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tool" class="py-32 px-8 bg-slate-950 text-white overflow-hidden">
+        <div class="max-w-4xl mx-auto">
+            <div class="assessment-card bg-white text-black p-8 md:p-16">
+                <div class="mb-12">
+                    <div class="flex justify-between items-end mb-4">
+                        <span class="mono text-[10px] uppercase font-bold text-slate-400">Step 01 of 04</span>
+                        <span class="mono text-[10px] uppercase font-bold text-blue-600">Buyer Context</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold mb-8">What best describes you right now?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="choice-button group">
+                            <span class="block text-sm font-bold mb-1">First-time buyer</span>
+                            <span class="block text-[10px] text-slate-400 uppercase mono">Buying for the first time</span>
+                        </div>
+                        <div class="choice-button selected">
+                            <span class="block text-sm font-bold mb-1">Investor</span>
+                            <span class="block text-[10px] text-blue-400 uppercase mono">Looking for long-term growth</span>
+                        </div>
+                        <div class="choice-button">
+                            <span class="block text-sm font-bold mb-1">Upgrader</span>
+                            <span class="block text-[10px] text-slate-400 uppercase mono">Moving into a larger asset</span>
+                        </div>
+                        <div class="choice-button">
+                            <span class="block text-sm font-bold mb-1">Exploring options</span>
+                            <span class="block text-[10px] text-slate-400 uppercase mono">Just seeing where you stand</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-8 border-t border-slate-100">
+                    <button class="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-black">Previous</button>
+                    <button class="btn-primary px-10 py-4 font-bold rounded-sm">Next Step</button>
+                </div>
+            </div>
+
+            <div class="mt-20 flex justify-center opacity-30">
+                <svg viewBox="0 0 400 100" class="w-full max-w-2xl h-auto">
+                    <line x1="0" y1="50" x2="400" y2="50" stroke="white" stroke-width="0.5" stroke-dasharray="4" />
+                    <circle cx="120" cy="50" r="4" fill="#2563EB" />
+                    <text x="120" y="70" font-family="JetBrains Mono" font-size="8" fill="white" text-anchor="middle">YOUR_POSITION</text>
+                    <rect x="250" y="30" width="100" height="40" fill="none" stroke="white" stroke-width="0.5" />
+                    <text x="300" y="53" font-family="JetBrains Mono" font-size="8" fill="white" text-anchor="middle">MARKET_RESISTANCE</text>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white border-t border-black/5">
+        <div class="max-w-xl mx-auto text-center">
+            <h2 class="text-3xl font-extrabold mb-6">Receive your summary.</h2>
+            <p class="text-slate-500 mb-12">Enter your details below and we will send your personal decision snapshot to your inbox.</p>
+            
+            <form class="space-y-6 text-left">
+                <div>
+                    <label class="mono text-[10px] uppercase font-bold text-slate-400 block mb-2">First Name</label>
+                    <input type="text" placeholder="Your name" class="w-full border-b border-black/10 py-4 outline-none focus:border-blue-600 transition-colors">
+                </div>
+                <div>
+                    <label class="mono text-[10px] uppercase font-bold text-slate-400 block mb-2">Email Address</label>
+                    <input type="email" placeholder="you@example.com" class="w-full border-b border-black/10 py-4 outline-none focus:border-blue-600 transition-colors">
+                </div>
+                <div>
+                    <label class="mono text-[10px] uppercase font-bold text-slate-400 block mb-2">Phone Number (Optional)</label>
+                    <input type="tel" placeholder="0400 000 000" class="w-full border-b border-black/10 py-4 outline-none focus:border-blue-600 transition-colors">
+                </div>
+                <div class="pt-6">
+                    <button type="submit" class="btn-primary w-full py-6 text-xl font-bold rounded-sm">Get my assessment summary</button>
+                    <p class="text-center text-[10px] text-slate-400 uppercase tracking-widest mt-6 italic">No spam • No sales pitch • Unsubscribe anytime</p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-slate-50 border-y border-black/5">
+        <div class="max-w-4xl mx-auto">
+            <div class="p-12 border border-blue-600/20 bg-white relative">
+                <div class="absolute -top-3 -left-3 bg-blue-600 text-white px-4 py-1 mono text-[10px] uppercase font-bold">Sample Result Snapshot</div>
+                
+                <h3 class="text-2xl font-bold mb-8 italic">Your Property Decision Snapshot</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <div class="border-l-2 border-blue-600 pl-4">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Your Current Position</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">Based on your details, your readiness for a major capital move is high, but some assumptions around holding costs need to be weighed more carefully.</p>
+                        </div>
+                        <div class="border-l-2 border-slate-200 pl-4">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Key Consideration</h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">Buyers in your position often underestimate the way that oversupply in newer areas can stall growth for years.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 border border-slate-100">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-red-500 mb-4">Pitfalls to watch</h4>
+                        <ul class="space-y-3 text-[11px] text-slate-500 mono">
+                            <li>[!] Acting on incomplete facts</li>
+                            <li>[!] Paying too much for yield</li>
+                            <li>[!] Relying on sales-led opinions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <p class="text-lg text-slate-500 mb-10 leading-relaxed">
+                    If you want to understand how this applies to your situation — and avoid making expensive assumptions — the next step is a structured conversation.
+                </p>
+                <a href="#booking" class="btn-primary px-12 py-5 text-lg font-bold">Request a strategy conversation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 text-center">
+        <div class="mono text-[10px] text-slate-400 tracking-[0.5em] uppercase font-bold mb-4">
+            BMONEY PROPERTY // &copy; 2026
+        </div>
+        <div class="text-[10px] text-slate-300 mono uppercase tracking-tighter">Assessment Framework</div>
+    </footer>
+
+</body>
+</html>
