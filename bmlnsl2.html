@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyer Readiness Assessment — Lower North Shore | BMONEY Property</title>
+<meta name="description" content="See where you stand as a Lower North Shore buyer. A 2-minute private assessment — no calls, no obligation, just clarity.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #202c4e;
+    --navy-deep: #161f38;
+    --navy-light: #2a3a62;
+    --teal: #5fc3db;
+    --teal-deep: #417d9a;
+    --teal-glow: rgba(95, 195, 219, 0.15);
+    --teal-subtle: rgba(95, 195, 219, 0.06);
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --text-primary: #202c4e;
+    --text-body: #414141;
+    --text-muted: #6b7a8e;
+    --text-light: #9aa3b0;
+    --border: #e2e8eb;
+    --border-light: #eef1f3;
+    --red: #c04040;
+    --amber: #d4930c;
+    --green: #2d8a5e;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', 'Trebuchet MS', Helvetica, sans-serif;
+    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--sans);
+    color: var(--text-body);
+    background: var(--off-white);
+    line-height: 1.7;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ============================================ */
+  /* NAV */
+  /* ============================================ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-logo {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 3.5px;
+    text-transform: uppercase; font-weight: 700; color: var(--navy);
+  }
+  .nav-meta {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 1px;
+    color: var(--text-light); font-weight: 500;
+  }
+  .nav-meta span { color: var(--teal-deep); font-weight: 600; }
+
+  /* ============================================ */
+  /* PAGE LAYOUT */
+  /* ============================================ */
+  .page {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ============================================ */
+  /* LEFT PANEL — Context & Progress */
+  /* ============================================ */
+  .sidebar {
+    background: var(--navy);
+    padding: 100px 48px 48px;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  .sidebar-content { flex: 1; }
+  .sidebar-eyebrow {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-eyebrow::before {
+    content: ''; width: 24px; height: 2px; background: var(--teal);
+  }
+  .sidebar h1 {
+    font-family: var(--serif); font-size: 32px; line-height: 1.2;
+    font-weight: 300; color: var(--white); letter-spacing: -0.3px;
+    margin-bottom: 20px;
+  }
+  .sidebar h1 em { font-style: italic; color: var(--teal); font-weight: 400; }
+  .sidebar-desc {
+    font-family: var(--sans); font-size: 14px; line-height: 1.7;
+    color: rgba(255,255,255,0.4); margin-bottom: 48px;
+  }
+
+  /* Progress tracker */
+  .progress-tracker { margin-bottom: 40px; }
+  .progress-bar-container {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+  }
+  .progress-bar-track {
+    flex: 1; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--teal); border-radius: 2px;
+    width: 0%; transition: width 0.6s var(--ease-out);
+  }
+  .progress-text {
+    font-family: var(--sans); font-size: 12px; color: var(--teal);
+    font-weight: 600; white-space: nowrap; min-width: 36px; text-align: right;
+  }
+
+  /* Step indicators */
+  .steps-list { display: flex; flex-direction: column; gap: 4px; }
+  .step-indicator {
+    display: flex; align-items: center; gap: 14px; padding: 10px 0;
+    transition: all 0.3s var(--ease);
+  }
+  .step-dot {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    transition: all 0.4s var(--ease);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.25);
+    background: transparent;
+  }
+  .step-indicator.active .step-dot {
+    border-color: var(--teal); color: var(--navy);
+    background: var(--teal);
+    box-shadow: 0 0 16px rgba(95,195,219,0.3);
+  }
+  .step-indicator.completed .step-dot {
+    border-color: rgba(95,195,219,0.3); color: var(--teal);
+    background: rgba(95,195,219,0.1);
+  }
+  .step-label {
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.2); transition: color 0.3s;
+  }
+  .step-indicator.active .step-label { color: var(--white); }
+  .step-indicator.completed .step-label { color: rgba(255,255,255,0.45); }
+
+  /* Sidebar footer */
+  .sidebar-footer {
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .sidebar-trust {
+    font-family: var(--sans); font-size: 11px; line-height: 1.7;
+    color: rgba(255,255,255,0.2);
+  }
+  .sidebar-trust strong { color: rgba(255,255,255,0.35); font-weight: 600; }
+
+  /* ============================================ */
+  /* RIGHT PANEL — Assessment */
+  /* ============================================ */
+  .main {
+    margin-left: 380px;
+    padding: 100px 64px 64px;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .assessment-container {
+    max-width: 580px;
+    width: 100%;
+  }
+
+  /* ============================================ */
+  /* QUESTION SCREENS */
+  /* ============================================ */
+  .screen {
+    display: none;
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease-out);
+  }
+  .screen.active {
+    display: block;
+  }
+  .screen.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .question-number {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal-deep); font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .question-text {
+    font-family: var(--serif); font-size: 28px; line-height: 1.25;
+    font-weight: 400; color: var(--text-primary); margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+  .question-helper {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    margin-bottom: 36px; line-height: 1.6;
+  }
+
+  /* Option cards */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-card {
+    padding: 20px 24px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s var(--ease);
+    display: flex; align-items: flex-start; gap: 16px;
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .option-card::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+    width: 3px; background: var(--teal);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform 0.3s var(--ease);
+  }
+  .option-card:hover {
+    border-color: var(--teal);
+    background: var(--teal-subtle);
+    transform: translateX(4px);
+  }
+  .option-card:hover::before { transform: scaleY(1); }
+  .option-card.selected {
+    border-color: var(--teal);
+    background: var(--teal-glow);
+    box-shadow: 0 4px 20px rgba(95,195,219,0.12);
+  }
+  .option-card.selected::before { transform: scaleY(1); }
+  .option-radio {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid var(--border); margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s var(--ease);
+  }
+  .option-card:hover .option-radio { border-color: var(--teal); }
+  .option-card.selected .option-radio {
+    border-color: var(--teal); background: var(--teal);
+  }
+  .option-radio-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--white); opacity: 0; transform: scale(0);
+    transition: all 0.2s var(--ease);
+  }
+  .option-card.selected .option-radio-dot {
+    opacity: 1; transform: scale(1);
+  }
+  .option-content { flex: 1; }
+  .option-label {
+    font-family: var(--sans); font-size: 15px; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 3px; line-height: 1.4;
+  }
+  .option-desc {
+    font-family: var(--sans); font-size: 13px; color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Navigation buttons */
+  .nav-buttons {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px solid var(--border-light);
+  }
+  .btn-back {
+    font-family: var(--sans); font-size: 13px; color: var(--text-muted);
+    font-weight: 500; cursor: pointer; padding: 10px 0;
+    transition: color 0.2s; background: none; border: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-back:hover { color: var(--text-primary); }
+  .btn-back svg { width: 16px; height: 16px; }
+  .btn-next {
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700;
+    padding: 14px 32px; border-radius: 6px; cursor: pointer;
+    border: none; transition: all 0.3s var(--ease);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .btn-next.primary {
+    background: var(--teal); color: var(--navy);
+  }
+  .btn-next.primary:hover {
+    background: var(--teal-deep); color: var(--white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(65,125,154,0.3);
+  }
+  .btn-next.disabled {
+    background: var(--border-light); color: var(--text-light);
+    cursor: not-allowed; pointer-events: none;
+  }
+  .btn-next svg { width: 14px; height: 14px; }
+
+  /* ============================================ */
+  /* EMAIL CAPTURE SCREEN */
+  /* ============================================ */
+  .email-capture {
+    text-align: center;
+  }
+  .email-capture .question-text {
+    font-size: 26px; margin-bottom: 12px;
+  }
+  .email-input-group {
+    max-width: 400px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .email-input {
+    padding: 16px 20px; border: 1.5px solid var(--border);
+    border-radius: 6px; font-family: var(--sans); font-size: 15px;
+    color: var(--text-primary); background: var(--white); outline: none;
+    transition: border-color 0.3s; text-align: center;
+  }
+  .email-input::placeholder { color: var(--text-light); }
+  .email-input:focus { border-color: var(--teal); }
+  .email-submit {
+    padding: 16px 32px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; border: none;
+    border-radius: 6px; cursor: pointer; transition: all 0.3s var(--ease);
+  }
+  .email-submit:hover {
+    background: var(--teal-deep); color: var(--white);
+  }
+  .email-disclaimer {
+    font-family: var(--sans); font-size: 12px; color: var(--text-light);
+    margin-top: 12px; line-height: 1.6;
+  }
+
+  /* ============================================ */
+  /* RESULTS SCREEN */
+  /* ============================================ */
+  .results-screen { display: none; }
+  .results-screen.active { display: block; }
+
+  .results-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .results-score-ring {
+    width: 140px; height: 140px; margin: 0 auto 24px;
+    position: relative;
+  }
+  .results-score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--border-light); stroke-width: 6; }
+  .ring-fill {
+    fill: none; stroke: var(--teal); stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 408;
+    stroke-dashoffset: 408;
+    transition: stroke-dashoffset 1.5s var(--ease-out) 0.3s;
+  }
+  .ring-fill.amber-ring { stroke: var(--amber); }
+  .ring-fill.red-ring { stroke: var(--red); }
+  .ring-fill.green-ring { stroke: var(--green); }
+  .results-score-number {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--sans); font-size: 36px; font-weight: 800;
+    color: var(--text-primary); letter-spacing: -1px;
+  }
+  .results-score-label {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 8px;
+  }
+  .results-title {
+    font-family: var(--serif); font-size: 28px; line-height: 1.25;
+    font-weight: 400; color: var(--text-primary); margin-bottom: 12px;
+  }
+  .results-subtitle {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    line-height: 1.7; max-width: 440px; margin: 0 auto;
+  }
+
+  /* Results breakdown */
+  .results-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-bottom: 40px;
+  }
+  .result-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 8px; padding: 24px 20px;
+    transition: all 0.3s var(--ease);
+  }
+  .result-card:hover { box-shadow: 0 4px 16px rgba(32,44,78,0.06); }
+  .result-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .result-card-label {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 700;
+  }
+  .result-badge {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; padding: 3px 8px; border-radius: 3px;
+  }
+  .badge-green { background: #eaf7f0; color: var(--green); }
+  .badge-amber { background: #fef6e7; color: var(--amber); }
+  .badge-red { background: #fdeaea; color: var(--red); }
+  .result-card-value {
+    font-family: var(--sans); font-size: 20px; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 4px; letter-spacing: -0.5px;
+  }
+  .result-card-detail {
+    font-family: var(--sans); font-size: 12px; color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Insights list */
+  .results-insights {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px 24px; margin-bottom: 40px;
+  }
+  .insights-title {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal-deep); font-weight: 700;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .insights-title::before {
+    content: ''; width: 20px; height: 2px; background: var(--teal);
+  }
+  .insight-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid var(--border-light);
+  }
+  .insight-item:last-child { border-bottom: none; }
+  .insight-icon {
+    width: 24px; height: 24px; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .insight-text {
+    font-family: var(--sans); font-size: 14px; line-height: 1.6;
+    color: var(--text-body);
+  }
+  .insight-text strong { color: var(--text-primary); font-weight: 600; }
+
+  /* CTA section */
+  .results-cta {
+    background: var(--navy); border-radius: 10px; padding: 36px 32px;
+    text-align: center;
+  }
+  .results-cta-label {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .results-cta-title {
+    font-family: var(--serif); font-size: 24px; line-height: 1.3;
+    font-weight: 400; color: var(--white); margin-bottom: 16px;
+  }
+  .results-cta-text {
+    font-family: var(--sans); font-size: 14px; color: rgba(255,255,255,0.45);
+    line-height: 1.7; margin-bottom: 28px; max-width: 400px; margin-left: auto; margin-right: auto;
+  }
+  .results-cta-buttons {
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 340px; margin: 0 auto;
+  }
+  .cta-primary {
+    padding: 16px 32px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; border: none;
+    border-radius: 6px; cursor: pointer; transition: all 0.3s var(--ease);
+    display: block; text-align: center;
+  }
+  .cta-primary:hover {
+    background: var(--teal-deep); color: var(--white);
+    box-shadow: 0 4px 16px rgba(65,125,154,0.3);
+  }
+  .cta-secondary {
+    padding: 14px 32px; background: transparent; color: rgba(255,255,255,0.5);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 600;
+    border: 1.5px solid rgba(255,255,255,0.12); border-radius: 6px;
+    cursor: pointer; transition: all 0.3s var(--ease);
+    display: block; text-align: center;
+  }
+  .cta-secondary:hover {
+    border-color: rgba(255,255,255,0.3); color: var(--white);
+  }
+  .results-cta-disclaimer {
+    font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.2);
+    margin-top: 16px;
+  }
+
+  /* ============================================ */
+  /* RESPONSIVE */
+  /* ============================================ */
+  @media (max-width: 900px) {
+    .page { grid-template-columns: 1fr; }
+    .sidebar {
+      position: relative; width: 100%; padding: 100px 24px 36px;
+    }
+    .main { margin-left: 0; padding: 40px 24px 60px; }
+    .nav { padding: 16px 24px; }
+    .results-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">BMONEY PROPERTY</div>
+  <div class="nav-meta"><span>Private</span> &middot; No data shared</div>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-content">
+      <div class="sidebar-eyebrow">Buyer Assessment</div>
+      <h1>See where you stand — <em>before you call anyone.</em></h1>
+      <p class="sidebar-desc">Six questions. Two minutes. A private readiness snapshot based on how Lower North Shore buyers at your stage typically perform.</p>
+
+      <!-- Progress -->
+      <div class="progress-tracker">
+        <div class="progress-bar-container">
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+
+        <div class="steps-list" id="stepsList">
+          <div class="step-indicator active" data-step="1">
+            <div class="step-dot">1</div>
+            <div class="step-label">Buying timeline</div>
+          </div>
+          <div class="step-indicator" data-step="2">
+            <div class="step-dot">2</div>
+            <div class="step-label">Budget position</div>
+          </div>
+          <div class="step-indicator" data-step="3">
+            <div class="step-dot">3</div>
+            <div class="step-label">Market experience</div>
+          </div>
+          <div class="step-indicator" data-step="4">
+            <div class="step-dot">4</div>
+            <div class="step-label">Auction readiness</div>
+          </div>
+          <div class="step-indicator" data-step="5">
+            <div class="step-dot">5</div>
+            <div class="step-label">Decision clarity</div>
+          </div>
+          <div class="step-indicator" data-step="6">
+            <div class="step-dot">6</div>
+            <div class="step-label">Risk awareness</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <p class="sidebar-trust"><strong>2,400+ assessments completed.</strong><br>Your answers aren't shared with agents, vendors, or third parties.</p>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="assessment-container">
+
+      <!-- ============ QUESTION 1 ============ -->
+      <div class="screen active visible" data-screen="1">
+        <div class="question-number">Question 01 of 06</div>
+        <h2 class="question-text">Where are you in the buying process?</h2>
+        <p class="question-helper">This helps calibrate the assessment to your stage.</p>
+        <div class="options" data-question="timeline">
+          <div class="option-card" data-value="browsing" data-score="1">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Just starting to look</div>
+              <div class="option-desc">Researching suburbs and getting a feel for the market</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="active" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Actively inspecting properties</div>
+              <div class="option-desc">Attending open homes, comparing options each weekend</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="ready" data-score="3">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Ready to make a decision</div>
+              <div class="option-desc">Finance in place, shortlist defined, looking to move in the next 4–8 weeks</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="missed" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">I've already missed one or two</div>
+              <div class="option-desc">Lost at auction or moved too slowly on a property I wanted</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <div></div>
+          <button class="btn-next disabled" id="btn1">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ QUESTION 2 ============ -->
+      <div class="screen" data-screen="2">
+        <div class="question-number">Question 02 of 06</div>
+        <h2 class="question-text">What's your total budget position?</h2>
+        <p class="question-helper">Including equity, pre-approval, and available capital. We don't need exact numbers.</p>
+        <div class="options" data-question="budget">
+          <div class="option-card" data-value="under2m" data-score="1">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Under $2M</div>
+              <div class="option-desc">Apartments and some townhouses in select pockets</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="2to3.5m" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">$2M – $3.5M</div>
+              <div class="option-desc">Entry-level houses, premium apartments, wider suburb range</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="3.5to5m" data-score="3">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">$3.5M – $5M</div>
+              <div class="option-desc">Quality established homes across most LNS suburbs</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="over5m" data-score="3">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">$5M+</div>
+              <div class="option-desc">Premium positions, trophy homes, harbour-adjacent</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-back" onclick="goToScreen(1)">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Back
+          </button>
+          <button class="btn-next disabled" id="btn2">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ QUESTION 3 ============ -->
+      <div class="screen" data-screen="3">
+        <div class="question-number">Question 03 of 06</div>
+        <h2 class="question-text">How many Lower North Shore properties have you inspected?</h2>
+        <p class="question-helper">Including open homes and private inspections in the last 6 months.</p>
+        <div class="options" data-question="experience">
+          <div class="option-card" data-value="none" data-score="1">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">None yet</div>
+              <div class="option-desc">Still researching online and from listings</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="few" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">1 – 5 properties</div>
+              <div class="option-desc">Getting a sense of what's available at different price points</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="moderate" data-score="3">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">6 – 15 properties</div>
+              <div class="option-desc">Familiar with the market, refining criteria</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="many" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">15+ and counting</div>
+              <div class="option-desc">Extensive search, haven't been able to secure the right one</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-back" onclick="goToScreen(2)">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Back
+          </button>
+          <button class="btn-next disabled" id="btn3">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ QUESTION 4 ============ -->
+      <div class="screen" data-screen="4">
+        <div class="question-number">Question 04 of 06</div>
+        <h2 class="question-text">Have you bid at auction on the Lower North Shore?</h2>
+        <p class="question-helper">Auction experience significantly affects outcomes in this market.</p>
+        <div class="options" data-question="auction">
+          <div class="option-card" data-value="never" data-score="1">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Never attended an auction</div>
+              <div class="option-desc">Planning to go but haven't been to one yet</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="watched" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Watched but never bid</div>
+              <div class="option-desc">Attended as an observer, haven't participated</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="bid-lost" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Bid and lost</div>
+              <div class="option-desc">Participated but was outbid or withdrew</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="experienced" data-score="3">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Multiple auction experiences</div>
+              <div class="option-desc">Comfortable in the room, understand the dynamics</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-back" onclick="goToScreen(3)">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Back
+          </button>
+          <button class="btn-next disabled" id="btn4">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ QUESTION 5 ============ -->
+      <div class="screen" data-screen="5">
+        <div class="question-number">Question 05 of 06</div>
+        <h2 class="question-text">How clear is your buying criteria?</h2>
+        <p class="question-helper">This affects how efficiently you can move when the right property appears.</p>
+        <div class="options" data-question="clarity">
+          <div class="option-card" data-value="exploring" data-score="1">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Still exploring what I want</div>
+              <div class="option-desc">Open to different property types, suburbs, and configurations</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="general" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">General idea, flexible on details</div>
+              <div class="option-desc">Know the suburb and type, flexible on specifics</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="specific" data-score="3">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Very specific — I know exactly what I'm looking for</div>
+              <div class="option-desc">Street-level preferences, non-negotiables defined, deal-breakers clear</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-back" onclick="goToScreen(4)">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Back
+          </button>
+          <button class="btn-next disabled" id="btn5">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ QUESTION 6 ============ -->
+      <div class="screen" data-screen="6">
+        <div class="question-number">Question 06 of 06</div>
+        <h2 class="question-text">What's your biggest concern about buying here?</h2>
+        <p class="question-helper">Select the one that keeps you up at night.</p>
+        <div class="options" data-question="concern">
+          <div class="option-card" data-value="overpay" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Overpaying at auction</div>
+              <div class="option-desc">Getting caught up in the moment and exceeding fair value</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="missing" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Missing the right property</div>
+              <div class="option-desc">Not finding out about it, or finding out too late</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="hidden" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Hidden problems after purchase</div>
+              <div class="option-desc">Structural, strata, zoning, or market issues I can't see</div>
+            </div>
+          </div>
+          <div class="option-card" data-value="timing" data-score="2">
+            <div class="option-radio"><div class="option-radio-dot"></div></div>
+            <div class="option-content">
+              <div class="option-label">Market timing — buying at the wrong point</div>
+              <div class="option-desc">Whether now is the right time or if I should wait</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-back" onclick="goToScreen(5)">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Back
+          </button>
+          <button class="btn-next disabled" id="btn6">
+            See My Results
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ EMAIL CAPTURE ============ -->
+      <div class="screen" data-screen="email">
+        <div class="email-capture">
+          <div class="question-number">Almost there</div>
+          <h2 class="question-text">Where should we send your results?</h2>
+          <p class="question-helper">Your full readiness breakdown, personalised insights, and what to check next — delivered to your inbox.</p>
+          <div class="email-input-group">
+            <input type="email" class="email-input" id="emailInput" placeholder="Your email address">
+            <button class="email-submit" id="emailSubmit">Show My Results</button>
+          </div>
+          <p class="email-disclaimer">No spam. No sales calls. Unsubscribe anytime.</p>
+        </div>
+      </div>
+
+      <!-- ============ RESULTS ============ -->
+      <div class="results-screen" id="resultsScreen">
+
+        <div class="results-header">
+          <div class="results-score-ring">
+            <svg viewBox="0 0 140 140">
+              <circle class="ring-bg" cx="70" cy="70" r="65"/>
+              <circle class="ring-fill" id="ringFill" cx="70" cy="70" r="65"/>
+            </svg>
+            <div class="results-score-number" id="scoreNumber">—</div>
+          </div>
+          <div class="results-score-label" id="scoreLabel" style="color: var(--teal);">READINESS SCORE</div>
+          <h2 class="results-title" id="resultsTitle">Calculating...</h2>
+          <p class="results-subtitle" id="resultsSubtitle"></p>
+        </div>
+
+        <div class="results-grid" id="resultsGrid"></div>
+
+        <div class="results-insights" id="resultsInsights">
+          <div class="insights-title">What this means for you</div>
+          <div id="insightsList"></div>
+        </div>
+
+        <div class="results-cta">
+          <div class="results-cta-label">Your next step</div>
+          <h3 class="results-cta-title" id="ctaTitle">See how this applies to specific properties</h3>
+          <p class="results-cta-text" id="ctaText">Based on your profile, a 15-minute walkthrough would cover the gaps that matter most for buyers at your stage.</p>
+          <div class="results-cta-buttons">
+            <a href="#" class="cta-primary">Watch the Walkthrough — 15 mins</a>
+            <a href="#" class="cta-secondary">Download the Buyer's Roadmap</a>
+          </div>
+          <p class="results-cta-disclaimer">No obligation. No sales pitch on the other end.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ============================================ -->
+<!-- JAVASCRIPT -->
+<!-- ============================================ -->
+<script>
+  const answers = {};
+  let currentScreen = 1;
+  const totalSteps = 6;
+
+  // Option selection
+  document.querySelectorAll('.option-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const parent = this.closest('.options');
+      parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      const question = parent.dataset.question;
+      answers[question] = {
+        value: this.dataset.value,
+        score: parseInt(this.dataset.score)
+      };
+      // Enable next button
+      const screenEl = this.closest('.screen');
+      const btn = screenEl.querySelector('.btn-next');
+      if (btn) {
+        btn.classList.remove('disabled');
+        btn.classList.add('primary');
+      }
+    });
+  });
+
+  // Next buttons
+  for (let i = 1; i <= totalSteps; i++) {
+    const btn = document.getElementById('btn' + i);
+    if (btn) {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('disabled')) return;
+        if (i < totalSteps) {
+          goToScreen(i + 1);
+        } else {
+          goToScreen('email');
+        }
+      });
+    }
+  }
+
+  // Email submit
+  document.getElementById('emailSubmit').addEventListener('click', () => {
+    const email = document.getElementById('emailInput').value;
+    if (email && email.includes('@')) {
+      showResults();
+    }
+  });
+  document.getElementById('emailInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('emailSubmit').click();
+    }
+  });
+
+  function goToScreen(num) {
+    // Hide current
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('visible');
+      setTimeout(() => { s.classList.remove('active'); }, 300);
+    });
+
+    setTimeout(() => {
+      const target = document.querySelector(`[data-screen="${num}"]`);
+      if (target) {
+        target.classList.add('active');
+        setTimeout(() => target.classList.add('visible'), 20);
+      }
+
+      // Update progress
+      if (typeof num === 'number') {
+        currentScreen = num;
+        const pct = Math.round(((num - 1) / totalSteps) * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressText').textContent = pct + '%';
+
+        document.querySelectorAll('.step-indicator').forEach(si => {
+          const step = parseInt(si.dataset.step);
+          si.classList.remove('active', 'completed');
+          if (step === num) si.classList.add('active');
+          else if (step < num) si.classList.add('completed');
+        });
+      } else if (num === 'email') {
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressText').textContent = '100%';
+        document.querySelectorAll('.step-indicator').forEach(si => si.classList.add('completed'));
+      }
+    }, 320);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showResults() {
+    // Hide email screen
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('visible', 'active');
+    });
+
+    // Calculate score
+    let total = 0;
+    let max = 0;
+    Object.values(answers).forEach(a => {
+      total += a.score;
+      max += 3;
+    });
+    const pct = Math.round((total / max) * 100);
+
+    // Determine tier
+    let tier, tierColor, ringClass, title, subtitle;
+    if (pct >= 75) {
+      tier = 'HIGH'; tierColor = 'var(--green)'; ringClass = 'green-ring';
+      title = 'You\'re in a strong position';
+      subtitle = 'Your readiness indicators are above average for Lower North Shore buyers. The main risk at your stage is execution — moving decisively on the right property while avoiding overpayment.';
+    } else if (pct >= 50) {
+      tier = 'MODERATE'; tierColor = 'var(--amber)'; ringClass = 'amber-ring';
+      title = 'Solid foundation, some gaps to close';
+      subtitle = 'You have good fundamentals, but there are specific areas where additional preparation would significantly reduce your risk and improve your outcomes.';
+    } else {
+      tier = 'BUILDING'; tierColor = 'var(--teal)'; ringClass = '';
+      title = 'You\'re early — that\'s actually an advantage';
+      subtitle = 'Most buyers who overpay on the Lower North Shore rushed in before they were properly prepared. Taking time now to understand the dynamics puts you ahead.';
+    }
+
+    // Show results screen
+    const resultsEl = document.getElementById('resultsScreen');
+    resultsEl.classList.add('active');
+
+    setTimeout(() => {
+      // Score ring
+      const ringFill = document.getElementById('ringFill');
+      ringFill.className = 'ring-fill ' + ringClass;
+      const circumference = 2 * Math.PI * 65;
+      const offset = circumference - (pct / 100) * circumference;
+      ringFill.style.strokeDashoffset = offset;
+
+      document.getElementById('scoreNumber').textContent = pct;
+      document.getElementById('scoreLabel').style.color = tierColor;
+      document.getElementById('scoreLabel').textContent = tier + ' READINESS';
+      document.getElementById('resultsTitle').textContent = title;
+      document.getElementById('resultsSubtitle').textContent = subtitle;
+
+      // Build result cards
+      const grid = document.getElementById('resultsGrid');
+      const cards = [
+        {
+          label: 'TIMELINE',
+          value: answers.timeline?.value === 'ready' ? 'Active' : answers.timeline?.value === 'active' ? 'Engaged' : answers.timeline?.value === 'missed' ? 'Re-entering' : 'Early',
+          badge: answers.timeline?.score >= 3 ? 'green' : answers.timeline?.score >= 2 ? 'amber' : 'amber',
+          badgeText: answers.timeline?.score >= 3 ? 'READY' : answers.timeline?.score >= 2 ? 'ON TRACK' : 'EARLY',
+          detail: answers.timeline?.value === 'missed' ? 'Learning from missed properties is valuable market intelligence' : 'Your timing position relative to current market conditions'
+        },
+        {
+          label: 'AUCTION PREP',
+          value: answers.auction?.value === 'experienced' ? 'Experienced' : answers.auction?.value === 'bid-lost' ? 'Some exposure' : answers.auction?.value === 'watched' ? 'Observer' : 'No exposure',
+          badge: answers.auction?.score >= 3 ? 'green' : answers.auction?.score >= 2 ? 'amber' : 'red',
+          badgeText: answers.auction?.score >= 3 ? 'STRONG' : answers.auction?.score >= 2 ? 'DEVELOPING' : 'GAP',
+          detail: '73% of LNS properties sell at auction — this is a critical competency'
+        },
+        {
+          label: 'CRITERIA CLARITY',
+          value: answers.clarity?.value === 'specific' ? 'Defined' : answers.clarity?.value === 'general' ? 'General' : 'Exploring',
+          badge: answers.clarity?.score >= 3 ? 'green' : answers.clarity?.score >= 2 ? 'amber' : 'red',
+          badgeText: answers.clarity?.score >= 3 ? 'CLEAR' : answers.clarity?.score >= 2 ? 'REFINING' : 'BROAD',
+          detail: 'Specificity in criteria reduces decision fatigue and improves speed'
+        },
+        {
+          label: 'RISK FOCUS',
+          value: answers.concern?.value === 'overpay' ? 'Pricing' : answers.concern?.value === 'missing' ? 'Access' : answers.concern?.value === 'hidden' ? 'Due diligence' : 'Timing',
+          badge: 'amber',
+          badgeText: 'NOTED',
+          detail: 'This is the area where tailored guidance adds the most value'
+        }
+      ];
+
+      grid.innerHTML = cards.map(c => `
+        <div class="result-card">
+          <div class="result-card-header">
+            <div class="result-card-label">${c.label}</div>
+            <div class="result-badge badge-${c.badge}">${c.badgeText}</div>
+          </div>
+          <div class="result-card-value">${c.value}</div>
+          <div class="result-card-detail">${c.detail}</div>
+        </div>
+      `).join('');
+
+      // Build insights
+      const insights = [];
+      if (answers.auction?.score < 3) {
+        insights.push({ icon: '&#9888;&#65039;', text: '<strong>Auction preparation is your highest-leverage improvement.</strong> On the Lower North Shore, the gap between a prepared bidder and an unprepared one averages $80–150k in overpayment.' });
+      }
+      if (answers.experience?.value === 'many') {
+        insights.push({ icon: '&#128269;', text: '<strong>Extended searches often indicate a criteria or strategy issue</strong> rather than a market availability issue. Buyers who inspect 15+ properties without securing one typically benefit from recalibrating their approach.' });
+      }
+      if (answers.concern?.value === 'overpay') {
+        insights.push({ icon: '&#128176;', text: '<strong>Your instinct about overpayment risk is well-founded.</strong> The average emotional premium at competitive LNS auctions is $185k above fair market value. Having a pre-set ceiling and a strategy for the final three bids is essential.' });
+      }
+      if (answers.concern?.value === 'missing') {
+        insights.push({ icon: '&#128161;', text: '<strong>Access to pre-market and off-market inventory</strong> comes from agent relationships, not from checking listing sites more frequently. 18% of LNS properties transact without public campaigns.' });
+      }
+      if (answers.concern?.value === 'hidden') {
+        insights.push({ icon: '&#128270;', text: '<strong>Due diligence gaps are the most expensive mistakes on the Lower North Shore.</strong> Strata issues, DA exposure, and micro-location risks are rarely visible from listing information alone.' });
+      }
+      if (answers.clarity?.score < 3) {
+        insights.push({ icon: '&#127919;', text: '<strong>Sharpening your criteria before the next inspection cycle</strong> means you can act faster when the right property appears. In this market, the best properties move within 7–10 days.' });
+      }
+      // Always add a generic useful one
+      insights.push({ icon: '&#128200;', text: '<strong>Lower North Shore buyers who prepare before they act</strong> consistently secure better outcomes than those who learn through experience alone. The cost of education is always less than the cost of a mistake at this price point.' });
+
+      document.getElementById('insightsList').innerHTML = insights.map(i => `
+        <div class="insight-item">
+          <div class="insight-icon">${i.icon}</div>
+          <div class="insight-text">${i.text}</div>
+        </div>
+      `).join('');
+
+    }, 100);
+  }
+</script>
+
+</body>
+</html>
