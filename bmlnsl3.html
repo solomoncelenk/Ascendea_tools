@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Buying Decisions Are Made — Lower North Shore | BMONEY Property</title>
+<meta name="description" content="Real buyer stories, auction strategies, and the due diligence process behind Lower North Shore property decisions. No hype — just how it works.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #202c4e; --navy-deep: #161f38; --navy-light: #2a3a62;
+    --teal: #5fc3db; --teal-deep: #417d9a;
+    --teal-glow: rgba(95,195,219,0.12); --teal-subtle: rgba(95,195,219,0.05);
+    --white: #ffffff; --off-white: #f7f8fa; --warm-bg: #f4f2ef;
+    --text-primary: #202c4e; --text-body: #414141; --text-muted: #6b7a8e; --text-light: #9aa3b0;
+    --border: #e2e8eb; --border-light: #eef1f3;
+    --red: #c04040; --amber: #d4930c; --green: #2d8a5e;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', 'Trebuchet MS', Helvetica, sans-serif;
+    --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+  body{font-family:var(--sans);color:var(--text-body);background:var(--white);line-height:1.7;overflow-x:hidden;}
+  a{text-decoration:none;color:inherit;}
+  img{max-width:100%;height:auto;display:block;}
+
+  /* Reveals */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease);}
+  .reveal.vis{opacity:1;transform:translateY(0);}
+  .rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:transparent;transition:all 0.4s var(--ease);
+  }
+  .nav.scrolled{
+    background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border);padding:14px 40px;
+  }
+  .nav-logo{font-size:11px;letter-spacing:3.5px;text-transform:uppercase;font-weight:700;color:var(--white);transition:color 0.4s;}
+  .nav.scrolled .nav-logo{color:var(--navy);}
+  .nav-cta{
+    font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;
+    color:var(--teal);padding:10px 22px;border:1.5px solid rgba(95,195,219,0.4);
+    border-radius:4px;transition:all 0.3s;cursor:pointer;
+  }
+  .nav.scrolled .nav-cta{border-color:var(--teal-deep);color:var(--teal-deep);}
+  .nav-cta:hover{background:var(--teal);color:var(--navy);border-color:var(--teal);}
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:92vh;display:flex;align-items:flex-end;
+    padding:0 40px 72px;position:relative;overflow:hidden;
+    background:linear-gradient(170deg,var(--navy-deep) 0%,var(--navy) 50%,#1a3048 100%);
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 25% 50%,rgba(95,195,219,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse at 75% 20%,rgba(65,125,154,0.07) 0%,transparent 50%);
+  }
+  .hero-grid{
+    position:absolute;inset:0;
+    background-image:linear-gradient(rgba(95,195,219,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(95,195,219,0.025) 1px,transparent 1px);
+    background-size:72px 72px;opacity:0.5;
+  }
+  .hero-content{position:relative;z-index:2;max-width:720px;}
+  .hero-eyebrow{
+    font-size:11px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--teal);font-weight:600;margin-bottom:24px;
+    opacity:0;animation:fadeUp .8s var(--ease) .3s forwards;
+  }
+  .hero h1{
+    font-family:var(--serif);font-size:clamp(36px,5vw,58px);line-height:1.12;
+    font-weight:300;color:var(--white);letter-spacing:-0.5px;margin-bottom:24px;
+    opacity:0;animation:fadeUp .8s var(--ease) .5s forwards;
+  }
+  .hero h1 em{font-style:italic;color:var(--teal);font-weight:400;}
+  .hero-sub{
+    font-size:17px;line-height:1.7;color:rgba(255,255,255,0.5);max-width:500px;margin-bottom:36px;
+    opacity:0;animation:fadeUp .8s var(--ease) .7s forwards;
+  }
+  .hero-proof{
+    display:flex;gap:32px;flex-wrap:wrap;
+    opacity:0;animation:fadeUp .8s var(--ease) .9s forwards;
+  }
+  .hero-proof-item{display:flex;align-items:center;gap:10px;}
+  .hero-proof-num{font-size:28px;font-weight:800;color:var(--teal);letter-spacing:-1px;line-height:1;}
+  .hero-proof-label{font-size:12px;color:rgba(255,255,255,0.35);font-weight:500;line-height:1.4;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ============ CONTAINER ============ */
+  .container{max-width:760px;margin:0 auto;padding:0 24px;}
+  .container-sm{max-width:640px;margin:0 auto;padding:0 24px;}
+
+  /* ============ SECTION LABEL ============ */
+  .s-label{
+    font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--teal-deep);
+    font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;
+  }
+  .s-label::before{content:'';width:28px;height:2px;background:var(--teal);}
+  .s-label.light{color:var(--teal);}
+  .s-label.light::before{background:rgba(95,195,219,0.4);}
+  .s-label.center{justify-content:center;}
+  .s-label.center::before{display:none;}
+
+  /* ============ SECTION: CLIENT STORIES ============ */
+  .stories{padding:96px 40px;background:var(--white);}
+  .stories h2{
+    font-family:var(--serif);font-size:clamp(28px,3.5vw,40px);line-height:1.2;
+    font-weight:300;color:var(--text-primary);margin-bottom:16px;
+  }
+  .stories h2 strong{font-weight:600;}
+  .stories-intro{font-size:16px;color:var(--text-muted);margin-bottom:56px;max-width:560px;line-height:1.7;}
+
+  /* Story card */
+  .story{
+    background:var(--off-white);border-radius:12px;padding:40px 36px;
+    margin-bottom:24px;border:1px solid var(--border-light);
+    transition:box-shadow 0.4s var(--ease);position:relative;overflow:hidden;
+  }
+  .story:hover{box-shadow:0 8px 32px rgba(32,44,78,0.06);}
+  .story-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap;}
+  .story-who{display:flex;align-items:center;gap:14px;}
+  .story-avatar{
+    width:48px;height:48px;border-radius:50%;
+    background:var(--navy);display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:700;color:var(--teal);flex-shrink:0;
+  }
+  .story-name{font-size:15px;font-weight:600;color:var(--text-primary);line-height:1.3;}
+  .story-role{font-size:13px;color:var(--text-muted);font-weight:400;}
+  .story-outcome{text-align:right;}
+  .story-outcome-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);font-weight:700;}
+  .story-outcome-val{font-size:22px;font-weight:800;color:var(--green);letter-spacing:-0.5px;}
+
+  .story-quote{
+    font-family:var(--serif);font-size:20px;line-height:1.45;
+    color:var(--text-primary);font-style:italic;font-weight:400;
+    margin-bottom:20px;padding-left:20px;border-left:3px solid var(--teal);
+  }
+  .story-detail{font-size:14px;line-height:1.7;color:var(--text-muted);margin-bottom:20px;}
+
+  /* Story stats row */
+  .story-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+    padding-top:20px;border-top:1px solid var(--border);
+  }
+  .story-stat{text-align:center;}
+  .story-stat-val{font-size:18px;font-weight:700;color:var(--text-primary);}
+  .story-stat-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+
+  /* ============ SECTION: WHAT WE REJECT ============ */
+  .rejected{padding:96px 40px;background:var(--navy);position:relative;overflow:hidden;}
+  .rejected::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 60% 30%,rgba(95,195,219,0.04) 0%,transparent 60%);
+  }
+  .rejected h2{
+    font-family:var(--serif);font-size:clamp(28px,3.5vw,38px);line-height:1.2;
+    font-weight:300;color:var(--white);margin-bottom:16px;
+  }
+  .rejected-intro{font-size:15px;color:rgba(255,255,255,0.4);margin-bottom:48px;max-width:520px;line-height:1.7;}
+
+  .reject-card{
+    background:rgba(255,255,255,0.04);border:1px solid rgba(95,195,219,0.1);
+    border-radius:10px;padding:28px 24px;margin-bottom:16px;
+    transition:all 0.3s var(--ease);
+  }
+  .reject-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(95,195,219,0.2);}
+  .reject-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap;}
+  .reject-prop{font-size:16px;font-weight:600;color:var(--white);}
+  .reject-badge{
+    font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;border-radius:4px;
+    background:rgba(192,64,64,0.15);color:var(--red);border:1px solid rgba(192,64,64,0.25);
+  }
+  .reject-reason{font-size:14px;line-height:1.7;color:rgba(255,255,255,0.45);margin-bottom:16px;}
+  .reject-data{
+    display:flex;gap:20px;flex-wrap:wrap;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);
+  }
+  .reject-datum{
+    font-size:12px;color:rgba(255,255,255,0.3);font-weight:500;
+    display:flex;align-items:center;gap:6px;
+  }
+  .reject-datum strong{color:var(--teal);font-weight:700;}
+
+  /* ============ SECTION: PROCESS ============ */
+  .process{padding:96px 40px;background:var(--white);}
+  .process h2{
+    font-family:var(--serif);font-size:clamp(28px,3.5vw,38px);line-height:1.2;
+    font-weight:300;color:var(--text-primary);margin-bottom:16px;
+  }
+  .process-intro{font-size:15px;color:var(--text-muted);margin-bottom:56px;max-width:520px;line-height:1.7;}
+
+  /* Timeline */
+  .timeline{position:relative;padding-left:40px;}
+  .timeline::before{
+    content:'';position:absolute;left:15px;top:8px;bottom:8px;width:2px;
+    background:linear-gradient(to bottom,var(--teal),var(--teal-deep),var(--navy));
+    border-radius:1px;
+  }
+  .tl-step{position:relative;margin-bottom:40px;}
+  .tl-step:last-child{margin-bottom:0;}
+  .tl-dot{
+    position:absolute;left:-40px;top:4px;width:32px;height:32px;
+    border-radius:50%;background:var(--white);border:2.5px solid var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;color:var(--teal);z-index:1;
+    transition:all 0.3s var(--ease);
+  }
+  .tl-step:hover .tl-dot{background:var(--teal);color:var(--navy);box-shadow:0 0 16px rgba(95,195,219,0.3);}
+  .tl-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal-deep);font-weight:700;margin-bottom:4px;}
+  .tl-title{font-size:18px;font-weight:600;color:var(--text-primary);margin-bottom:8px;line-height:1.35;}
+  .tl-text{font-size:14px;line-height:1.7;color:var(--text-muted);max-width:480px;}
+
+  /* ============ SECTION: OFF-MARKET ============ */
+  .offmarket{padding:96px 40px;background:var(--off-white);}
+  .offmarket h2{
+    font-family:var(--serif);font-size:clamp(28px,3.5vw,38px);line-height:1.2;
+    font-weight:300;color:var(--text-primary);margin-bottom:16px;
+  }
+  .offmarket-intro{font-size:15px;color:var(--text-muted);margin-bottom:48px;max-width:540px;line-height:1.7;}
+  .om-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;}
+  .om-card{
+    background:var(--white);border:1px solid var(--border);border-radius:10px;padding:28px 24px;
+    transition:all 0.3s var(--ease);
+  }
+  .om-card:hover{box-shadow:0 4px 20px rgba(32,44,78,0.06);transform:translateY(-2px);}
+  .om-icon{font-size:20px;margin-bottom:12px;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--teal-glow);border-radius:50%;}
+  .om-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:6px;}
+  .om-text{font-size:13px;color:var(--text-muted);line-height:1.6;}
+  .om-note{
+    font-family:var(--serif);font-size:19px;line-height:1.5;font-style:italic;
+    color:var(--text-primary);font-weight:400;text-align:center;
+    padding:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  }
+
+  /* ============ SECTION: VIDEO ============ */
+  .video-sec{padding:96px 40px;background:var(--white);}
+  .video-wrap{
+    max-width:680px;margin:0 auto;text-align:center;
+  }
+  .video-sec h2{
+    font-family:var(--serif);font-size:clamp(26px,3vw,34px);line-height:1.2;
+    font-weight:300;color:var(--text-primary);margin-bottom:12px;
+  }
+  .video-sub{font-size:14px;color:var(--text-muted);margin-bottom:40px;line-height:1.7;}
+  .video-player{
+    position:relative;width:100%;padding-bottom:56.25%;background:var(--navy);
+    border-radius:10px;overflow:hidden;cursor:pointer;
+    box-shadow:0 16px 48px rgba(32,44,78,0.15);
+  }
+  .video-overlay{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:14px;
+    background:rgba(32,44,78,0.55);transition:background 0.3s;
+  }
+  .video-player:hover .video-overlay{background:rgba(32,44,78,0.35);}
+  .play-btn{
+    width:64px;height:64px;background:var(--teal);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform 0.3s,box-shadow 0.3s;
+  }
+  .video-player:hover .play-btn{transform:scale(1.08);box-shadow:0 8px 32px rgba(95,195,219,0.4);}
+  .play-btn svg{width:22px;height:22px;margin-left:3px;}
+  .video-dur{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500;}
+
+  /* ============ SECTION: DILIGENCE ============ */
+  .diligence{padding:96px 40px;background:var(--navy);position:relative;}
+  .diligence::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 30% 70%,rgba(95,195,219,0.04) 0%,transparent 60%);
+  }
+  .diligence h2{
+    font-family:var(--serif);font-size:clamp(28px,3.5vw,38px);line-height:1.2;
+    font-weight:300;color:var(--white);margin-bottom:16px;
+  }
+  .diligence-intro{font-size:15px;color:rgba(255,255,255,0.4);margin-bottom:48px;max-width:520px;line-height:1.7;}
+  .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .dd-item{
+    background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);
+    border-radius:8px;padding:24px 20px;transition:all 0.3s var(--ease);
+  }
+  .dd-item:hover{background:rgba(95,195,219,0.06);border-color:rgba(95,195,219,0.15);}
+  .dd-num{font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1px;margin-bottom:8px;}
+  .dd-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px;line-height:1.4;}
+  .dd-text{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.6;}
+
+  /* ============ CTA ============ */
+  .final-cta{padding:96px 40px;background:var(--off-white);border-top:1px solid var(--border);}
+  .final-cta-inner{max-width:560px;margin:0 auto;text-align:center;}
+  .final-cta h2{
+    font-family:var(--serif);font-size:clamp(28px,3.5vw,40px);line-height:1.2;
+    font-weight:300;color:var(--text-primary);margin-bottom:16px;
+  }
+  .final-cta-text{font-size:15px;color:var(--text-muted);margin-bottom:36px;line-height:1.7;}
+  .cta-form{display:flex;gap:10px;max-width:420px;margin:0 auto 16px;}
+  .cta-input{
+    flex:1;padding:16px 20px;border:1.5px solid var(--border);border-radius:6px;
+    font-family:var(--sans);font-size:14px;color:var(--text-primary);
+    background:var(--white);outline:none;transition:border-color 0.3s;
+  }
+  .cta-input::placeholder{color:var(--text-light);}
+  .cta-input:focus{border-color:var(--teal);}
+  .cta-btn{
+    padding:16px 28px;background:var(--teal);color:var(--navy);
+    font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:700;
+    border:none;border-radius:6px;cursor:pointer;transition:all 0.3s;white-space:nowrap;
+  }
+  .cta-btn:hover{background:var(--teal-deep);color:var(--white);transform:translateY(-1px);box-shadow:0 4px 16px rgba(65,125,154,0.3);}
+  .cta-fine{font-size:12px;color:var(--text-light);line-height:1.6;}
+
+  /* ============ FOOTER ============ */
+  .footer{background:var(--navy-deep);padding:40px;text-align:center;}
+  .footer-brand{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:12px;}
+  .footer-text{font-size:12px;color:rgba(255,255,255,0.2);line-height:1.7;}
+  .footer-links{margin-top:14px;display:flex;justify-content:center;gap:20px;}
+  .footer-links a{font-size:12px;color:rgba(255,255,255,0.3);transition:color 0.3s;}
+  .footer-links a:hover{color:var(--teal);}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:640px){
+    .hero{padding:0 24px 56px;min-height:85vh;}
+    .stories,.rejected,.process,.offmarket,.video-sec,.diligence,.final-cta{padding-left:24px;padding-right:24px;}
+    .story-stats{grid-template-columns:1fr;}
+    .om-grid,.dd-grid{grid-template-columns:1fr;}
+    .hero-proof{gap:20px;}
+    .cta-form{flex-direction:column;}
+    .reject-head{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">BMONEY PROPERTY</div>
+  <a href="#cta" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Case Studies &middot; Lower North Shore</p>
+    <h1>See how buying decisions <em>are actually made.</em></h1>
+    <p class="hero-sub">Real clients. Real numbers. No hype. An inside look at the process behind Lower North Shore property decisions — what was bought, what was rejected, and why.</p>
+    <div class="hero-proof">
+      <div class="hero-proof-item">
+        <div class="hero-proof-num">$47M</div>
+        <div class="hero-proof-label">in LNS property<br>secured for clients</div>
+      </div>
+      <div class="hero-proof-item">
+        <div class="hero-proof-num">73%</div>
+        <div class="hero-proof-label">purchased below<br>vendor expectations</div>
+      </div>
+      <div class="hero-proof-item">
+        <div class="hero-proof-num">12</div>
+        <div class="hero-proof-label">properties rejected<br>for every 1 purchased</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLIENT STORIES ============ -->
+<section class="stories">
+  <div class="container">
+    <div class="s-label reveal">Real buyer outcomes</div>
+    <h2 class="reveal">Three clients. Three different situations. <strong>One process.</strong></h2>
+    <p class="stories-intro reveal">Every buyer's position is different. The framework is the same — it just surfaces different priorities depending on where you start.</p>
+
+    <!-- Story 1 -->
+    <div class="story reveal">
+      <div class="story-top">
+        <div class="story-who">
+          <div class="story-avatar">J+S</div>
+          <div>
+            <div class="story-name">James & Sarah</div>
+            <div class="story-role">Corporate lawyers — upgrading from Kirribilli apartment</div>
+          </div>
+        </div>
+        <div class="story-outcome">
+          <div class="story-outcome-label">SAVED</div>
+          <div class="story-outcome-val">$220k</div>
+        </div>
+      </div>
+      <div class="story-quote">"We'd already lost two auctions. We were about to overpay on a third just to end the process. Having someone say 'this one fails the stress test' was the clarity we needed."</div>
+      <div class="story-detail">James and Sarah had been searching for 4 months. Their frustration was pushing them toward emotional decisions. We rejected 8 properties before identifying a home in Cremorne that met every test — then secured it via pre-auction negotiation at $220k below what they were prepared to pay at auction.</div>
+      <div class="story-stats">
+        <div class="story-stat"><div class="story-stat-val">14 weeks</div><div class="story-stat-label">Search to settlement</div></div>
+        <div class="story-stat"><div class="story-stat-val">9 rejected</div><div class="story-stat-label">Properties reviewed</div></div>
+        <div class="story-stat"><div class="story-stat-val">Pre-auction</div><div class="story-stat-label">Acquisition method</div></div>
+      </div>
+    </div>
+
+    <!-- Story 2 -->
+    <div class="story reveal">
+      <div class="story-top">
+        <div class="story-who">
+          <div class="story-avatar">M</div>
+          <div>
+            <div class="story-name">Michael</div>
+            <div class="story-role">CFO — downsizing from family home in Mosman</div>
+          </div>
+        </div>
+        <div class="story-outcome">
+          <div class="story-outcome-label">RESULT</div>
+          <div class="story-outcome-val">Off-market</div>
+        </div>
+      </div>
+      <div class="story-quote">"I knew Mosman inside out — or thought I did. The apartment I purchased never appeared on any portal. I wouldn't have known it existed."</div>
+      <div class="story-detail">Michael's brief was specific: harbour views, sub-$3M, no renovation required. That combination in Mosman is rare. Rather than wait for public listings, we activated agent relationships. A deceased estate came to us 10 days before it would have gone to market. Michael inspected, ran due diligence, and made an offer within 72 hours.</div>
+      <div class="story-stats">
+        <div class="story-stat"><div class="story-stat-val">6 weeks</div><div class="story-stat-label">Search to settlement</div></div>
+        <div class="story-stat"><div class="story-stat-val">Off-market</div><div class="story-stat-label">Acquisition method</div></div>
+        <div class="story-stat"><div class="story-stat-val">$2.78M</div><div class="story-stat-label">Final purchase price</div></div>
+      </div>
+    </div>
+
+    <!-- Story 3 -->
+    <div class="story reveal">
+      <div class="story-top">
+        <div class="story-who">
+          <div class="story-avatar">R+L</div>
+          <div>
+            <div class="story-name">Rachel & Liam</div>
+            <div class="story-role">Tech founders — first home, relocating from inner west</div>
+          </div>
+        </div>
+        <div class="story-outcome">
+          <div class="story-outcome-label">SAVED</div>
+          <div class="story-outcome-val">$145k</div>
+        </div>
+      </div>
+      <div class="story-quote">"We didn't know the Lower North Shore. We didn't know what 'good' looked like. The framework took our budget and showed us exactly where the value was."</div>
+      <div class="story-detail">First-time buyers in an unfamiliar market. Rachel and Liam had a $2.2M budget and no local knowledge. We mapped every pocket within their range, identified Neutral Bay as the best growth profile for their budget, and secured a 3-bedroom with parking at auction — bidding to a pre-set ceiling while three other buyers went emotional.</div>
+      <div class="story-stats">
+        <div class="story-stat"><div class="story-stat-val">11 weeks</div><div class="story-stat-label">Search to settlement</div></div>
+        <div class="story-stat"><div class="story-stat-val">16 rejected</div><div class="story-stat-label">Properties reviewed</div></div>
+        <div class="story-stat"><div class="story-stat-val">Auction</div><div class="story-stat-label">Acquired at ceiling</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT WE REJECT ============ -->
+<section class="rejected">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="s-label light reveal">What gets rejected</div>
+    <h2 class="reveal">What we said no to — and why</h2>
+    <p class="rejected-intro reveal">For every property a client purchases, we typically reject 10–15. Here are three recent examples and the specific reasons they failed our framework.</p>
+
+    <div class="reject-card reveal">
+      <div class="reject-head">
+        <div class="reject-prop">$1.85M — 3BR apartment, Neutral Bay</div>
+        <div class="reject-badge">✕ REJECTED</div>
+      </div>
+      <div class="reject-reason">Looked excellent on paper. Recently renovated, strong strata, good rental yield. But council DA records showed 140 new apartments approved within 300m — staged completion over 2 years. Supply flood risk was too high.</div>
+      <div class="reject-data">
+        <div class="reject-datum">Yield: <strong>4.1%</strong></div>
+        <div class="reject-datum">New supply: <strong>140 units</strong></div>
+        <div class="reject-datum">Risk: <strong>Oversupply</strong></div>
+      </div>
+    </div>
+
+    <div class="reject-card reveal">
+      <div class="reject-head">
+        <div class="reject-prop">$3.4M — 4BR house, Cremorne</div>
+        <div class="reject-badge">✕ REJECTED</div>
+      </div>
+      <div class="reject-reason">Beautiful home on a quiet street. Agent guide was $3.1M. Our analysis indicated vendor expectation was $3.6M+ and the property would pass in at auction. It did — passed in at $3.42M. Vendor relisted three weeks later at $3.35M.</div>
+      <div class="reject-data">
+        <div class="reject-datum">Guide: <strong>$3.1M</strong></div>
+        <div class="reject-datum">Passed in: <strong>$3.42M</strong></div>
+        <div class="reject-datum">Risk: <strong>Price conditioning</strong></div>
+      </div>
+    </div>
+
+    <div class="reject-card reveal">
+      <div class="reject-head">
+        <div class="reject-prop">$2.65M — 3BR semi, Mosman</div>
+        <div class="reject-badge">✕ REJECTED</div>
+      </div>
+      <div class="reject-reason">Owner-occupier ratio on the street had dropped from 71% to 54% over four years. Investor-heavy pocket. When rates move, vacancy spikes and values compress. The growth looked strong historically, but the risk profile had fundamentally shifted.</div>
+      <div class="reject-data">
+        <div class="reject-datum">OO ratio: <strong>54% ↓</strong></div>
+        <div class="reject-datum">Growth: <strong>6.8% historical</strong></div>
+        <div class="reject-datum">Risk: <strong>Investor saturation</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE PROCESS ============ -->
+<section class="process">
+  <div class="container">
+    <div class="s-label reveal">How it works</div>
+    <h2 class="reveal">The five-stage process behind every purchase</h2>
+    <p class="process-intro reveal">This isn't improvisation. It's a repeatable framework applied to every client, every property, every decision.</p>
+
+    <div class="timeline">
+      <div class="tl-step reveal">
+        <div class="tl-dot">1</div>
+        <div class="tl-label">Stage 01</div>
+        <div class="tl-title">Position Mapping</div>
+        <div class="tl-text">Your budget, risk tolerance, timeline, and non-negotiables are documented before we look at a single property. This filters out 70% of the market immediately — by design.</div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-dot">2</div>
+        <div class="tl-label">Stage 02</div>
+        <div class="tl-title">Market Scan + Off-Market Activation</div>
+        <div class="tl-text">We search both public listings and our agent network simultaneously. Properties are scored against your framework before you see them — you only inspect shortlisted options.</div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-dot">3</div>
+        <div class="tl-label">Stage 03</div>
+        <div class="tl-title">Due Diligence & Risk Audit</div>
+        <div class="tl-text">Council DA checks, strata review, comparable sales analysis, owner-occupier ratios, supply risk assessment. Every shortlisted property runs through the same framework before you consider making a move.</div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-dot">4</div>
+        <div class="tl-label">Stage 04</div>
+        <div class="tl-title">Strategy & Negotiation</div>
+        <div class="tl-text">For auctions: pre-set ceiling, bidding strategy, competitor analysis. For private treaty: market positioning, vendor motivation assessment, structured offers. The strategy matches the method.</div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-dot">5</div>
+        <div class="tl-label">Stage 05</div>
+        <div class="tl-title">Acquisition & Settlement</div>
+        <div class="tl-text">Contract review coordination, building and pest inspection management, finance confirmation. We manage the process through to handover so nothing falls through the cracks at the final stage.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OFF-MARKET ACCESS ============ -->
+<section class="offmarket">
+  <div class="container">
+    <div class="s-label reveal">Off-market access</div>
+    <h2 class="reveal">How we access properties you won't find on portals</h2>
+    <p class="offmarket-intro reveal">18% of Lower North Shore properties transact without public campaigns. Here's how we access that inventory — and how we filter genuine opportunities from recycled stock.</p>
+
+    <div class="om-grid">
+      <div class="om-card reveal">
+        <div class="om-icon">&#128101;</div>
+        <div class="om-title">Agent network — built over 8+ years</div>
+        <div class="om-text">Direct relationships with the top 15 selling agents on the Lower North Shore. When a vendor wants a quiet sale, we're in the first round of calls.</div>
+      </div>
+      <div class="om-card reveal rd1">
+        <div class="om-icon">&#128270;</div>
+        <div class="om-title">Pre-market intelligence</div>
+        <div class="om-text">Properties in pre-campaign preparation — styled, photographed, but not yet listed. A 7–10 day window to inspect and negotiate before the market sees it.</div>
+      </div>
+      <div class="om-card reveal rd2">
+        <div class="om-icon">&#128274;</div>
+        <div class="om-title">Deceased estates & quiet settlements</div>
+        <div class="om-text">Executors and family solicitors often prefer discreet sales. These rarely appear on portals and require trusted buyer relationships.</div>
+      </div>
+      <div class="om-card reveal rd3">
+        <div class="om-icon">&#9888;&#65039;</div>
+        <div class="om-title">Recycled stock filtering</div>
+        <div class="om-text">Not every "off-market" opportunity is genuine. We track listing histories to identify properties that have been shopped privately without success — so you don't overpay for someone else's reject.</div>
+      </div>
+    </div>
+
+    <div class="om-note reveal">
+      "The question isn't whether off-market deals exist. It's whether<br>the one being presented to you is genuine — or repackaged."
+    </div>
+  </div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section class="video-sec">
+  <div class="video-wrap">
+    <div class="s-label center reveal">Watch</div>
+    <h2 class="reveal">How a recent Mosman purchase came together</h2>
+    <p class="video-sub reveal">A 14-minute walkthrough of a real case — from first inspection through due diligence to auction strategy. No pitch, just process.</p>
+    <div class="video-player reveal">
+      <div class="video-overlay">
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24" fill="none"><polygon points="8,5 20,12 8,19" fill="#202c4e"/></svg>
+        </div>
+        <div class="video-dur">14:22 &middot; No email required</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DUE DILIGENCE ============ -->
+<section class="diligence">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="s-label light reveal">Due diligence discipline</div>
+    <h2 class="reveal">What gets checked on every property</h2>
+    <p class="diligence-intro reveal">The same framework, applied consistently. This is what separates a considered purchase from an expensive assumption.</p>
+
+    <div class="dd-grid">
+      <div class="dd-item reveal">
+        <div class="dd-num">01</div>
+        <div class="dd-title">Council DA applications</div>
+        <div class="dd-text">Current and approved developments within 500m. Supply risk assessment for the next 3–5 years.</div>
+      </div>
+      <div class="dd-item reveal rd1">
+        <div class="dd-num">02</div>
+        <div class="dd-title">Strata & body corporate</div>
+        <div class="dd-text">Financial health, sinking fund adequacy, outstanding levies, litigation history, planned works.</div>
+      </div>
+      <div class="dd-item reveal rd2">
+        <div class="dd-num">03</div>
+        <div class="dd-title">Owner-occupier ratios</div>
+        <div class="dd-text">ABS data for the specific street and pocket. Investor-heavy markets carry different risk profiles.</div>
+      </div>
+      <div class="dd-item reveal rd3">
+        <div class="dd-num">04</div>
+        <div class="dd-title">Comparable sales analysis</div>
+        <div class="dd-text">Not just suburb-level medians. Street-by-street, property-type-specific pricing analysis.</div>
+      </div>
+      <div class="dd-item reveal">
+        <div class="dd-num">05</div>
+        <div class="dd-title">Holding cost stress test</div>
+        <div class="dd-text">Modelling vacancy, rate increases, and expense changes. Does the property survive a 6-week vacancy at 2% higher rates?</div>
+      </div>
+      <div class="dd-item reveal rd1">
+        <div class="dd-num">06</div>
+        <div class="dd-title">Micro-location audit</div>
+        <div class="dd-text">Arterial road proximity, aspect, flood mapping, heritage overlays, and noise assessment. The things you don't see on Saturday morning.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta" id="cta">
+  <div class="final-cta-inner">
+    <div class="s-label center reveal">Next step</div>
+    <h2 class="reveal">See how this applies to your search</h2>
+    <p class="final-cta-text reveal">We'll send you a short guide covering the framework — what to check, what to ask, and how to avoid the patterns that cost Lower North Shore buyers the most.</p>
+    <div class="cta-form reveal">
+      <input type="email" class="cta-input" placeholder="Your email address">
+      <button class="cta-btn">Send Guide</button>
+    </div>
+    <p class="cta-fine reveal">No spam. No sales calls. Just the process — explained.</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-brand">BMONEY PROPERTY</div>
+  <p class="footer-text">Lower North Shore Buyer Advisory</p>
+  <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+</footer>
+
+<!-- ============ JS ============ -->
+<script>
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>80));
+
+  const ro=new IntersectionObserver(e=>{
+    e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('vis');});
+  },{threshold:0.12,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      const t=document.querySelector(this.getAttribute('href'));
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+</script>
+
+</body>
+</html>
