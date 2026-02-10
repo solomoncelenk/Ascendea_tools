@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | A Real Property Decision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Sovereign Grid Optics */
+        .bg-grid {
+            background-size: 35px 35px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+
+        .video-container {
+            position: relative;
+            height: 60vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            opacity: 0.35;
+            filter: grayscale(100%) contrast(110%);
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.8) 0%, #F8FAFC 100%);
+        }
+
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+
+        .audit-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+    </style>
+</head>
+<body class="antialiased bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-black/5">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em] uppercase">BMONEY</div>
+        </div>
+        <div class="mono text-[10px] text-slate-400 uppercase tracking-widest">Internal_Audit_Archive</div>
+    </nav>
+
+    <header class="video-container">
+        <video autoplay muted loop playsinline shadow-xl>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-hand-of-a-person-pointing-at-the-screen-of-a-laptop-4911-large.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            <div class="mono text-blue-500 text-[10px] font-bold tracking-[0.4em] mb-6 uppercase">
+                [ Case Walkthrough ]
+            </div>
+            <h1 class="text-white text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-[1.1]">
+                A real property decision <br><span class="text-blue-500 italic">— from being unsure to feeling certain.</span>
+            </h1>
+            <p class="text-slate-300 text-xl max-w-2xl font-light mb-10 leading-relaxed">
+                How a planned, risk-aware way of working helped an Australian buyer move forward with confidence — without shortcuts or hype.
+            </p>
+            <p class="text-slate-400 text-[10px] uppercase mono tracking-widest mb-12 italic">
+                This is a simplified case study. Details have been generalized, but the reasoning is accurate.
+            </p>
+            <a href="#audit" class="btn-primary px-12 py-5 text-lg font-bold">
+                See how the decision was made
+            </a>
+        </div>
+    </header>
+
+    <section class="py-32 px-8 bg-white border-y border-black/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                <div>
+                    <div class="mono text-blue-600 text-[10px] font-bold uppercase mb-6 tracking-widest">// The Starting Point</div>
+                    <h2 class="text-4xl font-bold mb-8">An Australian professional with a strong income.</h2>
+                    <p class="text-lg text-slate-500 font-light leading-relaxed">
+                        The client was earning well and had built savings, but felt unsure how to move forward without making a mistake they’d regret later. 
+                    </p>
+                </div>
+                <div class="p-10 bg-slate-50 border border-black/5 rounded-sm">
+                    <ul class="space-y-6">
+                        <li class="flex justify-between items-center border-b border-black/5 pb-4">
+                            <span class="mono text-[10px] text-slate-400 uppercase">Profile</span>
+                            <span class="font-bold text-sm">Senior Corporate Role</span>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-black/5 pb-4">
+                            <span class="mono text-[10px] text-slate-400 uppercase">Primary Fear</span>
+                            <span class="font-bold text-sm">Regretting a $2M decision</span>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-black/5 pb-4">
+                            <span class="mono text-[10px] text-slate-400 uppercase">Asset Goal</span>
+                            <span class="font-bold text-sm">Long-term portfolio safety</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="audit" class="py-32 px-8 bg-slate-950 text-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl font-bold italic mb-6">What they believed at the beginning</h2>
+                <div class="w-12 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-8 border border-white/10 bg-white/5">
+                    <p class="text-slate-400 text-sm leading-relaxed italic">"Newer properties felt safer because there was less maintenance to worry about."</p>
+                </div>
+                <div class="p-8 border border-white/10 bg-white/5">
+                    <p class="text-slate-400 text-sm leading-relaxed italic">"Familiar locations felt lower risk because I already knew the streets."</p>
+                </div>
+                <div class="p-8 border border-white/10 bg-white/5">
+                    <p class="text-slate-400 text-sm leading-relaxed italic">"A strong rental yield meant my money was safe regardless of what happened."</p>
+                </div>
+                <div class="p-8 border border-white/10 bg-white/5">
+                    <p class="text-slate-400 text-sm leading-relaxed italic">"Waiting longer might reduce the risk of buying at the wrong time."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="mono text-blue-600 text-[10px] font-bold uppercase mb-8 tracking-widest">Where uncertainty crept in</div>
+            <h2 class="text-4xl font-bold mb-12 leading-tight">The challenge wasn’t finding options — it was knowing which ones to rule out.</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+                <div class="p-10 audit-card">
+                    <p class="text-slate-600 leading-relaxed font-light">
+                        Too many opinions and conflicting advice made it hard to see which path was right. Risks were often glossed over by agents, making it hard to commit with any real confidence.
+                    </p>
+                </div>
+                <div class="p-10 audit-card">
+                    <p class="text-slate-600 leading-relaxed font-light">
+                        The fear of committing to the wrong path meant doing nothing felt safer than doing something. This is where the need for a planned way of working became clear.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white border-y border-black/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-20">
+                <div class="mono text-blue-600 text-[10px] font-bold mb-4 uppercase">The Evaluation Phase</div>
+                <h2 class="text-4xl font-bold">How the choice was made.</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="p-10 bg-slate-50 border border-black/5">
+                    <div class="flex justify-between items-center mb-10">
+                        <span class="mono text-[10px] text-slate-400 uppercase">Market Filtering</span>
+                        <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-6">Locations were checked for long-term supply and demand factors. Certain areas were ruled out early based on facts, not news.</p>
+                </div>
+                <div class="p-10 bg-slate-50 border border-black/5">
+                    <div class="flex justify-between items-center mb-10">
+                        <span class="mono text-[10px] text-slate-400 uppercase">Property Audit</span>
+                        <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57c.73.41 1.2 1.17 1.2 2.43v.28c0 .59-.11 1.07-.31 1.46L15 17H5l-1.89-3.26c-.2-.39-.31-.87-.31-1.46v-.28c0-1.26.47-2.02 1.2-2.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 100 2h2a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-6">We looked at what else had sold nearby and checked how easy the home would be to sell again in the future.</p>
+                </div>
+                <div class="p-10 bg-slate-50 border border-black/5">
+                    <div class="flex justify-between items-center mb-10">
+                        <span class="mono text-[10px] text-slate-400 uppercase">Risk Check</span>
+                        <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-6">Holding costs were checked under different scenarios, including rate changes and vacancies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-slate-950 text-white">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-16">What didn’t make the cut — and why</h2>
+            <div class="space-y-4">
+                <div class="p-8 border border-white/5 bg-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <div class="mono text-[9px] text-red-500 uppercase mb-2">Rejected Asset 01</div>
+                        <h4 class="font-bold">Newer property with high marketing spend</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 max-w-xs md:text-right">Ruled out due to high supply risk in the area. Fundamentals were too weak for long-term safety.</p>
+                </div>
+                <div class="p-8 border border-white/5 bg-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <div class="mono text-[9px] text-red-500 uppercase mb-2">Rejected Asset 02</div>
+                        <h4 class="font-bold">Deal reliant on government incentives</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 max-w-xs md:text-right">Ruled out because the value was artificial. Once incentives ended, flexibility would be gone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="mono text-blue-600 text-[10px] font-bold uppercase mb-8 tracking-widest">The decision</div>
+            <h2 class="text-4xl font-bold mb-10 italic">"The value wasn’t certainty — it was understanding the trade-offs."</h2>
+            <p class="text-xl text-slate-500 font-light leading-relaxed mb-12">
+                We chose a house in an established street where no new homes could be built. The client accepted the higher price because they understood the safety it provided.
+            </p>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 bg-white border-y border-black/5">
+        <div class="max-w-3xl mx-auto text-center">
+            <div class="flex justify-center gap-1 mb-10">
+                <svg class="w-5 h-5 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                <svg class="w-5 h-5 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                <svg class="w-5 h-5 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                <svg class="w-5 h-5 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                <svg class="w-5 h-5 text-blue-600 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+            </div>
+            <p class="text-2xl font-bold italic mb-8">“The biggest difference was seeing what not to do. That clarity made the decision much easier.”</p>
+            <p class="mono text-[10px] text-slate-400 uppercase tracking-widest font-bold">Director, Senior Partner</p>
+        </div>
+    </section>
+
+    <section class="py-32 px-8">
+        <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div>
+                <h4 class="font-bold mb-6 text-blue-600 uppercase text-xs tracking-widest">This case study will resonate if you:</h4>
+                <ul class="space-y-4 text-sm text-slate-600">
+                    <li>• Are weighing your first or next property decision</li>
+                    <li>• Want to be sure before committing capital</li>
+                    <li>• Prefer facts over persuasion</li>
+                    <li>• Are wary of sales-driven advice</li>
+                </ul>
+            </div>
+            <div class="opacity-40 grayscale">
+                <h4 class="font-bold mb-6 text-slate-400 uppercase text-xs tracking-widest">It may not resonate if you're:</h4>
+                <ul class="space-y-4 text-sm text-slate-400">
+                    <li>• Looking for shortcuts</li>
+                    <li>• Chasing specific returns</li>
+                    <li>• Expecting someone to guarantee the future</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="briefing" class="py-32 px-8 bg-white text-center">
+        <h2 class="text-4xl font-extrabold mb-10">If this aligns with how you think:</h2>
+        <a href="#briefing" class="btn-primary px-16 py-6 text-xl font-bold rounded-sm inline-block">Request a Strategy Conversation</a>
+        <div class="mt-12 text-center text-slate-400 text-xs italic space-y-2">
+            <p>The conversation exists to see whether working together makes sense for you.</p>
+            <p>No obligation. No pressure.</p>
+        </div>
+    </section>
+
+    <footer class="py-12 border-t border-black/5 text-center">
+        <div class="mono text-[10px] text-slate-400 tracking-[0.6em] uppercase font-bold">
+            BMONEY PROPERTY // &copy; 2026
+        </div>
+    </footer>
+
+</body>
+</html>
