@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMONEY | Book Your Strategy Call</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563EB;
+            --brand-dark: #0A0A0A;
+            --brand-gray: #F8FAFC;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--brand-gray); 
+            color: var(--brand-dark);
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Subtle Grid Optics */
+        .bg-grid {
+            background-size: 35px 35px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+        }
+
+        .btn-primary {
+            background: var(--brand-dark);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+        }
+        .btn-primary:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+
+        .booking-container {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.05);
+        }
+
+        input, select {
+            background: transparent;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding: 1.25rem 0;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-bottom-color: var(--brand-blue);
+        }
+
+        .divider-vertical {
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1), transparent);
+        }
+    </style>
+</head>
+<body class="antialiased bg-grid">
+
+    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-black/5">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+            <div class="mono text-xs font-bold tracking-[0.4em] uppercase">BMONEY</div>
+        </div>
+        <div class="mono text-[10px] text-slate-400 uppercase tracking-widest">Intake_Portal_2026</div>
+    </nav>
+
+    <header class="pt-40 pb-20 px-8 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-[1.1]">
+                Book a property <br><span class="text-blue-600 italic">strategy call.</span>
+            </h1>
+            <p class="text-xl text-slate-500 max-w-2xl mx-auto mb-8 leading-relaxed font-light">
+                A step-by-step conversation to understand your situation, answer key questions, and determine whether working together makes sense.
+            </p>
+            <div class="flex justify-center items-center gap-6 mono text-[10px] text-slate-400 uppercase tracking-widest font-bold italic">
+                <span>No pressure</span>
+                <span class="opacity-20">•</span>
+                <span>No obligation</span>
+                <span class="opacity-20">•</span>
+                <span>Just a clear picture</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-20 px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="p-10 bg-white border border-black/5">
+                    <h3 class="mono text-blue-600 text-[10px] font-bold uppercase mb-8 tracking-widest">// What this call is for</h3>
+                    <ul class="space-y-6 text-sm text-slate-600">
+                        <li class="flex items-start gap-3"><span>/</span> Finding out where you stand right now</li>
+                        <li class="flex items-start gap-3"><span>/</span> Understanding what matters most to you</li>
+                        <li class="flex items-start gap-3"><span>/</span> Answering your questions about how things work</li>
+                        <li class="flex items-start gap-3"><span>/</span> Seeing if there is a good fit to work together</li>
+                    </ul>
+                </div>
+                <div class="p-10 bg-slate-100/50 border border-black/5">
+                    <h3 class="mono text-slate-400 text-[10px] font-bold uppercase mb-8 tracking-widest">// What this call is NOT</h3>
+                    <ul class="space-y-6 text-sm text-slate-400 italic">
+                        <li class="flex items-start gap-3"><span>✕</span> A property sales pitch</li>
+                        <li class="flex items-start gap-3"><span>✕</span> A high-pressure talk</li>
+                        <li class="flex items-start gap-3"><span>✕</span> A commitment to move forward</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pb-32 px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="relative aspect-video bg-black rounded-sm overflow-hidden group cursor-pointer shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 transition-all duration-700">
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:border-blue-600 transition-all">
+                        <svg class="w-8 h-8 text-white fill-current ml-1" viewBox="0 0 20 20"><path d="M4.5 2.691l12 7.309-12 7.309V2.691z"/></svg>
+                    </div>
+                    <p class="mono text-[10px] text-white uppercase tracking-widest font-bold">Watch: What to expect on the call (3 mins)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-8 bg-slate-950 text-white">
+        <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div>
+                <h4 class="font-bold mb-8 text-blue-400 uppercase text-[10px] tracking-[0.3em]">This is a good fit if:</h4>
+                <ul class="space-y-4 text-sm text-slate-400">
+                    <li>• You are thinking about buying soon</li>
+                    <li>• You want certainty before committing</li>
+                    <li>• You prefer reasoning over hype</li>
+                    <li>• You are open to professional help</li>
+                </ul>
+            </div>
+            <div class="opacity-40">
+                <h4 class="font-bold mb-8 text-slate-500 uppercase text-[10px] tracking-[0.3em]">It may not be a fit if:</h4>
+                <ul class="space-y-4 text-sm text-slate-500">
+                    <li>• You are just browsing or learning</li>
+                    <li>• You want quick tips or predictions</li>
+                    <li>• You are not ready to move forward yet</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="py-32 px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="booking-container flex flex-col lg:flex-row">
+                
+                <div class="lg:w-1/2 p-10 md:p-16 border-r border-black/5">
+                    <div class="mb-12">
+                        <span class="mono text-[10px] text-blue-600 font-bold uppercase mb-4 block tracking-widest">Step 01 / Basic Details</span>
+                        <h3 class="text-3xl font-bold italic">Tell us about you.</h3>
+                    </div>
+                    <form class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <input type="text" placeholder="First Name" class="text-lg font-bold">
+                            <input type="text" placeholder="Last Name" class="text-lg font-bold">
+                        </div>
+                        <input type="email" placeholder="Email Address" class="text-lg font-bold">
+                        <input type="tel" placeholder="Phone Number" class="text-lg font-bold">
+                        
+                        <div>
+                            <label class="mono text-[10px] text-slate-400 uppercase block mb-2">What best describes you?</label>
+                            <select class="text-sm font-bold">
+                                <option>First-time buyer</option>
+                                <option>Investor</option>
+                                <option>Upgrader</option>
+                                <option>Exploring options</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="mono text-[10px] text-slate-400 uppercase block mb-2">Timeline to act</label>
+                            <select class="text-sm font-bold">
+                                <option>0–3 months</option>
+                                <option>3–6 months</option>
+                                <option>6–12 months</option>
+                                <option>Unsure</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-8">
+                            <button type="button" class="btn-primary w-full py-6 text-xl font-bold uppercase tracking-widest">Continue to booking</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="lg:w-1/2 p-10 md:p-16 bg-slate-50/50 flex flex-col justify-center items-center text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-8">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Step 02 / Select a Time</h4>
+                    <p class="text-sm text-slate-500 mb-10 max-w-xs mx-auto leading-relaxed">
+                        After providing your details, you'll see our current availability. Select a 30-minute window that works for you.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-[10px] mono text-slate-400 uppercase font-bold">
+                            <span>✓ No obligation</span>
+                            <span>✓ No selling</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white border-y border-black/5">
+        <div class="max-w-4xl mx-auto px-8 text-center">
+            <h4 class="text-xl font-bold italic mb-10 text-slate-900">“The call was clear, calm, and genuinely helpful. Even without moving forward yet, the understanding I gained was worth it.”</h4>
+            <p class="mono text-[10px] text-slate-400 uppercase tracking-widest font-bold">— Verified Client Feedback</p>
+        </div>
+    </section>
+
+    <footer class="py-32 px-8 text-center bg-black text-white">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-light italic mb-8 text-slate-300">A clear picture first. Decisions second.</h2>
+            <div class="mono text-[10px] text-slate-600 tracking-[0.6em] uppercase font-bold mb-4">
+                BMONEY PROPERTY // &copy; 2026
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
