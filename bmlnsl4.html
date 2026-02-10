@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Strategy Call — Lower North Shore | BMONEY Property</title>
+<meta name="description" content="A 25-minute strategy call for serious Lower North Shore buyers. No pitch. Just clarity on your next move.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#202c4e;--navy-deep:#161f38;--navy-light:#2a3a62;
+    --teal:#5fc3db;--teal-deep:#417d9a;
+    --teal-glow:rgba(95,195,219,0.12);--teal-subtle:rgba(95,195,219,0.05);
+    --white:#ffffff;--off-white:#f7f8fa;
+    --text-primary:#202c4e;--text-body:#414141;--text-muted:#6b7a8e;--text-light:#9aa3b0;
+    --border:#e2e8eb;--border-light:#eef1f3;
+    --green:#2d8a5e;--red:#c04040;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Raleway','Trebuchet MS',Helvetica,sans-serif;
+    --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out:cubic-bezier(0.16,1,0.3,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+  body{font-family:var(--sans);color:var(--text-body);background:var(--off-white);line-height:1.7;overflow-x:hidden;}
+  a{text-decoration:none;color:inherit;}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease);}
+  .reveal.vis{opacity:1;transform:translateY(0);}
+  .rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}.rd4{transition-delay:.4s;}
+
+  /* ============ NAV ============ */
+  .nav{
+    padding:18px 40px;display:flex;justify-content:space-between;align-items:center;
+    background:var(--white);border-bottom:1px solid var(--border-light);
+  }
+  .nav-logo{font-size:11px;letter-spacing:3.5px;text-transform:uppercase;font-weight:700;color:var(--navy);}
+  .nav-meta{font-size:11px;color:var(--text-light);font-weight:500;letter-spacing:0.5px;}
+
+  /* ============ HERO ============ */
+  .hero{
+    padding:64px 40px 0;background:var(--white);
+  }
+  .hero-inner{
+    max-width:620px;margin:0 auto;text-align:center;
+  }
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--teal-subtle);border:1px solid var(--teal-glow);
+    border-radius:24px;padding:7px 18px;margin-bottom:28px;
+    font-size:12px;color:var(--teal-deep);font-weight:600;letter-spacing:0.3px;
+  }
+  .hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+  .hero h1{
+    font-family:var(--serif);font-size:clamp(32px,4.5vw,48px);line-height:1.15;
+    font-weight:300;color:var(--text-primary);margin-bottom:18px;letter-spacing:-0.5px;
+  }
+  .hero h1 strong{font-weight:600;}
+  .hero-sub{
+    font-size:16px;line-height:1.7;color:var(--text-muted);
+    max-width:460px;margin:0 auto 40px;
+  }
+
+  /* ============ CALL DETAILS STRIP ============ */
+  .details-strip{
+    max-width:560px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border:1px solid var(--border);border-radius:10px;
+    background:var(--white);overflow:hidden;
+  }
+  .detail-item{
+    padding:22px 16px;text-align:center;
+    border-right:1px solid var(--border-light);
+  }
+  .detail-item:last-child{border-right:none;}
+  .detail-icon{font-size:20px;margin-bottom:8px;}
+  .detail-val{font-size:15px;font-weight:700;color:var(--text-primary);line-height:1.3;}
+  .detail-label{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+
+  /* ============ MAIN CONTENT ============ */
+  .main{
+    max-width:620px;margin:0 auto;
+    padding:56px 24px 80px;
+  }
+
+  /* Section divider */
+  .s-divider{
+    display:flex;align-items:center;gap:14px;margin:48px 0 32px;
+  }
+  .s-divider::before,.s-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .s-divider-label{
+    font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--teal-deep);font-weight:700;white-space:nowrap;
+  }
+
+  /* ============ WHAT WE'LL COVER ============ */
+  .cover-list{display:flex;flex-direction:column;gap:8px;}
+  .cover-item{
+    display:flex;align-items:flex-start;gap:14px;
+    padding:16px 20px;background:var(--white);
+    border:1px solid var(--border-light);border-radius:8px;
+    transition:all 0.3s var(--ease);
+  }
+  .cover-item:hover{border-color:var(--teal);background:var(--teal-subtle);transform:translateX(4px);}
+  .cover-check{
+    width:24px;height:24px;border-radius:50%;flex-shrink:0;
+    background:var(--teal-glow);display:flex;align-items:center;justify-content:center;
+    color:var(--teal-deep);font-size:13px;font-weight:700;margin-top:1px;
+  }
+  .cover-text{font-size:15px;color:var(--text-primary);font-weight:500;line-height:1.5;}
+  .cover-text span{font-weight:400;color:var(--text-muted);font-size:13px;display:block;margin-top:2px;}
+
+  /* ============ HOW IT WORKS ============ */
+  .how-steps{display:flex;flex-direction:column;gap:6px;}
+  .how-step{
+    display:flex;align-items:flex-start;gap:16px;padding:18px 20px;
+    background:var(--white);border:1px solid var(--border-light);border-radius:8px;
+  }
+  .how-num{
+    width:28px;height:28px;border-radius:50%;flex-shrink:0;
+    background:var(--navy);color:var(--teal);
+    font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .how-body{}
+  .how-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:2px;}
+  .how-desc{font-size:13px;color:var(--text-muted);line-height:1.5;}
+
+  /* ============ WHAT THIS ISN'T ============ */
+  .not-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .not-card{padding:18px 16px;border-radius:8px;display:flex;align-items:flex-start;gap:12px;}
+  .not-card.yes{background:#eaf7f0;border:1px solid #d0eddf;}
+  .not-card.no{background:#fdf5f5;border:1px solid #f5dede;}
+  .not-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  .not-text{font-size:13px;line-height:1.5;font-weight:500;}
+  .not-card.yes .not-text{color:var(--green);}
+  .not-card.no .not-text{color:var(--red);}
+
+  /* ============ SOCIAL PROOF STRIP ============ */
+  .proof-strip{
+    background:var(--navy);border-radius:10px;padding:28px 24px;
+    margin:48px 0;
+  }
+  .proof-quote{
+    font-family:var(--serif);font-size:19px;line-height:1.45;
+    color:var(--white);font-style:italic;font-weight:400;
+    text-align:center;margin-bottom:16px;
+  }
+  .proof-attr{text-align:center;}
+  .proof-name{font-size:13px;font-weight:600;color:var(--teal);}
+  .proof-role{font-size:12px;color:rgba(255,255,255,0.35);margin-top:2px;}
+
+  /* ============ BOOKING FORM ============ */
+  .booking{
+    background:var(--white);border:1px solid var(--border);border-radius:12px;
+    padding:36px 32px;
+  }
+  .booking-head{text-align:center;margin-bottom:32px;}
+  .booking-title{
+    font-family:var(--serif);font-size:26px;line-height:1.2;
+    font-weight:400;color:var(--text-primary);margin-bottom:8px;
+  }
+  .booking-sub{font-size:13px;color:var(--text-muted);line-height:1.6;}
+
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .form-field{display:flex;flex-direction:column;gap:5px;}
+  .form-field.full{grid-column:1/-1;}
+  .form-label{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase;}
+  .form-input,.form-select,.form-textarea{
+    padding:14px 16px;border:1.5px solid var(--border);border-radius:6px;
+    font-family:var(--sans);font-size:14px;color:var(--text-primary);
+    background:var(--off-white);outline:none;transition:border-color 0.3s;
+    width:100%;
+  }
+  .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--teal);background:var(--white);}
+  .form-input::placeholder,.form-textarea::placeholder{color:var(--text-light);}
+  .form-select{appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%239aa3b0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
+  }
+  .form-textarea{resize:vertical;min-height:80px;}
+  .form-submit{
+    width:100%;padding:16px;background:var(--teal);color:var(--navy);
+    font-family:var(--sans);font-size:14px;letter-spacing:1px;
+    text-transform:uppercase;font-weight:700;border:none;border-radius:6px;
+    cursor:pointer;transition:all 0.3s var(--ease);margin-top:8px;
+  }
+  .form-submit:hover{
+    background:var(--teal-deep);color:var(--white);
+    transform:translateY(-1px);box-shadow:0 4px 16px rgba(65,125,154,0.3);
+  }
+  .form-fine{
+    font-size:12px;color:var(--text-light);text-align:center;margin-top:14px;line-height:1.6;
+  }
+
+  /* ============ AFTER BOOKING ============ */
+  .after{margin-top:40px;}
+  .after-title{
+    font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:16px;
+    text-align:center;
+  }
+  .after-steps{
+    display:flex;gap:12px;
+  }
+  .after-step{
+    flex:1;background:var(--white);border:1px solid var(--border-light);
+    border-radius:8px;padding:20px 16px;text-align:center;
+    transition:all 0.3s var(--ease);
+  }
+  .after-step:hover{border-color:var(--teal);transform:translateY(-2px);}
+  .after-num{
+    width:28px;height:28px;border-radius:50%;background:var(--teal-glow);
+    color:var(--teal-deep);font-size:12px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;
+  }
+  .after-step-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+  .after-step-desc{font-size:12px;color:var(--text-muted);line-height:1.5;}
+
+  /* ============ FOOTER ============ */
+  .footer{
+    max-width:620px;margin:0 auto;padding:0 24px 48px;text-align:center;
+  }
+  .footer-line{height:1px;background:var(--border);margin-bottom:24px;}
+  .footer-brand{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-light);font-weight:700;margin-bottom:8px;}
+  .footer-text{font-size:12px;color:var(--text-light);line-height:1.6;}
+  .footer-links{margin-top:10px;display:flex;justify-content:center;gap:18px;}
+  .footer-links a{font-size:12px;color:var(--text-light);transition:color 0.3s;}
+  .footer-links a:hover{color:var(--teal-deep);}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:560px){
+    .hero{padding:48px 24px 0;}
+    .details-strip{grid-template-columns:1fr;border:none;gap:8px;}
+    .detail-item{border-right:none;border-bottom:1px solid var(--border-light);padding:16px;}
+    .detail-item:last-child{border-bottom:none;}
+    .not-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .after-steps{flex-direction:column;}
+    .nav{padding:14px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-logo">BMONEY PROPERTY</div>
+  <div class="nav-meta">Lower North Shore</div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge reveal">
+      <div class="hero-badge-dot"></div>
+      Accepting new clients — limited availability
+    </div>
+    <h1 class="reveal">Book a <strong>strategy call</strong></h1>
+    <p class="hero-sub reveal">
+      25 minutes. We'll review your position, identify what to check, and tell you honestly whether we can help — or if you don't need us.
+    </p>
+
+    <!-- Call details -->
+    <div class="details-strip reveal">
+      <div class="detail-item">
+        <div class="detail-icon">&#9201;</div>
+        <div class="detail-val">25 minutes</div>
+        <div class="detail-label">Via Zoom</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">&#128274;</div>
+        <div class="detail-val">No obligation</div>
+        <div class="detail-label">No follow-up pressure</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">&#127919;</div>
+        <div class="detail-val">Specific to you</div>
+        <div class="detail-label">Not a generic sales call</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main">
+
+  <!-- WHAT WE'LL COVER -->
+  <div class="s-divider reveal"><div class="s-divider-label">What we'll cover</div></div>
+
+  <div class="cover-list">
+    <div class="cover-item reveal">
+      <div class="cover-check">&#10003;</div>
+      <div class="cover-text">
+        Your current position and buying timeline
+        <span>Where you are, what you've seen, what's working and what isn't</span>
+      </div>
+    </div>
+    <div class="cover-item reveal rd1">
+      <div class="cover-check">&#10003;</div>
+      <div class="cover-text">
+        Budget alignment with Lower North Shore realities
+        <span>What your budget buys in each pocket — and where the gaps are</span>
+      </div>
+    </div>
+    <div class="cover-item reveal rd2">
+      <div class="cover-check">&#10003;</div>
+      <div class="cover-text">
+        Specific risks for your target suburbs
+        <span>Supply, demand dynamics, and what to check before you inspect</span>
+      </div>
+    </div>
+    <div class="cover-item reveal rd3">
+      <div class="cover-check">&#10003;</div>
+      <div class="cover-text">
+        Honest assessment of whether you need help
+        <span>Some buyers don't need a buyers agent. We'll tell you if that's you.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="s-divider reveal"><div class="s-divider-label">How it works</div></div>
+
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="how-num">1</div>
+      <div class="how-body">
+        <div class="how-title">Fill in the form below</div>
+        <div class="how-desc">Takes 60 seconds. Helps us prepare so we don't waste your time asking basics.</div>
+      </div>
+    </div>
+    <div class="how-step reveal rd1">
+      <div class="how-num">2</div>
+      <div class="how-body">
+        <div class="how-title">We'll confirm within 24 hours</div>
+        <div class="how-desc">You'll receive a calendar link with time options that work for you.</div>
+      </div>
+    </div>
+    <div class="how-step reveal rd2">
+      <div class="how-num">3</div>
+      <div class="how-body">
+        <div class="how-title">25-minute Zoom call</div>
+        <div class="how-desc">Come with questions. We'll come with suburb-specific data relevant to your search.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT THIS ISN'T -->
+  <div class="s-divider reveal"><div class="s-divider-label">What this is &amp; isn't</div></div>
+
+  <div class="not-grid">
+    <div class="not-card yes reveal">
+      <div class="not-icon">&#10003;</div>
+      <div class="not-text">A candid conversation about your position</div>
+    </div>
+    <div class="not-card no reveal rd1">
+      <div class="not-icon">&#10005;</div>
+      <div class="not-text">A high-pressure sales pitch</div>
+    </div>
+    <div class="not-card yes reveal rd2">
+      <div class="not-icon">&#10003;</div>
+      <div class="not-text">Specific to your suburbs and budget</div>
+    </div>
+    <div class="not-card no reveal rd3">
+      <div class="not-icon">&#10005;</div>
+      <div class="not-text">A generic property seminar</div>
+    </div>
+    <div class="not-card yes reveal">
+      <div class="not-icon">&#10003;</div>
+      <div class="not-text">Honest about whether we're the right fit</div>
+    </div>
+    <div class="not-card no reveal rd1">
+      <div class="not-icon">&#10005;</div>
+      <div class="not-text">Follow-up calls you didn't ask for</div>
+    </div>
+  </div>
+
+  <!-- SOCIAL PROOF -->
+  <div class="proof-strip reveal">
+    <div class="proof-quote">"I expected a pitch. Instead I got 25 minutes of genuinely useful advice about Cremorne. I booked a second call two days later."</div>
+    <div class="proof-attr">
+      <div class="proof-name">James T.</div>
+      <div class="proof-role">Purchased 4BR home, Cremorne — $3.2M</div>
+    </div>
+  </div>
+
+  <!-- ============ BOOKING FORM ============ -->
+  <div class="booking reveal" id="booking">
+    <div class="booking-head">
+      <h2 class="booking-title">Request your strategy call</h2>
+      <p class="booking-sub">We'll review this before the call so we can come prepared with relevant data.</p>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">First name</label>
+        <input type="text" class="form-input" placeholder="First name">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Last name</label>
+        <input type="text" class="form-input" placeholder="Last name">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="you@example.com">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Phone</label>
+        <input type="tel" class="form-input" placeholder="04XX XXX XXX">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Budget range</label>
+        <select class="form-select">
+          <option value="" disabled selected>Select range</option>
+          <option>Under $2M</option>
+          <option>$2M – $3.5M</option>
+          <option>$3.5M – $5M</option>
+          <option>$5M+</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Timeline</label>
+        <select class="form-select">
+          <option value="" disabled selected>When are you looking to buy?</option>
+          <option>Within 4 weeks</option>
+          <option>1 – 3 months</option>
+          <option>3 – 6 months</option>
+          <option>6+ months / exploring</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field full">
+        <label class="form-label">Target suburbs (optional)</label>
+        <input type="text" class="form-input" placeholder="e.g. Mosman, Cremorne, Neutral Bay">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field full">
+        <label class="form-label">Anything specific you want to cover? (optional)</label>
+        <textarea class="form-textarea" placeholder="e.g. I'm looking at a property on Raglan St and want a second opinion before the auction this Saturday"></textarea>
+      </div>
+    </div>
+
+    <button class="form-submit">Book Strategy Call</button>
+    <p class="form-fine">You'll receive a confirmation email within 24 hours with time options.<br>No payment required. No obligation to proceed.</p>
+  </div>
+
+  <!-- AFTER BOOKING -->
+  <div class="after reveal">
+    <div class="after-title">After you book</div>
+    <div class="after-steps">
+      <div class="after-step">
+        <div class="after-num">1</div>
+        <div class="after-step-title">Confirmation</div>
+        <div class="after-step-desc">Email within 24hrs with calendar link</div>
+      </div>
+      <div class="after-step">
+        <div class="after-num">2</div>
+        <div class="after-step-title">Prep</div>
+        <div class="after-step-desc">We pull suburb data specific to your brief</div>
+      </div>
+      <div class="after-step">
+        <div class="after-num">3</div>
+        <div class="after-step-title">Call</div>
+        <div class="after-step-desc">25 min Zoom — come with questions</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-line"></div>
+  <div class="footer-brand">BMONEY PROPERTY</div>
+  <p class="footer-text">Lower North Shore Buyer Advisory</p>
+  <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+</footer>
+
+<!-- ============ JS ============ -->
+<script>
+  const ro=new IntersectionObserver(e=>{
+    e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('vis');});
+  },{threshold:0.1,rootMargin:'0px 0px -20px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+</script>
+
+</body>
+</html>
