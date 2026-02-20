@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyer Readiness Assessment — Lower North Shore | BMONEY Property</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #202c4e;
+    --navy-deep: #161f38;
+    --teal: #5fc3db;
+    --teal-deep: #417d9a;
+    --teal-glow: rgba(95,195,219,0.15);
+    --teal-subtle: rgba(95,195,219,0.06);
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --text-primary: #202c4e;
+    --text-body: #414141;
+    --text-muted: #6b7a8e;
+    --text-light: #9aa3b0;
+    --border: #e2e8eb;
+    --border-light: #eef1f3;
+    --red: #c04040;
+    --amber: #d4930c;
+    --green: #2d8a5e;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', 'Trebuchet MS', Helvetica, sans-serif;
+    --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
+  }
+
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--sans); color: var(--text-body);
+    background: var(--off-white); line-height: 1.7;
+    overflow-x: hidden; min-height: 100vh;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .progress-bar-inner {
+    max-width: 640px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .progress-logo {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 700; color: var(--navy);
+    white-space: nowrap;
+  }
+  .progress-track {
+    flex: 1; height: 3px; background: var(--border-light);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--teal); border-radius: 2px;
+    width: 0%; transition: width 0.6s var(--ease-out);
+  }
+  .progress-pct {
+    font-family: var(--sans); font-size: 12px; color: var(--teal-deep);
+    font-weight: 600; min-width: 32px; text-align: right;
+  }
+  .step-dots {
+    max-width: 640px; margin: 0 auto;
+    padding: 0 24px 10px;
+    display: flex; gap: 6px; justify-content: center;
+  }
+  .step-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: all 0.3s var(--ease);
+  }
+  .step-dot.active { background: var(--teal); transform: scale(1.25); box-shadow: 0 0 8px rgba(95,195,219,0.4); }
+  .step-dot.completed { background: var(--teal-deep); }
+
+  /* HERO */
+  .hero {
+    background: var(--navy);
+    padding: 88px 24px 56px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(95,195,219,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 60%, rgba(65,125,154,0.05) 0%, transparent 50%);
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 20px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 20px; height: 1.5px; background: rgba(95,195,219,0.4);
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: 34px; line-height: 1.2;
+    font-weight: 300; color: var(--white); margin-bottom: 16px;
+  }
+  .hero h1 em { font-style: italic; color: var(--teal); font-weight: 400; }
+  .hero-desc {
+    font-family: var(--sans); font-size: 15px; line-height: 1.7;
+    color: rgba(255,255,255,0.45); margin-bottom: 24px;
+  }
+  .hero-meta {
+    display: inline-flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+  }
+  .hero-meta-item {
+    font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.3);
+    font-weight: 500; display: flex; align-items: center; gap: 6px;
+  }
+  .hero-meta-item span { color: var(--teal); font-weight: 700; }
+
+  /* PRE-ASSESSMENT EXPLAINER */
+  .explainer {
+    background: var(--white);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .explainer-inner {
+    max-width: 640px; margin: 0 auto;
+    padding: 40px 24px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  }
+  .explainer-item {
+    padding: 0 28px;
+    border-right: 1px solid var(--border-light);
+  }
+  .explainer-item:first-child { padding-left: 0; }
+  .explainer-item:last-child { border-right: none; padding-right: 0; }
+  .explainer-num {
+    font-family: var(--sans); font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .explainer-label {
+    font-family: var(--serif); font-size: 17px; font-weight: 500;
+    color: var(--text-primary); line-height: 1.3; margin-bottom: 8px;
+  }
+  .explainer-body {
+    font-family: var(--sans); font-size: 12px; color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .explainer-body strong { color: var(--text-body); font-weight: 600; }
+
+  @media (max-width: 580px) {
+    .explainer-inner { grid-template-columns: 1fr; gap: 24px; }
+    .explainer-item { padding: 0; border-right: none; border-bottom: 1px solid var(--border-light); padding-bottom: 24px; }
+    .explainer-item:last-child { border-bottom: none; padding-bottom: 0; }
+  }
+
+  /* ASSESSMENT */
+  .assessment {
+    max-width: 640px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* SCREENS */
+  .screen {
+    display: none; opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease-out);
+  }
+  .screen.active { display: block; }
+  .screen.visible { opacity: 1; transform: translateY(0); }
+
+  .q-number {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal-deep); font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: var(--serif); font-size: 30px; line-height: 1.22;
+    font-weight: 400; color: var(--text-primary); margin-bottom: 8px;
+  }
+  .q-helper {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    margin-bottom: 32px; line-height: 1.6;
+  }
+
+  /* OPTION CARDS */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    padding: 20px 24px; border: 1.5px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    transition: all 0.25s var(--ease);
+    display: flex; align-items: flex-start; gap: 16px;
+    background: var(--white); position: relative; overflow: hidden;
+  }
+  .opt::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+    width: 3px; background: var(--teal);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform 0.3s var(--ease);
+  }
+  .opt:hover { border-color: rgba(95,195,219,0.5); background: var(--teal-subtle); }
+  .opt:hover::before { transform: scaleY(1); }
+  .opt.selected {
+    border-color: var(--teal); background: var(--teal-glow);
+    box-shadow: 0 4px 20px rgba(95,195,219,0.12);
+  }
+  .opt.selected::before { transform: scaleY(1); }
+  .opt-radio {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid var(--border); margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s var(--ease);
+  }
+  .opt:hover .opt-radio { border-color: var(--teal); }
+  .opt.selected .opt-radio { border-color: var(--teal); background: var(--teal); }
+  .opt-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--white);
+    opacity: 0; transform: scale(0); transition: all 0.2s var(--ease);
+  }
+  .opt.selected .opt-dot { opacity: 1; transform: scale(1); }
+  .opt-body { flex: 1; }
+  .opt-label {
+    font-family: var(--sans); font-size: 15px; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 2px; line-height: 1.4;
+  }
+  .opt-desc {
+    font-family: var(--sans); font-size: 13px; color: var(--text-muted); line-height: 1.5;
+  }
+
+  /* NAV BUTTONS */
+  .btns {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border-light);
+  }
+  .btn-back {
+    font-family: var(--sans); font-size: 13px; color: var(--text-muted);
+    font-weight: 500; cursor: pointer; padding: 10px 0; background: none; border: none;
+    display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+  }
+  .btn-back:hover { color: var(--text-primary); }
+  .btn-next {
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; padding: 14px 28px;
+    border-radius: 6px; cursor: pointer; border: none;
+    transition: all 0.3s var(--ease); display: flex; align-items: center; gap: 8px;
+  }
+  .btn-next.primary { background: var(--teal); color: var(--navy); }
+  .btn-next.primary:hover {
+    background: var(--teal-deep); color: var(--white);
+    transform: translateY(-1px); box-shadow: 0 4px 16px rgba(65,125,154,0.3);
+  }
+  .btn-next.disabled {
+    background: var(--border-light); color: var(--text-light);
+    cursor: not-allowed; pointer-events: none;
+  }
+
+  /* EMAIL CAPTURE */
+  .email-wrap { text-align: center; }
+  .email-icon {
+    width: 56px; height: 56px; background: var(--teal-glow);
+    border-radius: 50%; margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .email-group {
+    max-width: 380px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .email-input {
+    padding: 16px 20px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-family: var(--sans); font-size: 15px;
+    color: var(--text-primary); background: var(--white); outline: none;
+    transition: border-color 0.3s; text-align: center;
+  }
+  .email-input::placeholder { color: var(--text-light); }
+  .email-input:focus { border-color: var(--teal); }
+  .email-btn {
+    padding: 16px 32px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; border: none;
+    border-radius: 8px; cursor: pointer; transition: all 0.3s var(--ease);
+  }
+  .email-btn:hover { background: var(--teal-deep); color: var(--white); }
+  .email-fine {
+    font-family: var(--sans); font-size: 12px; color: var(--text-light);
+    margin-top: 12px; line-height: 1.6;
+  }
+
+  /* RESULTS */
+  .results { display: none; }
+  .results.active { display: block; }
+
+  .res-header { text-align: center; margin-bottom: 40px; }
+  .score-ring { width: 130px; height: 130px; margin: 0 auto 20px; position: relative; }
+  .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--border-light); stroke-width: 6; }
+  .ring-fill {
+    fill: none; stroke: var(--teal); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 377; stroke-dashoffset: 377;
+    transition: stroke-dashoffset 1.5s var(--ease-out) 0.3s;
+  }
+  .ring-fill.green-r { stroke: var(--green); }
+  .ring-fill.amber-r { stroke: var(--amber); }
+  .score-num {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-family: var(--sans); font-size: 34px; font-weight: 800;
+    color: var(--text-primary); letter-spacing: -1px;
+  }
+  .score-tier {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 8px;
+  }
+  .res-title {
+    font-family: var(--serif); font-size: 28px; line-height: 1.2;
+    font-weight: 400; color: var(--text-primary); margin-bottom: 12px;
+  }
+  .res-subtitle {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    line-height: 1.7; max-width: 460px; margin: 0 auto;
+  }
+
+  /* Result cards */
+  .res-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px;
+  }
+  .res-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 18px;
+    transition: box-shadow 0.3s;
+  }
+  .res-card:hover { box-shadow: 0 4px 16px rgba(32,44,78,0.06); }
+  .res-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .res-card-label {
+    font-family: var(--sans); font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 700;
+  }
+  .badge {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; padding: 3px 8px; border-radius: 4px;
+  }
+  .badge-g { background: #eaf7f0; color: var(--green); }
+  .badge-a { background: #fef6e7; color: var(--amber); }
+  .badge-r { background: #fdeaea; color: var(--red); }
+  .res-card-val {
+    font-family: var(--sans); font-size: 18px; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 4px;
+  }
+  .res-card-detail {
+    font-family: var(--sans); font-size: 12px; color: var(--text-muted); line-height: 1.5;
+  }
+
+  /* Insights */
+  .res-insights {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px; margin-bottom: 32px;
+  }
+  .insights-head {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal-deep); font-weight: 700;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .insights-head::before { content: ''; width: 20px; height: 2px; background: var(--teal); }
+  .insight {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border-light);
+  }
+  .insight:last-child { border-bottom: none; }
+  .insight-ico { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .insight-txt {
+    font-family: var(--sans); font-size: 14px; line-height: 1.65; color: var(--text-body);
+  }
+  .insight-txt strong { color: var(--text-primary); font-weight: 600; }
+
+  /* CTA block */
+  .res-cta {
+    background: var(--navy); border-radius: 12px; padding: 36px 28px;
+    text-align: center;
+  }
+  .res-cta-label {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal); font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .res-cta-title {
+    font-family: var(--serif); font-size: 24px; line-height: 1.3;
+    font-weight: 400; color: var(--white); margin-bottom: 12px;
+  }
+  .res-cta-text {
+    font-family: var(--sans); font-size: 14px; color: rgba(255,255,255,0.4);
+    line-height: 1.7; margin-bottom: 24px;
+  }
+  .res-cta-btns {
+    display: flex; flex-direction: column; gap: 10px;
+    max-width: 320px; margin: 0 auto;
+  }
+  .cta-pri {
+    padding: 15px 28px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; border: none;
+    border-radius: 6px; cursor: pointer; transition: all 0.3s var(--ease);
+    display: block; text-align: center;
+  }
+  .cta-pri:hover { background: var(--teal-deep); color: var(--white); box-shadow: 0 4px 16px rgba(65,125,154,0.3); }
+  .cta-sec {
+    padding: 13px 28px; background: transparent; color: rgba(255,255,255,0.45);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 600;
+    border: 1.5px solid rgba(255,255,255,0.1); border-radius: 6px;
+    cursor: pointer; transition: all 0.3s var(--ease);
+    display: block; text-align: center;
+  }
+  .cta-sec:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+  .res-cta-fine {
+    font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 14px;
+  }
+
+  /* Market context strip */
+  .market-strip {
+    background: var(--navy-deep); border-radius: 10px;
+    padding: 20px 24px; margin-bottom: 32px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .market-stat { text-align: center; }
+  .market-stat-val {
+    font-family: var(--sans); font-size: 20px; font-weight: 800;
+    color: var(--teal); letter-spacing: -0.5px; margin-bottom: 4px;
+  }
+  .market-stat-label {
+    font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.35);
+    line-height: 1.4; letter-spacing: 0.5px;
+  }
+  .market-stat-source {
+    font-family: var(--sans); font-size: 9px; color: rgba(255,255,255,0.2);
+    margin-top: 2px;
+  }
+
+  @media (max-width: 520px) {
+    .hero h1 { font-size: 28px; }
+    .q-text { font-size: 26px; }
+    .res-grid { grid-template-columns: 1fr; }
+    .market-strip { grid-template-columns: 1fr; }
+    .hero-meta { gap: 16px; }
+    .progress-logo { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar">
+  <div class="progress-bar-inner">
+    <div class="progress-logo">BMONEY</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="pFill"></div>
+    </div>
+    <div class="progress-pct" id="pPct">0%</div>
+  </div>
+  <div class="step-dots" id="stepDots">
+    <div class="step-dot active" data-s="1"></div>
+    <div class="step-dot" data-s="2"></div>
+    <div class="step-dot" data-s="3"></div>
+    <div class="step-dot" data-s="4"></div>
+    <div class="step-dot" data-s="5"></div>
+    <div class="step-dot" data-s="6"></div>
+    <div class="step-dot" data-s="7"></div>
+  </div>
+</div>
+
+<section class="hero" id="heroSection">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Buyer Readiness Assessment</div>
+    <h1>Know your position <em>before the property appears.</em></h1>
+    <p class="hero-desc">Seven situational questions. A private readiness snapshot built specifically for how the Lower North Shore market operates right now.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span>&#9201;</span> 3 minutes</div>
+      <div class="hero-meta-item"><span>&#128274;</span> Private</div>
+      <div class="hero-meta-item"><span>300+</span> completed</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRE-ASSESSMENT EXPLAINER -->
+<div class="explainer" id="explainerSection">
+  <div class="explainer-inner">
+    <div class="explainer-item">
+      <div class="explainer-num">What you get — 01</div>
+      <div class="explainer-label">A readiness score</div>
+      <div class="explainer-body">A snapshot of where you sit across the key preparation areas — search stage, team alignment, criteria clarity, and suburb priority. <strong>Calibrated to how LNS buyers at your stage typically perform.</strong></div>
+    </div>
+    <div class="explainer-item">
+      <div class="explainer-num">What you get — 02</div>
+      <div class="explainer-label">Streets, not suburbs</div>
+      <div class="explainer-body">Mosman, Cremorne, Neutral Bay, Cammeray, Northbridge — each suburb has pockets that fit school catchment, ferry access, or harbour proximity. <strong>And pockets that don't.</strong> The assessment identifies which priority filter applies to your search.</div>
+    </div>
+    <div class="explainer-item">
+      <div class="explainer-num">What you get — 03</div>
+      <div class="explainer-label">Where your team sits</div>
+      <div class="explainer-body">Whether you have a broker, a financial advisor, both, or neither — the assessment shows which conversations still need to happen. <strong>Team alignment before the property appears is what separates buyers who move from buyers who miss.</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="assessment" id="assessmentArea">
+
+  <div class="screen active visible" data-screen="1">
+    <div class="q-number">Question 01 of 07</div>
+    <h2 class="q-text">Where are you in the buying process?</h2>
+    <p class="q-helper">This calibrates the assessment to your current stage.</p>
+    <div class="options" data-q="timeline">
+      <div class="opt" data-v="browsing" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Just starting to look</div>
+          <div class="opt-desc">Researching suburbs and getting a feel for the market</div>
+        </div>
+      </div>
+      <div class="opt" data-v="active" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Actively inspecting properties</div>
+          <div class="opt-desc">Attending open homes and comparing options</div>
+        </div>
+      </div>
+      <div class="opt" data-v="ready" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Ready to move</div>
+          <div class="opt-desc">Finance in place, shortlist defined, looking to move within weeks</div>
+        </div>
+      </div>
+      <div class="opt" data-v="missed" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">I've put in offers and missed out</div>
+          <div class="opt-desc">Lost at auction or moved too slowly on properties I wanted</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <div></div>
+      <button class="btn-next disabled" data-btn="1">Continue →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="2">
+    <div class="q-number">Question 02 of 07</div>
+    <h2 class="q-text">What is your total budget position?</h2>
+    <p class="q-helper">Including equity, broker pre-approval, and available capital. We don't need exact figures.</p>
+    <div class="options" data-q="budget">
+      <div class="opt" data-v="under2m" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Under $2M</div>
+          <div class="opt-desc">Apartments and select townhouses across the Lower North Shore</div>
+        </div>
+      </div>
+      <div class="opt" data-v="2to3.5m" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$2M – $3.5M</div>
+          <div class="opt-desc">Entry-level houses, premium apartments, wider suburb access</div>
+        </div>
+      </div>
+      <div class="opt" data-v="3.5to5m" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$3.5M – $5M</div>
+          <div class="opt-desc">Quality established homes across most LNS suburbs — Cammeray median sits at $3.88M</div>
+        </div>
+      </div>
+      <div class="opt" data-v="over5m" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$5M+</div>
+          <div class="opt-desc">Premium positions, trophy homes, harbour-adjacent — Mosman median $5.68M</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(1)">← Back</button>
+      <button class="btn-next disabled" data-btn="2">Continue →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="3">
+    <div class="q-number">Question 03 of 07</div>
+    <h2 class="q-text">How many Lower North Shore properties have you inspected?</h2>
+    <p class="q-helper">Open homes and private inspections in the last six months.</p>
+    <div class="options" data-q="experience">
+      <div class="opt" data-v="none" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">None yet</div>
+          <div class="opt-desc">Still researching online and from listings</div>
+        </div>
+      </div>
+      <div class="opt" data-v="few" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">1 to 5 properties</div>
+          <div class="opt-desc">Getting a sense of what is available across price points</div>
+        </div>
+      </div>
+      <div class="opt" data-v="moderate" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">6 to 15 properties</div>
+          <div class="opt-desc">Familiar with the market, refining criteria</div>
+        </div>
+      </div>
+      <div class="opt" data-v="many" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">15 or more and still searching</div>
+          <div class="opt-desc">Extensive search, the right property hasn't come together yet</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(2)">← Back</button>
+      <button class="btn-next disabled" data-btn="3">Continue →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="4">
+    <div class="q-number">Question 04 of 07</div>
+    <h2 class="q-text">How is your buying team set up?</h2>
+    <p class="q-helper">The coordination between your advisors significantly affects how quickly and clearly you can move.</p>
+    <div class="options" data-q="team">
+      <div class="opt" data-v="none" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">I am working through this independently</div>
+          <div class="opt-desc">No broker or financial advisor engaged yet</div>
+        </div>
+      </div>
+      <div class="opt" data-v="broker" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Broker engaged, no financial advisor</div>
+          <div class="opt-desc">Pre-approval in place, working from borrowing capacity</div>
+        </div>
+      </div>
+      <div class="opt" data-v="both" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Broker and financial advisor, working separately</div>
+          <div class="opt-desc">Both engaged but conversations are happening independently</div>
+        </div>
+      </div>
+      <div class="opt" data-v="aligned" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Full team aligned before property search</div>
+          <div class="opt-desc">Broker, financial advisor and buyer's agent working from a shared position</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(3)">← Back</button>
+      <button class="btn-next disabled" data-btn="4">Continue →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="5">
+    <div class="q-number">Question 05 of 07</div>
+    <h2 class="q-text">How defined is your buying criteria?</h2>
+    <p class="q-helper">Specificity determines how quickly you can move when the right property appears.</p>
+    <div class="options" data-q="clarity">
+      <div class="opt" data-v="exploring" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Still exploring what I want</div>
+          <div class="opt-desc">Open to different property types, suburbs, and configurations</div>
+        </div>
+      </div>
+      <div class="opt" data-v="general" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">General direction, flexible on the detail</div>
+          <div class="opt-desc">Know the suburb and property type, flexible on specifics</div>
+        </div>
+      </div>
+      <div class="opt" data-v="specific" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Street-level specificity</div>
+          <div class="opt-desc">Non-negotiables defined, deal-breakers clear, prepared to move fast</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(4)">← Back</button>
+      <button class="btn-next disabled" data-btn="5">Continue →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="6">
+    <div class="q-number">Question 06 of 07</div>
+    <h2 class="q-text">What is your household income range?</h2>
+    <p class="q-helper">This helps us calibrate your holding capacity relative to current LNS price points. We don't need exact figures.</p>
+    <div class="options" data-q="income">
+      <div class="opt" data-v="300to500" data-sc="1">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$300k to $500k</div>
+          <div class="opt-desc">Entry point for most LNS property types with appropriate equity position</div>
+        </div>
+      </div>
+      <div class="opt" data-v="500to750" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$500k to $750k</div>
+          <div class="opt-desc">Comfortable serviceability across mid-range LNS properties</div>
+        </div>
+      </div>
+      <div class="opt" data-v="750to1m" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$750k to $1M</div>
+          <div class="opt-desc">Strong serviceability across most LNS price points including Mosman</div>
+        </div>
+      </div>
+      <div class="opt" data-v="over1m" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">$1M+</div>
+          <div class="opt-desc">Full range including premium harbour-adjacent and trophy positions</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(5)">← Back</button>
+      <button class="btn-next disabled" data-btn="6">Continue →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="7">
+    <div class="q-number">Question 07 of 07</div>
+    <h2 class="q-text">What is your primary search priority?</h2>
+    <p class="q-helper">The single factor that matters most when identifying which streets and suburbs fit your brief.</p>
+    <div class="options" data-q="priority">
+      <div class="opt" data-v="school" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Mosman Public school catchment</div>
+          <div class="opt-desc">Streets within the catchment boundary — Mosman, Clifton Gardens, parts of Balmoral</div>
+        </div>
+      </div>
+      <div class="opt" data-v="harbour" data-sc="3">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Harbour views or water proximity</div>
+          <div class="opt-desc">Waterfront or water-glimpse positions — Mosman, Cremorne Point, Milson Road</div>
+        </div>
+      </div>
+      <div class="opt" data-v="ferry" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Walk to ferry</div>
+          <div class="opt-desc">Walking distance to Mosman, Cremorne, Neutral Bay, or Milsons Point wharf</div>
+        </div>
+      </div>
+      <div class="opt" data-v="village" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Village lifestyle and cafe strip</div>
+          <div class="opt-desc">Cremorne, Cammeray, Neutral Bay — walkable high street, community feel</div>
+        </div>
+      </div>
+      <div class="opt" data-v="heritage" data-sc="2">
+        <div class="opt-radio"><div class="opt-dot"></div></div>
+        <div class="opt-body">
+          <div class="opt-label">Heritage streetscape</div>
+          <div class="opt-desc">Federation, Arts and Crafts, Californian Bungalow character streets with tightly held stock</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn-back" onclick="go(6)">← Back</button>
+      <button class="btn-next disabled" data-btn="7">See My Results →</button>
+    </div>
+  </div>
+
+  <div class="screen" data-screen="email">
+    <div class="email-wrap">
+      <div class="email-icon">&#128274;</div>
+      <div class="q-number">Almost there</div>
+      <h2 class="q-text">Where should we send your results?</h2>
+      <p class="q-helper">Your readiness breakdown and personalised insights, delivered privately. One email with your results — nothing further without your permission.</p>
+      <div class="email-group">
+        <input type="email" class="email-input" id="emailIn" placeholder="Your email address">
+        <button class="email-btn" id="emailBtn">Send My Results</button>
+      </div>
+      <p class="email-fine">Your results only. No follow-up without your permission.</p>
+    </div>
+  </div>
+
+  <div class="results" id="resScreen">
+    <div class="res-header">
+      <div class="score-ring">
+        <svg viewBox="0 0 130 130">
+          <circle class="ring-bg" cx="65" cy="65" r="60"/>
+          <circle class="ring-fill" id="ringFill" cx="65" cy="65" r="60"/>
+        </svg>
+        <div class="score-num" id="scoreNum">—</div>
+      </div>
+      <div class="score-tier" id="scoreTier" style="color:var(--teal)">READINESS SCORE</div>
+      <h2 class="res-title" id="resTitle">Calculating...</h2>
+      <p class="res-subtitle" id="resSub"></p>
+    </div>
+
+    <div class="market-strip">
+      <div class="market-stat">
+        <div class="market-stat-val">90.2%</div>
+        <div class="market-stat-label">Auction clearance rate — highest in Sydney</div>
+        <div class="market-stat-source">MyHousingMarket, Feb 2026</div>
+      </div>
+      <div class="market-stat">
+        <div class="market-stat-val">$3.88M</div>
+        <div class="market-stat-label">Cammeray house median, up 20% in 12 months</div>
+        <div class="market-stat-source">CoreLogic, Nov 2025</div>
+      </div>
+      <div class="market-stat">
+        <div class="market-stat-val">9 in 10</div>
+        <div class="market-stat-label">BMONEY buyers purchase the first property we show them</div>
+        <div class="market-stat-source">BMONEY internal data</div>
+      </div>
+    </div>
+
+    <div class="res-grid" id="resGrid"></div>
+    <div class="res-insights">
+      <div class="insights-head">What this means for your search</div>
+      <div id="insList"></div>
+    </div>
+    <div class="res-cta">
+      <div class="res-cta-label">Your next step</div>
+      <h3 class="res-cta-title" id="ctaTitle">Get a clear read on your position</h3>
+      <p class="res-cta-text" id="ctaText">Based on your profile, a short walkthrough covers the areas that matter most at your stage — before you are in a position where the pressure makes the decision.</p>
+      <div class="res-cta-btns">
+        <a href="#" class="cta-pri" id="ctaPri">Watch the 15-Minute Walkthrough</a>
+        <a href="#" class="cta-sec">Download the LNS Buyer Guide</a>
+      </div>
+      <p class="res-cta-fine">No obligation. One conversation if you want it.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ans = {};
+const total = 7;
+
+document.querySelectorAll('.opt').forEach(card => {
+  card.addEventListener('click', function() {
+    this.closest('.options').querySelectorAll('.opt').forEach(c => c.classList.remove('selected'));
+    this.classList.add('selected');
+    ans[this.closest('.options').dataset.q] = { v: this.dataset.v, s: +this.dataset.sc };
+    const btn = this.closest('.screen').querySelector('.btn-next');
+    if (btn) { btn.classList.remove('disabled'); btn.classList.add('primary'); }
+  });
+});
+
+document.querySelectorAll('.btn-next').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (this.classList.contains('disabled')) return;
+    const n = +this.dataset.btn;
+    go(n < total ? n + 1 : 'email');
+  });
+});
+
+document.getElementById('emailBtn').addEventListener('click', () => {
+  const v = document.getElementById('emailIn').value;
+  if (v && v.includes('@')) showResults();
+});
+document.getElementById('emailIn').addEventListener('keypress', e => {
+  if (e.key === 'Enter') document.getElementById('emailBtn').click();
+});
+
+function go(num) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('visible');
+    setTimeout(() => s.classList.remove('active'), 350);
+  });
+  setTimeout(() => {
+    const t = document.querySelector(`[data-screen="${num}"]`);
+    if (t) { t.classList.add('active'); setTimeout(() => t.classList.add('visible'), 30); }
+    if (typeof num === 'number') {
+      const pct = Math.round(((num - 1) / total) * 100);
+      document.getElementById('pFill').style.width = pct + '%';
+      document.getElementById('pPct').textContent = pct + '%';
+      document.querySelectorAll('.step-dot').forEach(d => {
+        const s = +d.dataset.s;
+        d.classList.remove('active','completed');
+        if (s === num) d.classList.add('active');
+        else if (s < num) d.classList.add('completed');
+      });
+    } else {
+      document.getElementById('pFill').style.width = '100%';
+      document.getElementById('pPct').textContent = '100%';
+      document.querySelectorAll('.step-dot').forEach(d => d.classList.add('completed'));
+    }
+    const hero = document.getElementById('heroSection');
+    const explainer = document.getElementById('explainerSection');
+    if (num !== 1 && num !== undefined) {
+      hero.style.display = 'none';
+      if (explainer) explainer.style.display = 'none';
+    } else {
+      hero.style.display = '';
+      if (explainer) explainer.style.display = '';
+    }
+  }, 370);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('visible','active'); });
+  document.getElementById('heroSection').style.display = 'none';
+  const explainer = document.getElementById('explainerSection');
+  if (explainer) explainer.style.display = 'none';
+
+  let sc = 0, mx = 0;
+  Object.values(ans).forEach(a => { sc += a.s; mx += 3; });
+  const pct = Math.round((sc / mx) * 100);
+
+  let tier, col, rc, title, sub, ctaTitle, ctaText, ctaPri;
+
+  if (pct >= 75) {
+    tier = 'STRONG'; col = 'var(--green)'; rc = 'green-r';
+    title = 'Your preparation is ahead of most buyers at this stage';
+    sub = 'Your readiness indicators are solid across the key areas. The focus now is execution — moving with confidence when the right property appears, and having the right team aligned before it does.';
+    ctaTitle = 'See how your position applies to current LNS inventory';
+    ctaText = 'A 15-minute walkthrough covers what is available at your price point right now and how your preparation maps to the current market.';
+    ctaPri = 'Watch the 15-Minute Walkthrough';
+  } else if (pct >= 50) {
+    tier = 'DEVELOPING'; col = 'var(--amber)'; rc = 'amber-r';
+    title = 'Good foundation with specific areas to sharpen';
+    sub = 'Your fundamentals are in place. A focused effort on the gaps below would materially improve your speed and confidence when the right property comes up.';
+    ctaTitle = 'Understand what preparation looks like at your stage';
+    ctaText = 'The walkthrough covers the areas most relevant to buyers in your position — without the parts you have already covered.';
+    ctaPri = 'Watch the 15-Minute Walkthrough';
+  } else {
+    tier = 'BUILDING'; col = 'var(--teal)'; rc = '';
+    title = 'You are at an early stage — the preparation happens now';
+    sub = 'The buyers who move well on the Lower North Shore do the work before the property appears. Starting the preparation now puts you ahead of buyers who begin when they find something they want.';
+    ctaTitle = 'Start with the LNS Buyer Guide';
+    ctaText = 'The guide covers what to understand before your first inspection — the market dynamics, the qualification process, and how to build the right team around your search.';
+    ctaPri = 'Download the LNS Buyer Guide';
+  }
+
+  document.getElementById('ctaTitle').textContent = ctaTitle;
+  document.getElementById('ctaText').textContent = ctaText;
+  document.getElementById('ctaPri').textContent = ctaPri;
+
+  const res = document.getElementById('resScreen');
+  res.classList.add('active');
+
+  setTimeout(() => {
+    const rf = document.getElementById('ringFill');
+    rf.className = 'ring-fill ' + rc;
+    rf.style.strokeDashoffset = 377 - (pct / 100) * 377;
+    document.getElementById('scoreNum').textContent = pct;
+    document.getElementById('scoreTier').style.color = col;
+    document.getElementById('scoreTier').textContent = tier + ' READINESS';
+    document.getElementById('resTitle').textContent = title;
+    document.getElementById('resSub').textContent = sub;
+
+    const teamLabel = ans.team?.v === 'aligned' ? 'Fully aligned' : ans.team?.v === 'both' ? 'Partially aligned' : ans.team?.v === 'broker' ? 'Broker only' : 'Independent';
+    const teamBadge = ans.team?.s >= 3 ? 'g' : ans.team?.s >= 2 ? 'a' : 'r';
+    const teamStatus = ans.team?.s >= 3 ? 'ALIGNED' : ans.team?.s >= 2 ? 'DEVELOPING' : 'EARLY';
+    const priorityLabel = ans.priority?.v === 'school' ? 'School catchment' : ans.priority?.v === 'harbour' ? 'Harbour proximity' : ans.priority?.v === 'ferry' ? 'Ferry access' : ans.priority?.v === 'village' ? 'Village lifestyle' : 'Heritage streetscape';
+
+    const cards = [
+      {
+        l: 'SEARCH STAGE',
+        v: ans.timeline?.v === 'ready' ? 'Ready to move' : ans.timeline?.v === 'active' ? 'Actively searching' : ans.timeline?.v === 'missed' ? 'Re-entering' : 'Early stage',
+        b: ans.timeline?.s >= 3 ? 'g' : ans.timeline?.s >= 2 ? 'a' : 'a',
+        bt: ans.timeline?.s >= 3 ? 'ACTIVE' : ans.timeline?.s >= 2 ? 'IN PROGRESS' : 'EARLY',
+        d: 'Your current stage relative to how this market moves'
+      },
+      {
+        l: 'BUYING TEAM',
+        v: teamLabel,
+        b: teamBadge,
+        bt: teamStatus,
+        d: 'Team alignment determines how quickly and cleanly you can act'
+      },
+      {
+        l: 'PRIMARY PRIORITY',
+        v: priorityLabel,
+        b: 'a',
+        bt: 'NOTED',
+        d: 'The filter that narrows your street and suburb shortlist most directly'
+      },
+      {
+        l: 'CRITERIA CLARITY',
+        v: ans.clarity?.v === 'specific' ? 'Street-level' : ans.clarity?.v === 'general' ? 'General' : 'Exploring',
+        b: ans.clarity?.s >= 3 ? 'g' : ans.clarity?.s >= 2 ? 'a' : 'r',
+        bt: ans.clarity?.s >= 3 ? 'DEFINED' : ans.clarity?.s >= 2 ? 'REFINING' : 'BROAD',
+        d: 'Specificity in criteria reduces hesitation when the right property appears'
+      }
+    ];
+
+    document.getElementById('resGrid').innerHTML = cards.map(c => `
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-label">${c.l}</div>
+          <div class="badge badge-${c.b}">${c.bt}</div>
+        </div>
+        <div class="res-card-val">${c.v}</div>
+        <div class="res-card-detail">${c.d}</div>
+      </div>`).join('');
+
+    const ins = [];
+
+    if (ans.priority?.v === 'school') {
+      ins.push({ i: '🏫', t: '<strong>Mosman Public catchment properties are among the most tightly held on the Lower North Shore.</strong> The catchment boundary determines which streets qualify and the price premium for being inside it is significant. Many of the best positions transact off-market precisely because owners know the depth of demand.' });
+    }
+    if (ans.priority?.v === 'harbour') {
+      ins.push({ i: '⚓', t: '<strong>Harbour proximity is the single most consistent driver of price premium and capital growth on the Lower North Shore.</strong> Milson Road in Cremorne Point, Parriwi Road and Hopetoun Avenue in Mosman, and Shellcove Road in Neutral Bay represent the tightest held stock in the market. Many of these positions do not reach public campaigns.' });
+    }
+    if (ans.priority?.v === 'ferry') {
+      ins.push({ i: '⛴️', t: '<strong>Walk-to-ferry positions cluster around Mosman, Cremorne Point, Neutral Bay, and Milsons Point wharves.</strong> For CBD-based buyers this is often the most practical filter. Streets within genuine walking distance of a wharf carry a consistent premium over those requiring a connecting bus.' });
+    }
+    if (ans.priority?.v === 'village') {
+      ins.push({ i: '☕', t: '<strong>Cremorne, Cammeray, and Neutral Bay offer the strongest village lifestyle on the Lower North Shore.</strong> Cammeray house median is $3.88M, up 20% in the past twelve months, making it one of the fastest moving suburbs in the corridor. Source: CoreLogic, Nov 2025.' });
+    }
+    if (ans.priority?.v === 'heritage') {
+      ins.push({ i: '🏛️', t: '<strong>Heritage streetscape properties on the Lower North Shore are tightly held by design.</strong> Federation and Arts and Crafts character streets in Mosman, Cremorne, and Neutral Bay see long average hold periods. When they do transact, stock depth is thin and comparable sales are limited, which makes independent pricing difficult.' });
+    }
+
+    if (ans.team?.v === 'none' || ans.team?.v === 'broker') {
+      ins.push({ i: '🤝', t: '<strong>Building the right team before you search changes the quality of every decision.</strong> When your broker understands your comfort threshold and your buyer\'s agent is aligned with both, the preparation happens before the pressure does.' });
+    }
+    if (ans.team?.v === 'both') {
+      ins.push({ i: '🔗', t: '<strong>Having the team in place is the start.</strong> The buyers who move well on the Lower North Shore have their broker and financial advisor working from a shared position. Connecting those conversations before a property appears is where the gap closes.' });
+    }
+
+    if (ans.income?.v === '300to500') {
+      ins.push({ i: '📊', t: '<strong>At this income range, holding threshold clarity becomes particularly important.</strong> A 1.5% rate movement on a $4M to $5M property adds thousands to monthly repayments. Knowing your real comfort threshold before you commit is the preparation that prevents hesitation under pressure.' });
+    }
+
+    if (ans.experience?.v === 'many') {
+      ins.push({ i: '🔄', t: '<strong>An extended search on the Lower North Shore usually signals a strategy or criteria issue, not an availability problem.</strong> The buyers we work with who have been searching the longest typically benefit most from recalibrating their approach before continuing to inspect.' });
+    }
+
+    if (ans.clarity?.s < 3) {
+      ins.push({ i: '🎯', t: '<strong>Street-level criteria is the standard required to move at this market\'s pace.</strong> The Lower North Shore clearance rate is 90.2%, the highest of any Sydney region. Properties worth buying move quickly. Suburb-level clarity is not enough to act decisively when it matters. Source: MyHousingMarket, Feb 2026.' });
+    }
+
+    ins.push({ i: '📈', t: '<strong>Nine in ten buyers we work with purchase the first property we show them.</strong> That is the qualification process working before the property appears. The preparation that happens now is what makes the decision clean when the right property comes up. Source: BMONEY internal data.' });
+
+    document.getElementById('insList').innerHTML = ins.map(i => `
+      <div class="insight">
+        <div class="insight-ico">${i.i}</div>
+        <div class="insight-txt">${i.t}</div>
+      </div>`).join('');
+
+  }, 100);
+}
+</script>
+</body>
+</html>
