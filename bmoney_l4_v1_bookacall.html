@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Discovery Call | BMONEY Property</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#202c4e; --navy-deep:#131c35; --navy-mid:#253358; --navy-light:#2e3e68;
+    --teal:#5fc3db; --teal-deep:#3a8fa8;
+    --teal-glow:rgba(95,195,219,0.12); --teal-subtle:rgba(95,195,219,0.05);
+    --white:#ffffff; --off-white:#f4f6fa;
+    --text-primary:#181f34; --text-body:#3a4558; --text-muted:#6b7a8e; --text-light:#9aa3b0;
+    --border:#e0e6ea; --border-light:#eef1f4;
+    --green:#2a7f58; --green-bg:#e8f5ef;
+    --amber:#c8880a; --amber-bg:#fdf3e0;
+    --red:#c0392b;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Raleway',Helvetica,sans-serif;
+    --mono:'JetBrains Mono',monospace;
+    --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out:cubic-bezier(0.16,1,0.3,1);
+    --shadow-md:0 8px 32px rgba(19,28,53,0.11);
+    --shadow-lg:0 20px 64px rgba(19,28,53,0.16);
+    --shadow-xl:0 32px 80px rgba(19,28,53,0.22);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--sans);color:var(--text-body);background:var(--navy-deep);line-height:1.7;overflow-x:hidden}
+
+  /* ── NAV ── */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(19,28,53,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.05)}
+  .nav-logo{font-family:var(--sans);font-size:10px;letter-spacing:3px;font-weight:800;color:var(--white);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .nav-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2.5s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
+  .nav-right{font-family:var(--mono);font-size:10px;font-weight:500;color:rgba(255,255,255,0.2);letter-spacing:1px;text-transform:uppercase}
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;display:grid;grid-template-columns:1fr 480px;gap:0;position:relative;overflow:hidden;background:var(--navy-deep)}
+  .hero-bg{position:absolute;inset:0;pointer-events:none}
+  .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 0% 30%,rgba(95,195,219,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 100% 80%,rgba(58,143,168,0.04) 0%,transparent 55%)}
+  .hero-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(95,195,219,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(95,195,219,0.02) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 80% at 30% 50%,black 0%,transparent 100%)}
+
+  .hero-left{position:relative;z-index:1;padding:120px 64px 80px 48px;display:flex;flex-direction:column;justify-content:center}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:2px;color:var(--teal);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 0.6s var(--ease-out) 0.2s forwards}
+  .hero-eyebrow::before{content:'';width:20px;height:1px;background:rgba(95,195,219,0.4)}
+  .hero h1{font-family:var(--serif);font-size:clamp(34px,4.5vw,56px);font-weight:300;line-height:1.08;color:var(--white);margin-bottom:12px;opacity:0;animation:fadeUp 0.7s var(--ease-out) 0.35s forwards}
+  .hero h1 em{font-style:italic;color:var(--teal);font-weight:400}
+  .hero-sub{font-family:var(--serif);font-size:clamp(15px,1.8vw,19px);font-style:italic;font-weight:300;color:rgba(255,255,255,0.28);margin-bottom:32px;opacity:0;animation:fadeUp 0.6s var(--ease-out) 0.5s forwards}
+  .hero-desc{font-family:var(--sans);font-size:14px;line-height:1.8;color:rgba(255,255,255,0.38);max-width:440px;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s var(--ease-out) 0.65s forwards}
+  .hero-desc strong{color:rgba(255,255,255,0.7)}
+
+  /* Nick card */
+  .nick-card{display:flex;align-items:center;gap:18px;padding:20px 22px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;max-width:400px;opacity:0;animation:fadeUp 0.6s var(--ease-out) 0.8s forwards}
+  .nick-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));border:1px solid rgba(95,195,219,0.2);display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:16px;font-weight:800;color:var(--teal);flex-shrink:0}
+  .nick-name{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px}
+  .nick-title{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px}
+  .nick-note{font-family:var(--sans);font-size:12px;color:rgba(255,255,255,0.35);line-height:1.5}
+
+  /* What to expect strip */
+  .expect-strip{display:flex;flex-direction:column;gap:12px;margin-top:36px;opacity:0;animation:fadeUp 0.6s var(--ease-out) 0.95s forwards}
+  .expect-label{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(95,195,219,0.4);margin-bottom:4px}
+  .expect-item{display:flex;align-items:flex-start;gap:10px}
+  .expect-dot{width:5px;height:5px;border-radius:50%;background:rgba(95,195,219,0.4);flex-shrink:0;margin-top:8px}
+  .expect-text{font-family:var(--sans);font-size:13px;color:rgba(255,255,255,0.35);line-height:1.5}
+  .expect-text strong{color:rgba(255,255,255,0.6)}
+
+  /* NOT list */
+  .not-strip{display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;opacity:0;animation:fadeUp 0.6s var(--ease-out) 1.1s forwards}
+  .not-tag{font-family:var(--sans);font-size:11px;font-weight:600;color:rgba(255,255,255,0.2);display:flex;align-items:center;gap:6px}
+  .not-tag::before{content:'&#10005;';font-size:9px;color:rgba(255,255,255,0.12)}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── FORM PANEL ── */
+  .form-panel{background:var(--white);position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh;padding-top:56px}
+  .form-panel-inner{padding:48px 40px;flex:1;display:flex;flex-direction:column}
+  .form-header{margin-bottom:32px}
+  .form-eyebrow{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal-deep);margin-bottom:10px}
+  .form-title{font-family:var(--serif);font-size:26px;font-weight:400;line-height:1.2;color:var(--text-primary)}
+  .form-title em{font-style:italic;color:var(--teal)}
+  .form-sub{font-family:var(--sans);font-size:13px;color:var(--text-muted);margin-top:6px;line-height:1.6}
+
+  /* Progress */
+  .form-progress{display:flex;gap:6px;margin-bottom:32px}
+  .fp-step{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background 0.4s}
+  .fp-step.active{background:var(--teal)}
+  .fp-step.done{background:rgba(95,195,219,0.4)}
+
+  /* Step panels */
+  .step-panel{display:none;flex-direction:column;gap:0;flex:1}
+  .step-panel.active{display:flex}
+
+  /* Form fields */
+  .field-group{margin-bottom:18px}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  .field-label{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px}
+  .field-label .req{color:var(--teal)}
+  .field-input,.field-select,.field-textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--sans);font-size:14px;color:var(--text-primary);background:var(--white);outline:none;transition:border-color 0.25s,box-shadow 0.25s;appearance:none}
+  .field-input::placeholder,.field-textarea::placeholder{color:var(--text-light)}
+  .field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(95,195,219,0.1)}
+  .field-input.error,.field-select.error,.field-textarea.error{border-color:var(--red)}
+  .field-textarea{resize:vertical;min-height:80px;line-height:1.6}
+  .field-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa3b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
+
+  /* Choice chips */
+  .choice-chips{display:flex;flex-direction:column;gap:8px}
+  .chip{border:1.5px solid var(--border);border-radius:8px;padding:13px 16px;cursor:pointer;transition:all 0.2s var(--ease);display:flex;align-items:center;gap:12px;user-select:none}
+  .chip:hover{border-color:rgba(95,195,219,0.4);background:var(--teal-subtle)}
+  .chip.selected{border-color:var(--teal);background:var(--teal-glow);box-shadow:0 0 0 1px var(--teal)}
+  .chip-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .chip.selected .chip-radio{border-color:var(--teal);background:var(--teal)}
+  .chip.selected .chip-radio::after{content:'';width:5px;height:5px;border-radius:50%;background:white}
+  .chip-label{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--text-primary)}
+  .chip-desc{font-family:var(--mono);font-size:10px;color:var(--text-light);letter-spacing:0.3px;text-transform:uppercase;margin-left:auto}
+  .chip.selected .chip-desc{color:var(--teal-deep)}
+
+  /* Nav */
+  .step-nav{display:flex;justify-content:space-between;align-items:center;padding-top:24px;margin-top:auto;border-top:1px solid var(--border-light)}
+  .btn-prev{font-family:var(--sans);font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;background:none;border:none;cursor:pointer;transition:color 0.2s}
+  .btn-prev:hover{color:var(--text-primary)}
+  .btn-prev:disabled{opacity:0.3;cursor:default}
+  .btn-proceed{display:flex;align-items:center;gap:8px;padding:13px 28px;background:var(--navy);color:var(--white);font-family:var(--sans);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s var(--ease)}
+  .btn-proceed:hover{background:var(--teal);color:var(--navy)}
+  .btn-proceed:disabled{opacity:0.35;cursor:default;pointer-events:none}
+  .btn-proceed svg{width:13px;height:13px}
+
+  /* Calendly placeholder */
+  .calendly-wrap{background:var(--off-white);border:1px solid var(--border);border-radius:12px;padding:36px 28px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+  .calendly-icon{width:48px;height:48px;border-radius:50%;background:var(--teal-glow);border:1px solid rgba(95,195,219,0.2);display:flex;align-items:center;justify-content:center;font-size:20px}
+  .calendly-title{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--text-primary)}
+  .calendly-sub{font-family:var(--sans);font-size:13px;color:var(--text-muted);line-height:1.6;max-width:280px}
+  .calendly-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--teal);color:var(--navy);font-family:var(--sans);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s;text-decoration:none}
+  .calendly-btn:hover{background:var(--navy);color:var(--teal)}
+  .calendly-note{font-family:var(--mono);font-size:10px;color:var(--text-light);letter-spacing:0.5px;text-transform:uppercase}
+
+  /* Confirmation screen */
+  .confirm-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;padding:20px 0;gap:16px}
+  .confirm-icon{width:56px;height:56px;border-radius:50%;background:var(--green-bg);border:1px solid rgba(42,127,88,0.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green)}
+  .confirm-title{font-family:var(--serif);font-size:24px;font-weight:400;color:var(--text-primary);line-height:1.2}
+  .confirm-title em{font-style:italic;color:var(--green)}
+  .confirm-body{font-family:var(--sans);font-size:13px;color:var(--text-muted);line-height:1.75;max-width:300px}
+  .confirm-body strong{color:var(--text-primary)}
+  .confirm-meta{display:flex;flex-direction:column;gap:6px;background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:16px 20px;width:100%;text-align:left}
+  .confirm-row{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--sans);font-size:12px}
+  .confirm-row-label{color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.3px;font-size:10px}
+  .confirm-row-val{color:var(--text-primary);font-weight:600}
+
+  /* Testimonial */
+  .testimonial-bar{background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.05);padding:24px 40px}
+  .testimonial-quote{font-family:var(--serif);font-size:15px;font-style:italic;color:rgba(255,255,255,0.3);line-height:1.65;margin-bottom:8px}
+  .testimonial-attr{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:1px}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;min-height:auto}
+    .hero-left{padding:100px 28px 48px}
+    .form-panel{min-height:auto}
+    .form-panel-inner{padding:36px 24px}
+    .field-row{grid-template-columns:1fr}
+    .testimonial-bar{padding:20px 24px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo"><div class="nav-dot"></div>BMONEY Property</div>
+  <div class="nav-right">// Discovery_Call</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- LEFT: context -->
+  <div class="hero-left">
+    <div class="hero-eyebrow">// Final step</div>
+    <h1>You've done<br>the work.<br><em>This is next.</em></h1>
+    <p class="hero-sub">15 minutes. No obligation. Just clarity.</p>
+    <p class="hero-desc">
+      You've seen how BMONEY evaluates a property, assessed your own position, and identified the gaps worth resolving.
+      This call covers your specific brief — and whether working together is the right move.
+      <strong>Nick will have reviewed your details before the call starts.</strong>
+    </p>
+
+    <div class="nick-card">
+      <div class="nick-avatar">N</div>
+      <div>
+        <div class="nick-name">Nick Celenk</div>
+        <div class="nick-title">Principal · BMONEY Property</div>
+        <div class="nick-note">Active across VIC, NSW &amp; QLD. Reviews every brief personally before each call.</div>
+      </div>
+    </div>
+
+    <div class="expect-strip">
+      <div class="expect-label">// What the 15 minutes covers</div>
+      <div class="expect-item"><div class="expect-dot"></div><div class="expect-text"><strong>Your brief</strong> — budget, state, hold horizon, finance position</div></div>
+      <div class="expect-item"><div class="expect-dot"></div><div class="expect-text"><strong>Your primary concern</strong> — the specific question you want answered</div></div>
+      <div class="expect-item"><div class="expect-dot"></div><div class="expect-text"><strong>Current market signals</strong> — where BMONEY is finding the strongest data right now</div></div>
+      <div class="expect-item"><div class="expect-dot"></div><div class="expect-text"><strong>Whether there's a genuine fit</strong> — no obligation either way</div></div>
+    </div>
+
+    <div class="not-strip">
+      <div class="not-tag">Not a property pitch</div>
+      <div class="not-tag">Not a high-pressure close</div>
+      <div class="not-tag">Not a commitment</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: form panel -->
+  <div class="form-panel">
+    <div class="form-panel-inner">
+
+      <div class="form-header">
+        <div class="form-eyebrow">// Your details &amp; availability</div>
+        <div class="form-title">Tell Nick <em>what to prepare for.</em></div>
+        <div class="form-sub">Two quick steps. Your answers let Nick review your position before the call starts.</div>
+      </div>
+
+      <!-- Progress dots -->
+      <div class="form-progress">
+        <div class="fp-step active" id="fp1"></div>
+        <div class="fp-step" id="fp2"></div>
+        <div class="fp-step" id="fp3"></div>
+      </div>
+
+      <!-- STEP 1: Personal details -->
+      <div class="step-panel active" id="step1">
+        <div class="field-row">
+          <div>
+            <label class="field-label">First name <span class="req">*</span></label>
+            <input type="text" class="field-input" id="fName" placeholder="James" autocomplete="given-name">
+          </div>
+          <div>
+            <label class="field-label">Last name <span class="req">*</span></label>
+            <input type="text" class="field-input" id="fLast" placeholder="Morrison" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email address <span class="req">*</span></label>
+          <input type="email" class="field-input" id="fEmail" placeholder="james@email.com" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Mobile number <span class="req">*</span></label>
+          <input type="tel" class="field-input" id="fPhone" placeholder="0400 000 000" autocomplete="tel">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Purchase budget</label>
+          <select class="field-select" id="fBudget">
+            <option value="">Select your range</option>
+            <option value="sub600">Under $600K</option>
+            <option value="600to900">$600K – $900K</option>
+            <option value="900to1_2">$900K – $1.2M</option>
+            <option value="over1_2">$1.2M+</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Target state</label>
+          <select class="field-select" id="fState">
+            <option value="">Select or leave open</option>
+            <option value="vic">Victoria</option>
+            <option value="nsw">New South Wales</option>
+            <option value="qld">Queensland</option>
+            <option value="open">Open — wherever the data is strongest</option>
+          </select>
+        </div>
+        <div class="step-nav">
+          <button class="btn-prev" id="btn1Prev" disabled>&#8592; Back</button>
+          <button class="btn-proceed" id="btn1Next">
+            Continue
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Pre-call context -->
+      <div class="step-panel" id="step2">
+        <div class="field-group">
+          <label class="field-label">Finance position <span class="req">*</span></label>
+          <div class="choice-chips" id="financeChips">
+            <div class="chip" data-val="approved"><div class="chip-radio"></div><span class="chip-label">Pre-approval confirmed</span><span class="chip-desc">Ready to move</span></div>
+            <div class="chip" data-val="inprogress"><div class="chip-radio"></div><span class="chip-label">Pre-approval in progress</span><span class="chip-desc">Working through it</span></div>
+            <div class="chip" data-val="notstarted"><div class="chip-radio"></div><span class="chip-label">Not started yet</span><span class="chip-desc">Haven't spoken to broker</span></div>
+            <div class="chip" data-val="cash"><div class="chip-radio"></div><span class="chip-label">Cash buyer</span><span class="chip-desc">No finance needed</span></div>
+          </div>
+        </div>
+        <div class="field-group" style="margin-top:4px">
+          <label class="field-label">Timeline to act</label>
+          <div class="choice-chips" id="timelineChips">
+            <div class="chip" data-val="0-3"><div class="chip-radio"></div><span class="chip-label">0–3 months</span><span class="chip-desc">Actively looking</span></div>
+            <div class="chip" data-val="3-6"><div class="chip-radio"></div><span class="chip-label">3–6 months</span><span class="chip-desc">Getting ready</span></div>
+            <div class="chip" data-val="6-12"><div class="chip-radio"></div><span class="chip-label">6–12 months</span><span class="chip-desc">Planning ahead</span></div>
+            <div class="chip" data-val="unsure"><div class="chip-radio"></div><span class="chip-label">Not sure yet</span><span class="chip-desc">Exploring options</span></div>
+          </div>
+        </div>
+        <div class="field-group" style="margin-top:4px">
+          <label class="field-label">The one question you most want answered on this call</label>
+          <textarea class="field-textarea" id="fQuestion" placeholder="e.g. How do you identify which pocket within an LGA actually has the strongest data right now?"></textarea>
+        </div>
+        <div class="step-nav">
+          <button class="btn-prev" id="btn2Prev">&#8592; Back</button>
+          <button class="btn-proceed" id="btn2Next">
+            Choose a time
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Calendar -->
+      <div class="step-panel" id="step3">
+        <div class="calendly-wrap">
+          <div class="calendly-icon">&#128197;</div>
+          <div class="calendly-title">Select your time with Nick</div>
+          <div class="calendly-sub">15 minutes. Replace this block with your Calendly or Cal.com embed — pass the form data as prefill parameters.</div>
+          <!-- 
+            CALENDLY EMBED:
+            Replace this block with:
+            <div class="calendly-inline-widget" 
+              data-url="https://calendly.com/YOUR_LINK?name=FIRSTNAME&email=EMAIL&a1=BUDGET"
+              style="min-width:320px;height:630px">
+            </div>
+            <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          -->
+          <a href="https://calendly.com" target="_blank" class="calendly-btn" id="calendlyBtn">
+            Open calendar
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+          <div class="calendly-note">15 min &middot; Nick reviews your brief first &middot; No obligation</div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-prev" id="btn3Prev">&#8592; Back</button>
+          <button class="btn-proceed" id="btn3Confirm">
+            Confirm booking
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CONFIRMATION -->
+      <div class="step-panel" id="stepConfirm">
+        <div class="confirm-wrap">
+          <div class="confirm-icon">&#10003;</div>
+          <div class="confirm-title">Booked.<br><em>Nick will be ready.</em></div>
+          <p class="confirm-body">Your details have been sent. Nick reviews every brief before the call — expect a confirmation to your inbox shortly.</p>
+          <div class="confirm-meta" id="confirmMeta"></div>
+          <p class="confirm-body" style="font-size:12px;color:var(--text-light)">If you need to reschedule, reply to the confirmation email directly.</p>
+        </div>
+      </div>
+
+    </div><!-- form-panel-inner -->
+
+    <div class="testimonial-bar">
+      <p class="testimonial-quote">"The call was 15 minutes. Nick had already looked at my brief. We covered my actual questions — not a script. Bought in Maitland 6 weeks later."</p>
+      <div class="testimonial-attr">David M. &mdash; Investment purchase, Maitland LGA &middot; $685K</div>
+    </div>
+  </div><!-- form-panel -->
+
+</div><!-- hero grid -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── state ── */
+  var formData = { finance: null, timeline: null };
+  var currentStep = 1;
+
+  /* ── chip selection ── */
+  function initChips(containerId, stateKey) {
+    var chips = document.querySelectorAll('#' + containerId + ' .chip');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.classList.remove('selected'); });
+        chip.classList.add('selected');
+        formData[stateKey] = chip.getAttribute('data-val');
+      });
+    });
+  }
+  initChips('financeChips', 'finance');
+  initChips('timelineChips', 'timeline');
+
+  /* ── progress ── */
+  function setProgress(step) {
+    for (var i = 1; i <= 3; i++) {
+      var el = document.getElementById('fp' + i);
+      el.className = 'fp-step';
+      if (i < step)  el.classList.add('done');
+      if (i === step) el.classList.add('active');
+    }
+  }
+
+  /* ── show step ── */
+  function showStep(n) {
+    ['step1','step2','step3','stepConfirm'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) { el.style.display = 'none'; el.className = 'step-panel'; }
+    });
+    var target = n === 'confirm' ? document.getElementById('stepConfirm') : document.getElementById('step' + n);
+    if (target) { target.style.display = 'flex'; target.className = 'step-panel active'; }
+    if (n !== 'confirm') setProgress(n);
+    document.getElementById('tool') && document.getElementById('tool').scrollIntoView({behavior:'smooth'});
+    window.scrollTo({top: document.querySelector('.form-panel').offsetTop - 56, behavior:'smooth'});
+  }
+
+  /* ── validation helpers ── */
+  function required(id) {
+    var el = document.getElementById(id);
+    var ok = el && el.value.trim() !== '';
+    if (el) el.classList.toggle('error', !ok);
+    return ok;
+  }
+  function validEmail(id) {
+    var el = document.getElementById(id);
+    var ok = el && el.value.indexOf('@') > 0;
+    if (el) el.classList.toggle('error', !ok);
+    return ok;
+  }
+
+  /* ── step 1 nav ── */
+  document.getElementById('btn1Next').addEventListener('click', function () {
+    var ok = required('fName') & required('fLast') & validEmail('fEmail') & required('fPhone');
+    if (!ok) return;
+    currentStep = 2;
+    showStep(2);
+  });
+
+  /* ── step 2 nav ── */
+  document.getElementById('btn2Prev').addEventListener('click', function () { currentStep = 1; showStep(1); });
+  document.getElementById('btn2Next').addEventListener('click', function () {
+    if (!formData.finance) {
+      var chips = document.querySelectorAll('#financeChips .chip');
+      chips.forEach(function(c){ c.style.outline = '1.5px solid ' + (formData.finance ? 'transparent' : '#c0392b'); });
+      return;
+    }
+    // Update calendly link with prefill data
+    var name  = (document.getElementById('fName').value + ' ' + document.getElementById('fLast').value).trim();
+    var email = document.getElementById('fEmail').value.trim();
+    var btn   = document.getElementById('calendlyBtn');
+    btn.href  = 'https://calendly.com?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email);
+    currentStep = 3;
+    showStep(3);
+  });
+
+  /* ── step 3 nav ── */
+  document.getElementById('btn3Prev').addEventListener('click', function () { currentStep = 2; showStep(2); });
+  document.getElementById('btn3Confirm').addEventListener('click', function () {
+    // Build confirmation summary
+    var name     = document.getElementById('fName').value.trim() + ' ' + document.getElementById('fLast').value.trim();
+    var email    = document.getElementById('fEmail').value.trim();
+    var budget   = document.getElementById('fBudget');
+    var budgetTxt= budget.options[budget.selectedIndex] ? budget.options[budget.selectedIndex].text : '—';
+    var state    = document.getElementById('fState');
+    var stateTxt = state.options[state.selectedIndex] ? state.options[state.selectedIndex].text : '—';
+    var financeLabels = {approved:'Pre-approval confirmed', inprogress:'In progress', notstarted:'Not started', cash:'Cash buyer'};
+    var timeLabels    = {'0-3':'0–3 months','3-6':'3–6 months','6-12':'6–12 months', unsure:'Not sure yet'};
+
+    var meta = document.getElementById('confirmMeta');
+    meta.innerHTML =
+      row('Name',     name) +
+      row('Email',    email) +
+      row('Budget',   budgetTxt) +
+      row('State',    stateTxt) +
+      row('Finance',  financeLabels[formData.finance] || '—') +
+      row('Timeline', timeLabels[formData.timeline]   || '—');
+
+    // In production: POST all formData + answers to your CRM here
+    showStep('confirm');
+    setProgress(3); // keep progress filled
+  });
+
+  function row(label, val) {
+    return '<div class="confirm-row"><span class="confirm-row-label">' + label + '</span><span class="confirm-row-val">' + val + '</span></div>';
+  }
+
+  /* ── enter key on text inputs ── */
+  document.querySelectorAll('.field-input').forEach(function (inp) {
+    inp.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      if (currentStep === 1) document.getElementById('btn1Next').click();
+    });
+  });
+
+});
+</script>
+</body>
+</html>
