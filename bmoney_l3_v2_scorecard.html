@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Readiness Assessment | BMONEY Property</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #202c4e;
+    --navy-deep: #131c35;
+    --navy-mid: #253358;
+    --navy-light: #2e3e68;
+    --teal: #5fc3db;
+    --teal-deep: #3a8fa8;
+    --teal-glow: rgba(95,195,219,0.12);
+    --teal-subtle: rgba(95,195,219,0.05);
+    --white: #ffffff;
+    --off-white: #f4f6fa;
+    --text-primary: #181f34;
+    --text-body: #3a4558;
+    --text-muted: #6b7a8e;
+    --text-light: #9aa3b0;
+    --border: #e0e6ea;
+    --border-light: #eef1f4;
+    --green: #2a7f58;
+    --green-bg: #e8f5ef;
+    --amber: #c8880a;
+    --amber-bg: #fdf3e0;
+    --red: #c0392b;
+    --red-bg: #fdecea;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', Helvetica, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
+    --shadow-sm: 0 2px 14px rgba(19,28,53,0.07);
+    --shadow-md: 0 8px 32px rgba(19,28,53,0.11);
+    --shadow-lg: 0 20px 64px rgba(19,28,53,0.16);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--sans); color: var(--text-body); background: var(--navy-deep); line-height: 1.7; overflow-x: hidden; }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 56px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(19,28,53,0.95); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-logo { font-family: var(--sans); font-size: 10px; letter-spacing: 3px; font-weight: 800; color: var(--white); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+  .nav-right { font-family: var(--mono); font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.2); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 100px 24px 80px;
+    background: var(--navy-deep);
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .hero-bg::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(95,195,219,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 80%, rgba(58,143,168,0.04) 0%, transparent 55%);
+  }
+  .hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(95,195,219,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,195,219,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 0%, transparent 100%);
+  }
+  .hero-inner {
+    position: relative; z-index: 1;
+    max-width: 820px; margin: 0 auto; width: 100%;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    color: var(--teal); text-transform: uppercase; margin-bottom: 22px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.2s forwards;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 20px; height: 1px; background: rgba(95,195,219,0.3); }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(32px, 6vw, 62px);
+    font-weight: 300; line-height: 1.1; color: var(--white); margin-bottom: 10px;
+    opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.35s forwards;
+  }
+  .hero h1 em { font-style: italic; color: var(--teal); font-weight: 400; }
+  .hero-sub {
+    font-family: var(--serif); font-size: clamp(15px, 2vw, 20px); font-style: italic;
+    font-weight: 300; color: rgba(255,255,255,0.3); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.5s forwards;
+  }
+  .hero-desc {
+    font-family: var(--sans); font-size: 15px; line-height: 1.8;
+    color: rgba(255,255,255,0.4); max-width: 540px; margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.65s forwards;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px;
+    background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase;
+    border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s var(--ease); text-decoration: none;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.8s forwards;
+  }
+  .hero-cta:hover { background: var(--white); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(95,195,219,0.25); }
+  .hero-cta svg { width: 14px; height: 14px; transition: transform 0.3s; }
+  .hero-cta:hover svg { transform: translateX(3px); }
+  .hero-fine {
+    font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.18);
+    margin-top: 14px; letter-spacing: 0.5px; text-transform: uppercase;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.95s forwards;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ─── INTENT STRIP ─── */
+  .intent-strip {
+    background: var(--navy); border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04); padding: 48px 24px;
+  }
+  .intent-inner { max-width: 880px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .intent-left {}
+  .intent-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; color: var(--teal-deep); margin-bottom: 10px; }
+  .intent-title { font-family: var(--serif); font-size: clamp(20px, 3vw, 28px); font-weight: 300; line-height: 1.2; color: var(--white); margin-bottom: 8px; }
+  .intent-title em { font-style: italic; color: var(--teal); }
+  .intent-quote { font-family: var(--serif); font-size: 16px; font-style: italic; color: rgba(255,255,255,0.25); line-height: 1.6; border-left: 2px solid rgba(95,195,219,0.2); padding-left: 16px; margin-top: 14px; }
+  .intent-list { display: flex; flex-direction: column; gap: 12px; }
+  .intent-item { display: flex; align-items: flex-start; gap: 12px; }
+  .intent-check { width: 18px; height: 18px; border-radius: 50%; background: rgba(95,195,219,0.1); border: 1px solid rgba(95,195,219,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-size: 9px; font-weight: 800; color: var(--teal); }
+  .intent-text { font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.55; }
+  .intent-text strong { color: rgba(255,255,255,0.75); }
+  .intent-disclaimer { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.15); margin-top: 20px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* ─── ASSESSMENT TOOL ─── */
+  .assessment-section { padding: 80px 24px; background: var(--navy-deep); }
+  .assessment-wrap { max-width: 720px; margin: 0 auto; }
+
+  /* ─── GATE SCREEN ─── */
+  .gate-header { background: var(--navy); padding: 28px 36px; }
+  .gate-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .gate-title { font-family: var(--serif); font-size: 24px; font-weight: 300; line-height: 1.25; color: var(--white); }
+  .gate-title em { font-style: italic; color: var(--teal); }
+  .gate-body { padding: 32px 36px 36px; }
+  .gate-sub { font-family: var(--sans); font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 28px; }
+  .gate-fields { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+  .gate-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .gate-group {}
+  .gate-label { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px; }
+  .gate-label .req { color: var(--teal); }
+  .gate-input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border); border-radius: 7px;
+    font-family: var(--sans); font-size: 14px; color: var(--text-primary);
+    background: var(--white); outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .gate-input::placeholder { color: var(--text-light); }
+  .gate-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(95,195,219,0.1); }
+  .gate-input.error { border-color: var(--red); }
+  .gate-btn {
+    width: 100%; padding: 15px;
+    background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    border: none; border-radius: 7px; cursor: pointer;
+    transition: all 0.3s var(--ease);
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+  }
+  .gate-btn:hover { background: var(--navy); color: var(--teal); box-shadow: 0 6px 24px rgba(19,28,53,0.2); transform: translateY(-1px); }
+  .gate-btn svg { width: 14px; height: 14px; }
+  .gate-fine { font-family: var(--sans); font-size: 11px; color: var(--text-light); text-align: center; margin-top: 12px; line-height: 1.6; }
+  .gate-privacy { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px; }
+  .gate-privacy input[type="checkbox"] { margin-top: 2px; accent-color: var(--teal); flex-shrink: 0; width: 15px; height: 15px; cursor: pointer; }
+  .gate-privacy-text { font-family: var(--sans); font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+
+  .assessment-card {
+    background: var(--white); border-radius: 16px; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Progress bar */
+  .progress-header { background: var(--navy); padding: 20px 28px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-step { font-family: var(--mono); font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+  .progress-label { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--teal); letter-spacing: 1px; text-transform: uppercase; }
+  .progress-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.5s var(--ease-out); }
+
+  /* Question body */
+  .question-body { padding: 36px 36px 28px; }
+  .question-text { font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.3; color: var(--text-primary); margin-bottom: 8px; }
+  .question-sub { font-family: var(--sans); font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+  /* Choice buttons */
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice {
+    border: 1.5px solid var(--border); border-radius: 9px; padding: 16px 18px;
+    cursor: pointer; transition: all 0.2s var(--ease); background: var(--white);
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .choice:hover { border-color: rgba(95,195,219,0.5); background: var(--teal-subtle); }
+  .choice.selected { border-color: var(--teal); background: var(--teal-glow); box-shadow: 0 0 0 1px var(--teal); }
+  .choice-radio {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border);
+    flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .choice.selected .choice-radio { border-color: var(--teal); background: var(--teal); }
+  .choice.selected .choice-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
+  .choice-content {}
+  .choice-title { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+  .choice-desc { font-family: var(--mono); font-size: 10px; color: var(--text-light); letter-spacing: 0.5px; text-transform: uppercase; }
+  .choice.selected .choice-desc { color: var(--teal-deep); }
+
+  /* Nav buttons */
+  .question-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 36px 28px; border-top: 1px solid var(--border-light); }
+  .btn-back { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; background: none; border: none; cursor: pointer; transition: color 0.2s; }
+  .btn-back:hover { color: var(--text-primary); }
+  .btn-back:disabled { opacity: 0.3; cursor: default; }
+  .btn-next {
+    display: flex; align-items: center; gap: 8px; padding: 13px 28px;
+    background: var(--navy); color: var(--white);
+    font-family: var(--sans); font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    border: none; border-radius: 7px; cursor: pointer; transition: all 0.3s var(--ease);
+  }
+  .btn-next:hover { background: var(--teal); color: var(--navy); }
+  .btn-next:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+  .btn-next svg { width: 13px; height: 13px; }
+
+  /* ─── RESULTS SCREEN ─── */
+  #resultsScreen { display: none; }
+  .results-header { background: var(--navy); padding: 28px 36px; }
+  .results-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .results-title { font-family: var(--serif); font-size: 26px; font-weight: 300; color: var(--white); line-height: 1.2; }
+  .results-title em { font-style: italic; color: var(--teal); }
+
+  .results-body { padding: 32px 36px; }
+
+  /* Score bar */
+  .readiness-bar-wrap { margin-bottom: 28px; }
+  .readiness-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .readiness-text { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .readiness-score { font-family: var(--sans); font-size: 22px; font-weight: 900; color: var(--text-primary); }
+  .readiness-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .readiness-fill { height: 100%; border-radius: 3px; transition: width 1s var(--ease-out) 0.3s; }
+
+  /* Result cards */
+  .result-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .result-card { border-radius: 10px; padding: 18px; }
+  .result-card.positive { background: var(--green-bg); border: 1px solid rgba(42,127,88,0.15); }
+  .result-card.caution { background: var(--amber-bg); border: 1px solid rgba(200,136,10,0.15); }
+  .result-card.risk { background: var(--red-bg); border: 1px solid rgba(192,57,43,0.12); }
+  .rc-head { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .result-card.positive .rc-head { color: var(--green); }
+  .result-card.caution .rc-head { color: var(--amber); }
+  .result-card.risk .rc-head { color: var(--red); }
+  .rc-body { font-family: var(--sans); font-size: 13px; line-height: 1.6; color: var(--text-body); }
+  .rc-body strong { color: var(--text-primary); }
+
+  /* Pitfalls */
+  .pitfalls-box { background: var(--navy); border-radius: 10px; padding: 18px 20px; margin-bottom: 24px; }
+  .pitfalls-head { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+  .pitfall-item { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.4); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+  .pitfall-item:last-child { border-bottom: none; }
+  .pitfall-flag { color: var(--teal); flex-shrink: 0; }
+
+  /* Email capture in results */
+  .results-capture { background: var(--off-white); border-radius: 10px; padding: 22px; border: 1px solid var(--border); }
+  .rc-title { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+  .rc-sub { font-family: var(--sans); font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.55; }
+  .capture-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 10px; }
+  .capture-input {
+    padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 7px;
+    font-family: var(--sans); font-size: 14px; color: var(--text-primary); background: var(--white);
+    outline: none; transition: border-color 0.25s, box-shadow 0.25s; width: 100%;
+  }
+  .capture-input::placeholder { color: var(--text-light); }
+  .capture-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(95,195,219,0.1); }
+  .capture-btn {
+    padding: 12px 20px; background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+    border: none; border-radius: 7px; cursor: pointer; transition: all 0.3s; white-space: nowrap;
+  }
+  .capture-btn:hover { background: var(--navy); color: var(--teal); }
+  .capture-fine { font-family: var(--sans); font-size: 11px; color: var(--text-light); }
+
+  /* Next step */
+  .next-step-bar {
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+    border-top: 1px solid rgba(95,195,219,0.1); padding: 22px 36px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .next-step-text { font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+  .next-step-text strong { color: rgba(255,255,255,0.8); display: block; margin-bottom: 2px; }
+  .btn-discovery {
+    display: flex; align-items: center; gap: 8px; padding: 13px 22px;
+    background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    border: none; border-radius: 7px; cursor: pointer; transition: all 0.3s; white-space: nowrap; text-decoration: none;
+  }
+  .btn-discovery:hover { background: var(--white); }
+  .btn-discovery svg { width: 12px; height: 12px; }
+
+  /* ─── FOOTER ─── */
+  .footer { background: var(--navy-deep); border-top: 1px solid rgba(255,255,255,0.04); padding: 28px 24px; text-align: center; }
+  .footer-logo { font-family: var(--sans); font-size: 10px; letter-spacing: 3px; font-weight: 800; color: rgba(255,255,255,0.15); text-transform: uppercase; margin-bottom: 6px; }
+  .footer-text { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.1); line-height: 1.6; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .intent-inner { grid-template-columns: 1fr; gap: 32px; }
+    .result-cards { grid-template-columns: 1fr; }
+    .capture-row { grid-template-columns: 1fr; }
+    .capture-btn { width: 100%; }
+    .next-step-bar { flex-direction: column; text-align: center; }
+    .question-body { padding: 24px 20px 18px; }
+    .question-nav { padding: 16px 20px 20px; }
+    .results-body { padding: 24px 20px; }
+    .results-header { padding: 22px 20px; }
+    .next-step-bar { padding: 18px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo"><div class="nav-dot"></div>BMONEY Property</div>
+  <div class="nav-right">// Readiness_Assessment</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">// Self-Assessment · 2–3 minutes</div>
+    <h1>Where do you actually<br><em>stand right now?</em></h1>
+    <p class="hero-sub">Most investors don't know until they check the right things.</p>
+    <p class="hero-desc">Answer 5 questions about your current position. You'll receive a personalised snapshot — what's working in your favour, what to watch, and what typically holds buyers back at your stage.</p>
+    <a href="#tool" class="hero-cta">
+      Start the assessment
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <p class="hero-fine">No pitch · No obligations · Results personalised to your answers</p>
+  </div>
+</section>
+
+<!-- INTENT STRIP -->
+<div class="intent-strip">
+  <div class="intent-inner">
+    <div class="intent-left">
+      <div class="intent-label">// What this shows you</div>
+      <h2 class="intent-title">See your position<br><em>through a different lens.</em></h2>
+      <p class="intent-quote">"Most investors find out what they missed after they've already committed capital. This assessment finds it first."</p>
+    </div>
+    <div class="intent-list">
+      <div class="intent-item"><div class="intent-check">✓</div><div class="intent-text">Whether your <strong>finance position</strong> is genuinely ready or has gaps that need addressing first</div></div>
+      <div class="intent-item"><div class="intent-check">✓</div><div class="intent-text">The <strong>risk factors</strong> that are most relevant to buyers at your budget level and timeline</div></div>
+      <div class="intent-item"><div class="intent-check">✓</div><div class="intent-text">Common <strong>assumptions that create problems</strong> for investors in your exact position</div></div>
+      <div class="intent-item"><div class="intent-check">✓</div><div class="intent-text">What <strong>typically needs to be resolved</strong> before you act — specific to your answers, not generic advice</div></div>
+      <div class="intent-disclaimer">// This assessment does not recommend specific properties or predict market outcomes.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ASSESSMENT TOOL -->
+<section class="assessment-section" id="tool">
+  <div class="assessment-wrap">
+    <div class="assessment-card" id="assessmentCard">
+
+      <!-- GATE SCREEN -->
+      <div id="gateScreen">
+        <div class="gate-header">
+          <div class="gate-eyebrow">// Step 0 of 05 — Your Details</div>
+          <div class="gate-title">Before we start — <em>who are we assessing?</em></div>
+        </div>
+        <div class="gate-body">
+          <p class="gate-sub">Your snapshot is personalised to your answers. Enter your details so we can send it to you — and so Nick has context if you choose to take the next step.</p>
+          <div class="gate-fields">
+            <div class="gate-row">
+              <div class="gate-group">
+                <label class="gate-label">First name <span class="req">*</span></label>
+                <input type="text" class="gate-input" id="gateName" placeholder="James" autocomplete="given-name">
+              </div>
+              <div class="gate-group">
+                <label class="gate-label">Last name</label>
+                <input type="text" class="gate-input" id="gateLastName" placeholder="Morrison" autocomplete="family-name">
+              </div>
+            </div>
+            <div class="gate-group">
+              <label class="gate-label">Email address <span class="req">*</span></label>
+              <input type="email" class="gate-input" id="gateEmail" placeholder="james@email.com" autocomplete="email">
+            </div>
+            <div class="gate-group">
+              <label class="gate-label">Mobile number</label>
+              <input type="tel" class="gate-input" id="gatePhone" placeholder="0400 000 000" autocomplete="tel">
+            </div>
+          </div>
+          <div class="gate-privacy">
+            <input type="checkbox" id="gateConsent" checked>
+            <span class="gate-privacy-text">I'm happy for BMONEY to follow up if my results suggest a discovery call would be useful. I can opt out at any time.</span>
+          </div>
+          <button class="gate-btn" onclick="startAssessment()">
+            Start my assessment
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <p class="gate-fine">Takes 2–3 minutes · Results sent to your inbox · No spam</p>
+        </div>
+      </div>
+
+      <!-- QUESTIONS SCREEN -->
+      <div id="questionsScreen" style="display:none;">
+        <div class="progress-header">
+          <div class="progress-meta">
+            <span class="progress-step" id="stepLabel">Step 01 of 05</span>
+            <span class="progress-label" id="stepTopic">Purchase Intent</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+        </div>
+
+        <div class="question-body">
+          <div class="question-text" id="questionText"></div>
+          <div class="question-sub" id="questionSub"></div>
+          <div class="choices" id="choicesWrap"></div>
+        </div>
+
+        <div class="question-nav">
+          <button class="btn-back" id="btnBack" disabled onclick="prevQuestion()">← Back</button>
+          <button class="btn-next" id="btnNext" disabled onclick="nextQuestion()">
+            Next
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- RESULTS SCREEN -->
+      <div id="resultsScreen">
+        <div class="results-header">
+          <div class="results-eyebrow">// Your Property Readiness Snapshot</div>
+          <div class="results-title" id="resultsTitle">Your position — <em>assessed.</em></div>
+        </div>
+        <div class="results-body">
+          <div class="readiness-bar-wrap">
+            <div class="readiness-label">
+              <span class="readiness-text">Readiness signal</span>
+              <span class="readiness-score" id="readinessScore">—</span>
+            </div>
+            <div class="readiness-bar"><div class="readiness-fill" id="readinessFill" style="width:0%"></div></div>
+          </div>
+
+          <div class="result-cards" id="resultCards"></div>
+          <div class="pitfalls-box" id="pitfallsBox"></div>
+
+          <div class="results-capture" id="resultsCapture">
+            <div class="rc-title" id="captureTitleText">Send your snapshot to your inbox.</div>
+            <div class="rc-sub">Your full results include LGA-specific data for your target state, pitfalls mapped to your answers, and the 3 questions worth resolving before your next step.</div>
+            <div class="capture-row">
+              <input type="email" class="capture-input" placeholder="your@email.com" id="captureEmail">
+              <button class="capture-btn" onclick="submitCapture()">Send it</button>
+            </div>
+            <p class="capture-fine">No spam · No pitch · Unsubscribe anytime</p>
+          </div>
+        </div>
+        <div class="next-step-bar">
+          <div class="next-step-text">
+            <strong>Ready to go deeper?</strong>
+            A 15-minute discovery call with Nick covers your brief, your current position, and whether BMONEY is a genuine fit for your search.
+          </div>
+          <a href="https://solomoncelenk.github.io/Ascendea_tools/bmlnsl4.html" class="btn-discovery">
+            Book a discovery call
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- end assessment-card -->
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">BMONEY Property</div>
+  <p class="footer-text">Eastern Seaboard Buyer Advisory · VIC · NSW · QLD<br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="355b5c565e7557585a5b504c1b565a581b5440">[email&#160;protected]</a> · 0457 177 550</p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ─── ASSESSMENT DATA ───────────────────────────────────────────────────────────
+const questions = [
+  {
+    id: 'intent',
+    topic: 'Purchase Intent',
+    text: 'What best describes your next property move?',
+    sub: 'This shapes how the rest of your snapshot is interpreted.',
+    choices: [
+      { value: 'investor', title: 'Investment property', desc: 'Capital growth or rental income focus' },
+      { value: 'oo', title: 'Owner-occupier', desc: 'Buying to live in' },
+      { value: 'both', title: 'Both — PPOR + investment', desc: 'Building a portfolio from the family home' },
+      { value: 'unsure', title: 'Still weighing it up', desc: 'Exploring what makes the most sense' }
+    ]
+  },
+  {
+    id: 'finance',
+    topic: 'Finance Position',
+    text: 'Where does your finance sit right now?',
+    sub: 'This is the single biggest indicator of genuine readiness — and the first thing any buyer\'s agent needs to know.',
+    choices: [
+      { value: 'approved', title: 'Pre-approval confirmed', desc: 'Have a current approval in hand' },
+      { value: 'inprogress', title: 'Pre-approval in progress', desc: 'Working through it now' },
+      { value: 'notstarted', title: 'Not started yet', desc: 'Haven\'t spoken to a broker' },
+      { value: 'cash', title: 'Cash buyer', desc: 'No finance required' }
+    ]
+  },
+  {
+    id: 'budget',
+    topic: 'Budget Range',
+    text: 'What is your purchase budget?',
+    sub: 'This determines which of our 13 active LGAs are relevant for your situation.',
+    choices: [
+      { value: 'sub600', title: 'Under $600K', desc: 'Entry-level eastern seaboard markets' },
+      { value: '600to900', title: '$600K – $900K', desc: 'Strong value in VIC and QLD corridors' },
+      { value: '900to1_2', title: '$900K – $1.2M', desc: 'Penrith, Newcastle, select QLD' },
+      { value: 'over1_2', title: '$1.2M+', desc: 'Premium LGA positions' }
+    ]
+  },
+  {
+    id: 'state',
+    topic: 'Target Market',
+    text: 'Which state are you focused on — or are you open?',
+    sub: 'BMONEY is active across VIC, NSW, and QLD. Many investors find the best opportunity outside their home state.',
+    choices: [
+      { value: 'vic', title: 'Victoria', desc: 'Frankston, Hume, Casey, Whittlesea, Melton' },
+      { value: 'nsw', title: 'New South Wales', desc: 'Penrith, Newcastle, Lake Macquarie, Maitland' },
+      { value: 'qld', title: 'Queensland', desc: 'Gold Coast, Ipswich, Moreton Bay, Logan' },
+      { value: 'open', title: 'Open — wherever the data is strongest', desc: 'Let the numbers decide the state' }
+    ]
+  },
+  {
+    id: 'concern',
+    topic: 'Primary Concern',
+    text: 'Where do you feel least confident right now?',
+    sub: 'Be honest — this is the most useful question for shaping your snapshot.',
+    choices: [
+      { value: 'pricing', title: 'Knowing what a property is actually worth', desc: 'Before making an offer' },
+      { value: 'market', title: 'Identifying the right market to buy in', desc: 'Which LGA, which suburbs, which timing' },
+      { value: 'duediligence', title: 'Risks that aren\'t visible from the listing', desc: 'What I might be missing' },
+      { value: 'holding', title: 'Whether I can genuinely hold the asset', desc: 'Cashflow, rates, vacancy scenarios' }
+    ]
+  }
+];
+
+// ─── RESULT ENGINE ─────────────────────────────────────────────────────────────
+
+// Score: finance (most weight), budget, intent
+function calcReadiness(answers) {
+  let score = 0;
+  // Finance
+  if (answers.finance === 'approved' || answers.finance === 'cash') score += 40;
+  else if (answers.finance === 'inprogress') score += 22;
+  else score += 5;
+  // Intent
+  if (answers.intent === 'investor' || answers.intent === 'oo') score += 20;
+  else if (answers.intent === 'both') score += 15;
+  else score += 8;
+  // Budget
+  if (answers.budget === 'sub600' || answers.budget === '600to900') score += 20;
+  else if (answers.budget === '900to1_2') score += 18;
+  else score += 12;
+  // State
+  if (answers.state !== 'open') score += 10;
+  else score += 8;
+  // Concern clarity
+  if (answers.concern) score += 10;
+  return Math.min(score, 98);
+}
+
+function getReadinessLabel(score) {
+  if (score >= 80) return { label: 'Strong', color: '#2a7f58', fillColor: '#2a7f58' };
+  if (score >= 55) return { label: 'Developing', color: '#c8880a', fillColor: '#c8880a' };
+  return { label: 'Early Stage', color: '#c0392b', fillColor: '#c0392b' };
+}
+
+function getResultCards(answers) {
+  const cards = [];
+
+  // Finance card
+  if (answers.finance === 'approved' || answers.finance === 'cash') {
+    cards.push({ type: 'positive', head: '✓ Finance position', body: 'Pre-approval confirmed or cash available — <strong>your strongest readiness signal.</strong> You can move quickly when the right property appears, which matters in markets trading in under 30 days.' });
+  } else if (answers.finance === 'inprogress') {
+    cards.push({ type: 'caution', head: '⚠ Finance in progress', body: 'You\'re on the right track, but <strong>pre-approval should be completed before you start inspecting seriously.</strong> Without it, you\'re gathering information you can\'t act on — and in fast markets, that gap costs deals.' });
+  } else {
+    cards.push({ type: 'risk', head: '! Finance not started', body: '<strong>This is the highest-priority step before anything else.</strong> Without a broker assessment, you don\'t know your real capacity, your actual holding threshold, or whether your target budget is realistic. Inspecting without this is a significant risk.' });
+  }
+
+  // State/market card
+  const stateData = {
+    vic: { label: 'Victoria', stat: 'Hume LGA up 17.3% Q4 2025 (REIV). Melton western corridor — 21/27 markets positive.' },
+    nsw: { label: 'New South Wales', stat: 'Maitland grew 15.2% in 2025 — #1 SA3 in NSW. Newcastle/Lake Macquarie above $1M median.' },
+    qld: { label: 'Queensland', stat: 'Ipswich annual growth 13.6%. Logan units +103% over 5 years (REIQ). Moreton Bay median $853K.' },
+    open: { label: 'open to all three states', stat: 'The strongest current signals are in QLD value corridors (Ipswich, Logan) and NSW Hunter Region (Maitland, Lake Macquarie).' }
+  };
+  const sd = stateData[answers.state] || stateData['open'];
+  cards.push({ type: 'positive', head: `📍 Target: ${sd.label}`, body: sd.stat });
+
+  // Budget card
+  const budgetMap = {
+    sub600: { type: 'positive', body: 'Under $600K puts you in strong entry position across <strong>Melton (VIC), select Ipswich suburbs (QLD), and parts of Maitland (NSW)</strong>. Tight supply and growing demand in these pockets.' },
+    '600to900': { type: 'positive', body: 'The $600K–$900K range covers <strong>the most active investor pockets</strong> across our 13 LGAs — Frankston, Logan, Moreton Bay, Lake Macquarie. Strong data across all three states at this level.' },
+    '900to1_2': { type: 'positive', body: 'The $900K–$1.2M range reaches <strong>Penrith ($1.1M median, +9% annual), Newcastle ($1.05M, +9.8%)</strong>, and premium Gold Coast pockets. Tighter supply, lower yield but stronger capital growth potential.' },
+    over1_2: { type: 'caution', body: 'At $1.2M+, you\'re at the <strong>upper range of our active LGA list.</strong> Availability in the right pockets requires off-market access — BMONEY\'s ~80% off-market purchase rate is most relevant at this level.' }
+  };
+  const bm = budgetMap[answers.budget] || budgetMap['600to900'];
+  cards.push({ ...bm, head: '💰 Budget alignment' });
+
+  return cards;
+}
+
+function getPitfalls(answers) {
+  const pitfalls = [];
+
+  if (answers.finance !== 'approved' && answers.finance !== 'cash') {
+    pitfalls.push('Pre-approval gap — inspecting without confirmed finance means you\'re gathering data you can\'t act on');
+  }
+  if (answers.concern === 'pricing') {
+    pitfalls.push('Relying on agent-supplied comparables to establish value — these are selected to support the asking price, not verify it');
+  }
+  if (answers.concern === 'market') {
+    pitfalls.push('Treating LGA median data as a buy signal — the relevant data is at suburb and pocket level, not LGA level');
+  }
+  if (answers.concern === 'duediligence') {
+    pitfalls.push('Reviewing due diligence after emotional commitment — approved DAs, zoning changes, and strata fund health are assessable before the first inspection');
+  }
+  if (answers.concern === 'holding') {
+    pitfalls.push('Confusing borrowing capacity with holding threshold — these are two different numbers, and the difference matters when rates shift or vacancy hits');
+  }
+  if (answers.state === 'open') {
+    pitfalls.push('Limiting search to home state by default — the strongest value signals on the eastern seaboard in early 2026 are in QLD and NSW, not necessarily your backyard');
+  }
+  // Always include
+  pitfalls.push('Acting on the first property that feels right rather than the first property the data confirms');
+
+  return pitfalls.slice(0, 4);
+}
+
+// ─── ASSESSMENT STATE ──────────────────────────────────────────────────────────
+let currentQ = 0;
+let answers = {};
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
+  const pct = Math.round(((currentQ + 1) / total) * 100);
+
+  document.getElementById('stepLabel').textContent = `Step ${String(currentQ+1).padStart(2,'0')} of ${String(total).padStart(2,'0')}`;
+  document.getElementById('stepTopic').textContent = q.topic;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('questionSub').textContent = q.sub;
+
+  const wrap = document.getElementById('choicesWrap');
+  wrap.innerHTML = '';
+  q.choices.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'choice' + (answers[q.id] === c.value ? ' selected' : '');
+    div.innerHTML = `<div class="choice-radio"></div><div class="choice-content"><div class="choice-title">${c.title}</div><div class="choice-desc">${c.desc}</div></div>`;
+    div.addEventListener('click', () => selectChoice(q.id, c.value));
+    wrap.appendChild(div);
+  });
+
+  document.getElementById('btnBack').disabled = (currentQ === 0);
+  document.getElementById('btnNext').disabled = !answers[q.id];
+
+  // Last question: change button label
+  const btnNext = document.getElementById('btnNext');
+  if (currentQ === total - 1) {
+    btnNext.innerHTML = 'See my results <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  } else {
+    btnNext.innerHTML = 'Next <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  }
+}
+
+function selectChoice(qId, value) {
+  answers[qId] = value;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function showResults() {
+  document.getElementById('questionsScreen').style.display = 'none';
+  document.getElementById('resultsScreen').style.display = 'block';
+
+  const score = calcReadiness(answers);
+  const rl = getReadinessLabel(score);
+  const cards = getResultCards(answers);
+  const pitfalls = getPitfalls(answers);
+
+  // Score
+  document.getElementById('readinessScore').textContent = `${score}% — ${rl.label}`;
+  document.getElementById('readinessScore').style.color = rl.color;
+  setTimeout(() => {
+    document.getElementById('readinessFill').style.width = score + '%';
+    document.getElementById('readinessFill').style.background = rl.fillColor;
+  }, 100);
+
+  // Cards
+  const cardWrap = document.getElementById('resultCards');
+  cardWrap.innerHTML = '';
+  cards.forEach(card => {
+    const div = document.createElement('div');
+    div.className = `result-card ${card.type}`;
+    div.innerHTML = `<div class="rc-head">${card.head}</div><div class="rc-body">${card.body}</div>`;
+    cardWrap.appendChild(div);
+  });
+
+  // Pitfalls
+  const pb = document.getElementById('pitfallsBox');
+  pb.innerHTML = `<div class="pitfalls-head">// Watch points for your position</div>`;
+  pitfalls.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'pitfall-item';
+    div.innerHTML = `<span class="pitfall-flag">[!]</span>${p}`;
+    pb.appendChild(div);
+  });
+
+  // Pre-fill email from gate
+  prefillCaptureEmail();
+
+  // Scroll to results
+  document.getElementById('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function submitCapture() {
+  const email = document.getElementById('captureEmail').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('captureEmail').style.borderColor = '#c0392b';
+    return;
+  }
+  // In production: POST to your backend/CRM here
+  document.querySelector('.results-capture').innerHTML = `
+    <div style="text-align:center;padding:12px 0">
+      <div style="font-family:var(--sans);font-size:15px;font-weight:700;color:var(--green);margin-bottom:6px">✓ Snapshot sent</div>
+      <div style="font-family:var(--sans);font-size:13px;color:var(--text-muted);line-height:1.6">Check your inbox for your personalised Property Readiness Snapshot — including LGA data for your target state and the 3 questions worth resolving before your next step.</div>
+    </div>`;
+}
+
+
+// ─── GATE ─────────────────────────────────────────────────────────────────────
+let userDetails = {};
+
+function startAssessment() {
+  const name  = document.getElementById('gateName').value.trim();
+  const email = document.getElementById('gateEmail').value.trim();
+  let valid = true;
+
+  if (!name) {
+    document.getElementById('gateName').classList.add('error'); valid = false;
+  } else {
+    document.getElementById('gateName').classList.remove('error');
+  }
+  if (!email || !email.includes('@')) {
+    document.getElementById('gateEmail').classList.add('error'); valid = false;
+  } else {
+    document.getElementById('gateEmail').classList.remove('error');
+  }
+  if (!valid) return;
+
+  userDetails = {
+    firstName: name,
+    lastName:  document.getElementById('gateLastName').value.trim(),
+    email:     email,
+    phone:     document.getElementById('gatePhone').value.trim(),
+    consent:   document.getElementById('gateConsent').checked
+  };
+
+  document.getElementById('gateScreen').style.display     = 'none';
+  document.getElementById('questionsScreen').style.display = 'block';
+  renderQuestion();
+  document.getElementById('tool').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Enter key on gate screen
+document.addEventListener('keydown', function(e) {
+  const gs = document.getElementById('gateScreen');
+  if (e.key === 'Enter' && gs && gs.style.display !== 'none') {
+    startAssessment();
+  }
+});
+
+// Pre-fill email in results capture from gate data
+function prefillCaptureEmail() {
+  const el = document.getElementById('captureEmail');
+  if (el && userDetails.email) el.value = userDetails.email;
+  const title = document.getElementById('captureTitleText');
+  if (title && userDetails.firstName) {
+    title.textContent = `${userDetails.firstName}, send your snapshot to your inbox.`;
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+// Gate shows first; questions render after startAssessment() is called
+</script>
+</body>
+</html>
