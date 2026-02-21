@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Property Decision Checklist | BMONEY Property</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #202c4e;
+    --navy-deep: #161f38;
+    --navy-mid: #253358;
+    --teal: #5fc3db;
+    --teal-deep: #417d9a;
+    --teal-glow: rgba(95,195,219,0.12);
+    --teal-subtle: rgba(95,195,219,0.06);
+    --white: #ffffff;
+    --off-white: #f5f6f9;
+    --text-primary: #202c4e;
+    --text-body: #3d4a5c;
+    --text-muted: #6b7a8e;
+    --text-light: #9aa3b0;
+    --border: #e2e8eb;
+    --border-light: #eef1f3;
+    --green: #2d8a5e;
+    --green-bg: #eaf7f0;
+    --amber: #d4930c;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', Helvetica, sans-serif;
+    --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
+    --shadow-sm: 0 2px 12px rgba(32,44,78,0.06);
+    --shadow-md: 0 6px 28px rgba(32,44,78,0.10);
+    --shadow-lg: 0 16px 56px rgba(32,44,78,0.14);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--sans); color: var(--text-body); background: var(--off-white); line-height: 1.7; overflow-x: hidden; }
+
+  /* NAV */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(22,31,56,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    height: 58px; display: flex; align-items: center;
+    padding: 0 28px; justify-content: space-between;
+  }
+  .nav-logo { font-family: var(--sans); font-size: 10px; letter-spacing: 3px; font-weight: 800; color: var(--white); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+  .nav-right { font-family: var(--sans); font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* HERO */
+  .hero { background: var(--navy); padding: 112px 24px 72px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 15% 30%, rgba(95,195,219,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 60% at 85% 65%, rgba(65,125,154,0.05) 0%, transparent 60%);
+  }
+  .hero::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 58px; background: linear-gradient(to bottom, transparent, rgba(95,195,219,0.25)); }
+  .hero-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px;
+    font-weight: 700; color: var(--teal); text-transform: uppercase; margin-bottom: 22px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.15s forwards;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 22px; height: 1px; background: rgba(95,195,219,0.3); }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(30px, 5.5vw, 52px);
+    font-weight: 300; line-height: 1.16; color: var(--white); margin-bottom: 6px;
+    opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.3s forwards;
+  }
+  .hero h1 em { font-style: italic; color: var(--teal); font-weight: 400; }
+  .hero-subtitle {
+    font-family: var(--serif); font-size: clamp(16px, 2.5vw, 21px); font-weight: 300; font-style: italic;
+    color: rgba(255,255,255,0.35); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.45s forwards;
+  }
+  .hero-desc {
+    font-family: var(--sans); font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.45);
+    max-width: 520px; margin: 0 auto 36px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.6s forwards;
+  }
+  .hero-cta-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.75s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px;
+    background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase;
+    border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s var(--ease); text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--white); color: var(--navy); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(95,195,219,0.25); }
+  .btn-primary svg { width: 14px; height: 14px; transition: transform 0.3s; }
+  .btn-primary:hover svg { transform: translateX(3px); }
+  .hero-reassure { font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.2); letter-spacing: 0.5px; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* LGA TICKER */
+  .lga-strip { background: var(--navy-deep); border-bottom: 1px solid rgba(255,255,255,0.04); padding: 14px 0; overflow: hidden; }
+  .lga-track { display: flex; gap: 0; white-space: nowrap; animation: ticker 28s linear infinite; }
+  .lga-item {
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    color: rgba(255,255,255,0.25); padding: 0 24px; letter-spacing: 1px;
+    text-transform: uppercase; display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .lga-item::after { content: '·'; color: rgba(95,195,219,0.3); }
+  .lga-item strong { color: rgba(95,195,219,0.6); font-weight: 700; }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* PROOF STRIP */
+  .proof-strip { background: rgba(22,31,56,0.95); border-bottom: 1px solid rgba(255,255,255,0.04); padding: 20px 24px; }
+  .proof-inner { max-width: 920px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; }
+  .proof-item { font-family: var(--sans); font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px; }
+  .proof-item strong { color: var(--teal); font-weight: 700; }
+  .proof-item .source { font-size: 10px; color: rgba(255,255,255,0.15); margin-left: 4px; }
+  .proof-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.07); align-self: center; }
+
+  /* TESTIMONIAL */
+  .testimonial-band { background: var(--white); border-bottom: 1px solid var(--border-light); padding: 36px 24px; }
+  .testimonial-inner { max-width: 680px; margin: 0 auto; display: flex; gap: 20px; align-items: flex-start; }
+  .quote-mark { font-family: var(--serif); font-size: 72px; line-height: 0.65; color: var(--teal); opacity: 0.35; flex-shrink: 0; margin-top: 14px; }
+  .t-body { flex: 1; }
+  .stars { display: flex; gap: 3px; margin-bottom: 10px; }
+  .star { width: 14px; height: 14px; background: var(--amber); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+  .t-text { font-family: var(--serif); font-size: 19px; line-height: 1.58; font-style: italic; color: var(--text-primary); margin-bottom: 14px; }
+  .t-attr { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; }
+  .t-attr span { color: var(--teal-deep); }
+
+  /* URGENCY BAR */
+  .urgency-bar { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); border-top: 1px solid rgba(95,195,219,0.15); border-bottom: 1px solid rgba(95,195,219,0.15); padding: 18px 24px; text-align: center; }
+  .urgency-text { font-family: var(--sans); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6); line-height: 1.6; max-width: 640px; margin: 0 auto; }
+  .urgency-text strong { color: var(--teal); }
+
+  /* MAIN */
+  .main { max-width: 1080px; margin: 0 auto; padding: 64px 24px 80px; display: grid; grid-template-columns: 1fr 400px; gap: 56px; align-items: start; }
+
+  /* SECTION LABELS */
+  .section-label { font-family: var(--sans); font-size: 9px; letter-spacing: 2.5px; font-weight: 700; text-transform: uppercase; color: var(--teal-deep); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; width: 18px; height: 2px; background: var(--teal); }
+  .section-title { font-family: var(--serif); font-size: clamp(22px, 3vw, 30px); font-weight: 400; line-height: 1.22; color: var(--text-primary); margin-bottom: 12px; }
+  .section-body { font-family: var(--sans); font-size: 14px; line-height: 1.75; color: var(--text-body); margin-bottom: 36px; }
+
+  /* MARKET DATA GRID */
+  .market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 48px; }
+  .market-card { background: var(--navy); border-radius: 10px; padding: 18px 16px; }
+  .market-state { font-family: var(--sans); font-size: 9px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .market-lga { font-family: var(--sans); font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .market-val { font-family: var(--sans); font-size: 20px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; margin-bottom: 3px; }
+  .market-growth { font-family: var(--sans); font-size: 11px; font-weight: 700; color: #4caf82; }
+  .market-source { font-family: var(--sans); font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 4px; }
+
+  /* GUIDE ITEMS */
+  .guide-items { display: flex; flex-direction: column; gap: 0; margin-bottom: 48px; }
+  .guide-item { display: flex; gap: 20px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--border-light); opacity: 0; transform: translateY(14px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease-out); }
+  .guide-item:first-child { border-top: 1px solid var(--border-light); }
+  .guide-item.visible { opacity: 1; transform: translateY(0); }
+  .guide-num { font-family: var(--sans); font-size: 10px; font-weight: 800; color: var(--teal); letter-spacing: 1px; min-width: 26px; padding-top: 3px; }
+  .guide-content { flex: 1; }
+  .guide-title { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; line-height: 1.4; }
+  .guide-desc { font-family: var(--sans); font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .guide-tag { font-family: var(--sans); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: var(--teal-glow); color: var(--teal-deep); margin-top: 6px; display: inline-block; }
+
+  /* UNDERSTAND LIST */
+  .understand-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 48px; }
+  .understand-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; font-family: var(--sans); font-size: 14px; color: var(--text-body); line-height: 1.5; box-shadow: var(--shadow-sm); }
+  .check-icon { width: 20px; height: 20px; border-radius: 50%; background: var(--green-bg); color: var(--green); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+  /* FOR GRID */
+  .for-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 48px; }
+  .for-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; box-shadow: var(--shadow-sm); }
+  .for-card-head { font-family: var(--sans); font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .for-card-head.is { color: var(--green); }
+  .for-card-head.isnt { color: var(--text-muted); }
+  .for-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .for-list li { font-family: var(--sans); font-size: 13px; color: var(--text-body); line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
+  .for-list li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 7px; }
+  .for-card.isnt .for-list li::before { background: var(--border); }
+  .for-card.isnt .for-list li { color: var(--text-muted); }
+
+  /* FORM CARD */
+  .form-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg); position: sticky; top: 74px; }
+  .form-head { background: var(--navy); padding: 28px 28px 24px; position: relative; overflow: hidden; }
+  .form-head::before { content: ''; position: absolute; bottom: -30px; right: -30px; width: 130px; height: 130px; border-radius: 50%; border: 1px solid rgba(95,195,219,0.08); }
+  .form-head-label { font-family: var(--sans); font-size: 9px; letter-spacing: 2.5px; font-weight: 700; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; position: relative; z-index: 1; }
+  .form-head-title { font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.28; color: var(--white); margin-bottom: 8px; position: relative; z-index: 1; }
+  .form-head-title em { font-style: italic; color: var(--teal); }
+  .form-head-sub { font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.6; position: relative; z-index: 1; }
+  .form-body { padding: 24px 28px 28px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-group { margin-bottom: 12px; }
+  .form-label { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .form-label .req { color: var(--teal); }
+  .form-input, .form-select { width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 7px; font-family: var(--sans); font-size: 14px; color: var(--text-primary); background: var(--white); outline: none; transition: border-color 0.25s, box-shadow 0.25s; appearance: none; }
+  .form-input::placeholder { color: var(--text-light); }
+  .form-input:focus, .form-select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(95,195,219,0.1); }
+  .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 13px center; padding-right: 34px; cursor: pointer; }
+  .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .toggle-opt { padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 7px; cursor: pointer; display: flex; align-items: center; gap: 9px; transition: all 0.2s var(--ease); background: var(--white); }
+  .toggle-opt:hover { border-color: rgba(95,195,219,0.5); background: var(--teal-subtle); }
+  .toggle-opt.selected { border-color: var(--teal); background: var(--teal-glow); }
+  .t-radio { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .toggle-opt.selected .t-radio { border-color: var(--teal); background: var(--teal); }
+  .toggle-opt.selected .t-radio::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: white; }
+  .t-label { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .form-submit { width: 100%; padding: 15px; background: var(--teal); color: var(--navy); font-family: var(--sans); font-size: 12px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase; border: none; border-radius: 7px; cursor: pointer; transition: all 0.3s var(--ease); display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 4px; }
+  .form-submit:hover { background: var(--navy); color: var(--teal); box-shadow: 0 6px 24px rgba(32,44,78,0.18); transform: translateY(-1px); }
+  .form-submit svg { width: 14px; height: 14px; transition: transform 0.3s; }
+  .form-submit:hover svg { transform: translateX(3px); }
+  .form-fine { font-family: var(--sans); font-size: 11px; color: var(--text-light); text-align: center; margin-top: 10px; line-height: 1.6; }
+  .next-step-note { background: rgba(95,195,219,0.06); border: 1px solid rgba(95,195,219,0.15); border-radius: 8px; padding: 14px 16px; margin-top: 14px; font-family: var(--sans); font-size: 12px; color: var(--text-muted); line-height: 1.65; }
+  .next-step-note strong { color: var(--teal-deep); font-weight: 700; }
+
+  /* FOOTER */
+  .footer { background: var(--navy-deep); padding: 28px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.04); }
+  .footer-logo { font-family: var(--sans); font-size: 10px; letter-spacing: 3px; font-weight: 800; color: rgba(255,255,255,0.2); text-transform: uppercase; margin-bottom: 8px; }
+  .footer-text { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.12); line-height: 1.6; }
+  .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 14px; }
+  .footer-links a { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.18); transition: color 0.2s; letter-spacing: 0.5px; }
+  .footer-links a:hover { color: var(--teal); }
+
+  /* RESPONSIVE */
+  @media (max-width: 860px) { .main { grid-template-columns: 1fr; gap: 40px; } .form-card { position: static; } .for-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } .proof-sep { display: none; } .market-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .hero { padding: 96px 20px 56px; } .hero h1 { font-size: 26px; } .testimonial-inner { flex-direction: column; gap: 8px; } .toggle-group { grid-template-columns: 1fr; } .market-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo"><div class="nav-dot"></div>BMONEY Property</div>
+  <div class="nav-right">Eastern Seaboard · VIC · NSW · QLD</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Free Investor Checklist</div>
+    <h1>The 5 decisions that determine<br><em>every property outcome.</em></h1>
+    <p class="hero-subtitle">Most investors get at least three of them wrong.</p>
+    <p class="hero-desc">The checklist BMONEY uses with clients across VIC, NSW, and QLD — to identify the right markets, understand what the data actually shows, and make decisions before the pressure of a contract starts.</p>
+    <div class="hero-cta-wrap">
+      <a href="#optin" class="btn-primary">
+        Get the free checklist
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <p class="hero-reassure">Takes 60 seconds to request · No spam · No follow-up pressure</p>
+    </div>
+  </div>
+</section>
+
+<!-- LGA TICKER -->
+<div class="lga-strip">
+  <div class="lga-track">
+    <div class="lga-item">Frankston LGA <strong>VIC</strong></div>
+    <div class="lga-item">Hume LGA <strong>VIC</strong></div>
+    <div class="lga-item">Casey LGA <strong>VIC</strong></div>
+    <div class="lga-item">Whittlesea LGA <strong>VIC</strong></div>
+    <div class="lga-item">Melton LGA <strong>VIC</strong></div>
+    <div class="lga-item">Penrith LGA <strong>NSW</strong></div>
+    <div class="lga-item">Newcastle LGA <strong>NSW</strong></div>
+    <div class="lga-item">Lake Macquarie <strong>NSW</strong></div>
+    <div class="lga-item">Maitland LGA <strong>NSW</strong></div>
+    <div class="lga-item">Gold Coast <strong>QLD</strong></div>
+    <div class="lga-item">Ipswich LGA <strong>QLD</strong></div>
+    <div class="lga-item">Moreton Bay <strong>QLD</strong></div>
+    <div class="lga-item">Logan LGA <strong>QLD</strong></div>
+    <!-- duplicate for seamless loop -->
+    <div class="lga-item">Frankston LGA <strong>VIC</strong></div>
+    <div class="lga-item">Hume LGA <strong>VIC</strong></div>
+    <div class="lga-item">Casey LGA <strong>VIC</strong></div>
+    <div class="lga-item">Whittlesea LGA <strong>VIC</strong></div>
+    <div class="lga-item">Melton LGA <strong>VIC</strong></div>
+    <div class="lga-item">Penrith LGA <strong>NSW</strong></div>
+    <div class="lga-item">Newcastle LGA <strong>NSW</strong></div>
+    <div class="lga-item">Lake Macquarie <strong>NSW</strong></div>
+    <div class="lga-item">Maitland LGA <strong>NSW</strong></div>
+    <div class="lga-item">Gold Coast <strong>QLD</strong></div>
+    <div class="lga-item">Ipswich LGA <strong>QLD</strong></div>
+    <div class="lga-item">Moreton Bay <strong>QLD</strong></div>
+    <div class="lga-item">Logan LGA <strong>QLD</strong></div>
+  </div>
+</div>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="proof-inner">
+    <div class="proof-item"><strong>9 in 10</strong> BMONEY buyers purchase the first property we show them</div>
+    <div class="proof-sep"></div>
+    <div class="proof-item">~<strong>80%</strong> of BMONEY purchases completed off-market</div>
+    <div class="proof-sep"></div>
+    <div class="proof-item">Active across <strong>13 LGAs</strong> — VIC, NSW and QLD</div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL -->
+<div class="testimonial-band">
+  <div class="testimonial-inner">
+    <div class="quote-mark">"</div>
+    <div class="t-body">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="t-text">I'd been looking at markets in Queensland for months without really knowing what I was looking for. The checklist gave me a clear framework — I understood what the data actually meant before I spoke to anyone. Made the whole process faster and a lot less stressful.</p>
+      <p class="t-attr">David M. — <span>Purchased investment property, Ipswich LGA · $685K</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- URGENCY BAR -->
+<div class="urgency-bar">
+  <p class="urgency-text">Maitland grew <strong>15.2% in 2025</strong> — the largest of any SA3 in NSW. Ipswich units have delivered <strong>103% growth over 5 years</strong>. The investors who captured this were prepared before the market moved. This checklist takes 60 seconds to request.</p>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div>
+
+    <!-- Market data -->
+    <div class="section-label">Current market data</div>
+    <h2 class="section-title">The markets BMONEY is actively buying across right now.</h2>
+    <p class="section-body">Verified data across our 13 target LGAs. These are the numbers that matter before you commit to a market — not the headline figures, but what's actually happening at ground level.</p>
+
+    <div class="market-grid">
+      <div class="market-card">
+        <div class="market-state">VIC</div>
+        <div class="market-lga">Mernda / Doreen</div>
+        <div class="market-val">$770K–$844K</div>
+        <div class="market-growth">▲ +4.8% Q4 2025</div>
+        <div class="market-source">REIV, Jan 2026</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">VIC</div>
+        <div class="market-lga">Frankston</div>
+        <div class="market-val">$861K</div>
+        <div class="market-growth">▲ 3.25% gross yield</div>
+        <div class="market-source">HTAG, 2026</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">VIC</div>
+        <div class="market-lga">Melton LGA</div>
+        <div class="market-val">~$500K</div>
+        <div class="market-growth">▲ High demand, 21/27 markets positive</div>
+        <div class="market-source">CoreLogic, Nov 2025</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">NSW</div>
+        <div class="market-lga">Maitland</div>
+        <div class="market-val">$869K</div>
+        <div class="market-growth">▲ +15.2% — #1 SA3 in NSW, 2025</div>
+        <div class="market-source">Cotality, Jan 2026</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">NSW</div>
+        <div class="market-lga">Newcastle / Lake Mac</div>
+        <div class="market-val">$1.05M</div>
+        <div class="market-growth">▲ +9.8% annual</div>
+        <div class="market-source">Cotality, Jan 2026</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">NSW</div>
+        <div class="market-lga">Penrith LGA</div>
+        <div class="market-val">$1.10M</div>
+        <div class="market-growth">▲ +9.0% annual · 0.6% vacancy</div>
+        <div class="market-source">PRD Research, Q3 2025</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">QLD</div>
+        <div class="market-lga">Ipswich</div>
+        <div class="market-val">$735K</div>
+        <div class="market-growth">▲ +13.6% annual · 5.2% unit yield</div>
+        <div class="market-source">REIQ, Q1 2025</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">QLD</div>
+        <div class="market-lga">Moreton Bay</div>
+        <div class="market-val">$853K</div>
+        <div class="market-growth">▲ +10.6% annual</div>
+        <div class="market-source">REIQ, Q3 2025</div>
+      </div>
+      <div class="market-card">
+        <div class="market-state">QLD</div>
+        <div class="market-lga">Logan LGA</div>
+        <div class="market-val">$820K</div>
+        <div class="market-growth">▲ +11.6% annual · units +103% over 5yr</div>
+        <div class="market-source">REIQ, 2025</div>
+      </div>
+    </div>
+
+    <!-- Inside the checklist -->
+    <div class="section-label">What's inside</div>
+    <h2 class="section-title">Built from what BMONEY clients learn<br>before their first purchase.</h2>
+    <p class="section-body">Each section covers a real decision point — the kind that determines whether you buy the right property in the right market, or spend 12 months trying to recover from the wrong one.</p>
+
+    <div class="guide-items" id="guideItems">
+      <div class="guide-item">
+        <div class="guide-num">01</div>
+        <div class="guide-content">
+          <div class="guide-title">How to Read a Market Before It Moves</div>
+          <div class="guide-desc">The supply and demand indicators that signal a market shift 6–12 months out — stock on market, inventory levels, days on market trends, and vacancy rates. What the headline median price doesn't tell you, and what does.</div>
+          <div class="guide-tag">Market timing</div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-num">02</div>
+        <div class="guide-content">
+          <div class="guide-title">LGA vs Suburb vs Pocket — Why the Level Matters</div>
+          <div class="guide-desc">LGA data is a starting point, not a decision. Within every LGA we target, specific pockets consistently outperform the broader median. Understanding which level of data to act on is what separates informed investors from ones who overpay for average stock in a good postcode.</div>
+          <div class="guide-tag">Data interpretation</div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-num">03</div>
+        <div class="guide-content">
+          <div class="guide-title">Holding Threshold vs Borrowing Capacity</div>
+          <div class="guide-desc">Your broker gives you a borrowing capacity number. Your real holding threshold — what you can comfortably service when rates move, vacancy hits, or costs shift — is a different calculation entirely. This is the number that determines whether your investment is a long-term asset or a forced sale.</div>
+          <div class="guide-tag">Finance position</div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-num">04</div>
+        <div class="guide-content">
+          <div class="guide-title">Due Diligence Beyond the Listing</div>
+          <div class="guide-desc">Zoning changes, approved DAs on neighbouring sites, public housing concentration, infrastructure timelines, and strata fund health — assessable before you inspect, not after you're emotionally committed. The risks that cost investors most are almost never visible from REA or Domain.</div>
+          <div class="guide-tag">Risk identification</div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-num">05</div>
+        <div class="guide-content">
+          <div class="guide-title">The Comparable Pricing Method</div>
+          <div class="guide-desc">How to verify what a property is worth using confirmed comparable sales matched by property type, land size, and configuration — before you make an offer, not after. The difference between agent-supplied comparables and independently verified ones can be $40K–$120K on a single transaction.</div>
+          <div class="guide-tag">Pricing confidence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- After reading -->
+    <div class="section-label">After reading this</div>
+    <h2 class="section-title">Clarity before commitment.</h2>
+    <p class="section-body">Most investors enter their first inspection carrying questions they haven't answered yet. This checklist answers them first.</p>
+
+    <div class="understand-list">
+      <div class="understand-item"><div class="check-icon">✓</div>Which of our 13 target LGAs align with your budget, risk profile, and investment horizon</div>
+      <div class="understand-item"><div class="check-icon">✓</div>How to assess a market using the same data tools BMONEY uses — before speaking to any agent</div>
+      <div class="understand-item"><div class="check-icon">✓</div>What your real holding threshold looks like across different rate scenarios</div>
+      <div class="understand-item"><div class="check-icon">✓</div>The specific due diligence flags to check before committing emotionally to any property</div>
+      <div class="understand-item"><div class="check-icon">✓</div>Whether your current preparation is ahead of, aligned with, or behind the pace these markets move</div>
+    </div>
+
+    <!-- Who this is for -->
+    <div class="section-label">Who this is for</div>
+    <div class="for-grid">
+      <div class="for-card is">
+        <div class="for-card-head is"><span>✓</span> This is for you if</div>
+        <ul class="for-list">
+          <li>You're building a property portfolio across VIC, NSW, or QLD</li>
+          <li>You want to understand what the data shows before pressure enters the room</li>
+          <li>You prefer logic and evidence over agent opinions and suburb hype</li>
+          <li>You're ready to invest in the next 3–12 months and want a clear framework first</li>
+        </ul>
+      </div>
+      <div class="for-card isnt">
+        <div class="for-card-head isnt"><span>—</span> This isn't for you if</div>
+        <ul class="for-list">
+          <li>You're looking for guaranteed returns or specific price predictions</li>
+          <li>You've already exchanged contracts on your next purchase</li>
+          <li>You're seeking off-the-plan or new development recommendations</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FORM -->
+  <div id="optin">
+    <div class="form-card">
+      <div class="form-head">
+        <div class="form-head-label">Free checklist</div>
+        <h3 class="form-head-title">The Property Decision<br><em>Checklist</em></h3>
+        <p class="form-head-sub">Used by BMONEY clients before their first purchase across VIC, NSW, and QLD.</p>
+      </div>
+      <div class="form-body">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First name <span class="req">*</span></label>
+            <input type="text" class="form-input" placeholder="David">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last name</label>
+            <input type="text" class="form-input" placeholder="Morrison">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email <span class="req">*</span></label>
+          <input type="email" class="form-input" placeholder="david@email.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Purchase type <span class="req">*</span></label>
+          <div class="toggle-group" id="typeToggle">
+            <div class="toggle-opt" onclick="selectToggle('typeToggle', this)"><div class="t-radio"></div><span class="t-label">Investment</span></div>
+            <div class="toggle-opt" onclick="selectToggle('typeToggle', this)"><div class="t-radio"></div><span class="t-label">Owner-occupier</span></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Finance position</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select your status</option>
+            <option>Pre-approval confirmed</option>
+            <option>Getting pre-approval now</option>
+            <option>Not yet started</option>
+            <option>Cash buyer</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Budget range</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select range</option>
+            <option>Under $600K</option>
+            <option>$600K – $900K</option>
+            <option>$900K – $1.2M</option>
+            <option>$1.2M+</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target state</label>
+          <select class="form-select">
+            <option value="" disabled selected>Where are you looking?</option>
+            <option>Victoria (VIC)</option>
+            <option>New South Wales (NSW)</option>
+            <option>Queensland (QLD)</option>
+            <option>Open — wherever the data makes sense</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Where do you feel least confident?</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select your main concern</option>
+            <option>Identifying which markets are actually worth buying in</option>
+            <option>Knowing what a property is actually worth before I offer</option>
+            <option>Understanding my real holding threshold</option>
+            <option>Due diligence — risks not visible from listings</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+
+        <button class="form-submit">
+          Send me the checklist
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p class="form-fine">No spam · No follow-up pressure · Unsubscribe anytime</p>
+
+        <div class="next-step-note">
+          <strong>What happens next:</strong> You'll receive the checklist by email. If your brief suggests BMONEY is a genuine fit for your search, Nick may follow up for a 15-minute call — only if that's useful to you.
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">BMONEY Property</div>
+  <p class="footer-text">Eastern Seaboard Buyer Advisory · VIC · NSW · QLD<br>nick@bmoney.com.au · 0457 177 550</p>
+  <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+</footer>
+
+<script>
+  function selectToggle(groupId, el) {
+    document.querySelectorAll('#' + groupId + ' .toggle-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.guide-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
