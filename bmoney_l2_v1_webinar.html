@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How BMONEY Evaluates a Property | Free 15-Min Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #202c4e;
+    --navy-deep: #131c35;
+    --navy-mid: #253358;
+    --navy-light: #2e3e68;
+    --teal: #5fc3db;
+    --teal-deep: #3a8fa8;
+    --teal-glow: rgba(95,195,219,0.12);
+    --teal-subtle: rgba(95,195,219,0.05);
+    --white: #ffffff;
+    --off-white: #f4f6fa;
+    --text-primary: #181f34;
+    --text-body: #3a4558;
+    --text-muted: #6b7a8e;
+    --text-light: #9aa3b0;
+    --border: #e0e6ea;
+    --border-light: #eef1f4;
+    --green: #2a7f58;
+    --green-bg: #e8f5ef;
+    --amber: #c8880a;
+    --red-soft: #c0392b;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Raleway', Helvetica, sans-serif;
+    --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
+    --shadow-sm: 0 2px 14px rgba(19,28,53,0.07);
+    --shadow-md: 0 8px 32px rgba(19,28,53,0.11);
+    --shadow-lg: 0 20px 64px rgba(19,28,53,0.16);
+    --shadow-xl: 0 32px 80px rgba(19,28,53,0.22);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--sans); color: var(--text-body); background: var(--navy-deep); line-height: 1.7; overflow-x: hidden; }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 56px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(19,28,53,0.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .nav-logo { font-family: var(--sans); font-size: 10px; letter-spacing: 3px; font-weight: 800; color: var(--white); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+  .nav-badge { font-family: var(--sans); font-size: 10px; font-weight: 700; color: var(--teal); letter-spacing: 1px; text-transform: uppercase; background: rgba(95,195,219,0.1); border: 1px solid rgba(95,195,219,0.2); border-radius: 20px; padding: 4px 12px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 100px 24px 80px;
+    background: var(--navy-deep);
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(95,195,219,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 80%, rgba(58,143,168,0.05) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(32,44,78,0.8) 0%, transparent 70%);
+  }
+  /* Grid overlay */
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(95,195,219,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,195,219,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+  }
+  .hero-inner {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: center;
+  }
+  .hero-left {}
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px; font-weight: 700;
+    color: var(--teal); text-transform: uppercase; margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.2s forwards;
+  }
+  .hero-eyebrow::before { content: ''; width: 20px; height: 1px; background: rgba(95,195,219,0.4); }
+  .hero-runtime {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(95,195,219,0.08); border: 1px solid rgba(95,195,219,0.18);
+    border-radius: 4px; padding: 3px 10px;
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    color: var(--teal); letter-spacing: 1px; text-transform: uppercase;
+    margin-left: 10px;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(32px, 5vw, 58px);
+    font-weight: 300; line-height: 1.1; color: var(--white);
+    margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.35s forwards;
+  }
+  .hero h1 em { font-style: italic; color: var(--teal); font-weight: 400; }
+  .hero h1 strong { font-weight: 600; color: var(--white); }
+  .hero-sub {
+    font-family: var(--serif); font-size: clamp(16px, 2vw, 21px); font-weight: 300;
+    font-style: italic; color: rgba(255,255,255,0.3);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.5s forwards;
+  }
+  .hero-desc {
+    font-family: var(--sans); font-size: 15px; line-height: 1.8;
+    color: rgba(255,255,255,0.42); max-width: 500px; margin-bottom: 36px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.65s forwards;
+  }
+  .hero-desc strong { color: rgba(255,255,255,0.7); font-weight: 600; }
+
+  /* Differentiator list */
+  .diff-list {
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.8s forwards;
+  }
+  .diff-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5;
+  }
+  .diff-check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(95,195,219,0.12); border: 1px solid rgba(95,195,219,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    font-size: 9px; color: var(--teal); font-weight: 800;
+  }
+  .diff-item strong { color: rgba(255,255,255,0.75); }
+
+  /* NOT list */
+  .not-list { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; opacity: 0; animation: fadeUp 0.6s var(--ease-out) 0.95s forwards; }
+  .not-tag {
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    color: rgba(255,255,255,0.25); letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .not-tag::before { content: '✕'; font-size: 9px; color: rgba(255,255,255,0.15); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ─── VIDEO CARD ─── */
+  .video-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    opacity: 0; animation: fadeUp 0.8s var(--ease-out) 0.4s forwards;
+  }
+  .video-thumb {
+    position: relative; aspect-ratio: 16/9;
+    background: linear-gradient(135deg, var(--navy) 0%, #1a2540 50%, #0f1828 100%);
+    cursor: pointer; overflow: hidden;
+  }
+  .video-thumb::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 40%, rgba(95,195,219,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 75% 65%, rgba(58,143,168,0.05) 0%, transparent 55%);
+  }
+  /* Fake data viz in background */
+  .video-bg-chart {
+    position: absolute; bottom: 20px; left: 20px; right: 20px;
+    height: 60px; opacity: 0.15;
+    display: flex; align-items: flex-end; gap: 3px;
+  }
+  .chart-bar {
+    flex: 1; border-radius: 2px 2px 0 0;
+    background: linear-gradient(to top, var(--teal), rgba(95,195,219,0.3));
+  }
+  .video-thumb-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px;
+  }
+  .play-btn {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--teal); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s var(--ease);
+    box-shadow: 0 0 0 0 rgba(95,195,219,0.4);
+    animation: playPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes playPulse {
+    0%,100%{box-shadow:0 0 0 0 rgba(95,195,219,0.4)}
+    50%{box-shadow:0 0 0 14px rgba(95,195,219,0)}
+  }
+  .play-btn:hover { transform: scale(1.08); background: var(--white); }
+  .play-btn svg { width: 22px; height: 22px; fill: var(--navy); margin-left: 3px; }
+  .video-label {
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .video-duration {
+    position: absolute; bottom: 12px; right: 14px;
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.5);
+    border-radius: 4px; padding: 2px 7px; letter-spacing: 0.5px;
+  }
+  /* Presenter label */
+  .presenter-tag {
+    position: absolute; bottom: 12px; left: 14px;
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    color: var(--teal); background: rgba(19,28,53,0.85);
+    border: 1px solid rgba(95,195,219,0.2);
+    border-radius: 4px; padding: 3px 8px; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* Video card body */
+  .video-card-body { padding: 22px 24px 24px; }
+  .video-card-title {
+    font-family: var(--serif); font-size: 18px; font-weight: 400; line-height: 1.3;
+    color: var(--white); margin-bottom: 14px;
+  }
+  .video-card-title em { font-style: italic; color: var(--teal); }
+
+  /* What you'll see inside */
+  .chapters { display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; }
+  .chapter {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .chapter:last-child { border-bottom: none; }
+  .ch-time {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    color: rgba(95,195,219,0.5); letter-spacing: 0.5px; min-width: 38px; padding-top: 2px;
+  }
+  .ch-text {
+    font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5;
+  }
+  .ch-text strong { color: rgba(255,255,255,0.7); font-weight: 600; }
+
+  /* CTA in card */
+  .video-cta {
+    width: 100%; padding: 14px;
+    background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1.5px; font-weight: 800;
+    text-transform: uppercase; border: none; border-radius: 8px; cursor: pointer;
+    transition: all 0.3s var(--ease);
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    text-decoration: none;
+  }
+  .video-cta:hover { background: var(--white); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(95,195,219,0.2); }
+  .video-cta svg { width: 13px; height: 13px; transition: transform 0.3s; }
+  .video-cta:hover svg { transform: translateX(3px); }
+  .video-fine { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.2); text-align: center; margin-top: 8px; letter-spacing: 0.3px; }
+
+  /* ─── SECTION WRAPPER ─── */
+  .section { padding: 80px 24px; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-inner.wide { max-width: 1080px; }
+  .section-label { font-family: var(--sans); font-size: 9px; letter-spacing: 2.5px; font-weight: 700; text-transform: uppercase; color: var(--teal-deep); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; width: 18px; height: 2px; background: var(--teal); }
+  .section-title { font-family: var(--serif); font-size: clamp(24px, 3.5vw, 38px); font-weight: 300; line-height: 1.18; color: var(--white); margin-bottom: 16px; }
+  .section-title em { font-style: italic; color: var(--teal); }
+  .section-body { font-family: var(--sans); font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.4); max-width: 620px; }
+
+  /* ─── PROBLEM SECTION ─── */
+  .problem-section { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .problem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 44px; }
+  .problem-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; padding: 24px;
+    transition: border-color 0.3s;
+  }
+  .problem-card:hover { border-color: rgba(95,195,219,0.15); }
+  .problem-num {
+    font-family: var(--sans); font-size: 9px; font-weight: 800; letter-spacing: 2px;
+    color: rgba(95,195,219,0.4); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .problem-title { font-family: var(--sans); font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 6px; line-height: 1.4; }
+  .problem-body { font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.65; }
+
+  /* ─── WHAT MAKES THIS DIFFERENT ─── */
+  .different-section { background: var(--navy-deep); }
+  .different-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow: hidden; margin-top: 44px; }
+  .different-cell { padding: 28px 24px; background: var(--navy-deep); }
+  .different-cell:hover { background: rgba(95,195,219,0.02); }
+  .dc-icon { font-size: 20px; margin-bottom: 10px; }
+  .dc-title { font-family: var(--sans); font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 6px; }
+  .dc-body { font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.6; }
+  .dc-body strong { color: rgba(255,255,255,0.6); }
+
+  /* ─── CASE STUDY ─── */
+  .case-section { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .case-timeline { margin-top: 44px; position: relative; }
+  .case-timeline::before { content: ''; position: absolute; left: 17px; top: 8px; bottom: 8px; width: 1px; background: rgba(95,195,219,0.12); }
+  .case-step { display: flex; gap: 20px; margin-bottom: 28px; position: relative; }
+  .case-step:last-child { margin-bottom: 0; }
+  .step-dot { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(95,195,219,0.2); background: var(--navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; }
+  .step-dot-num { font-family: var(--sans); font-size: 10px; font-weight: 800; color: var(--teal); }
+  .step-body { padding-top: 6px; }
+  .step-tag { font-family: var(--sans); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal-deep); margin-bottom: 5px; }
+  .step-title { font-family: var(--sans); font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 4px; }
+  .step-body-text { font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.65; }
+  .step-body-text strong { color: rgba(255,255,255,0.6); }
+
+  /* Case study outcome box */
+  .outcome-box {
+    background: rgba(95,195,219,0.05); border: 1px solid rgba(95,195,219,0.15);
+    border-radius: 12px; padding: 24px 28px; margin-top: 36px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .outcome-stat {}
+  .outcome-val { font-family: var(--sans); font-size: 26px; font-weight: 800; color: var(--teal); letter-spacing: -0.5px; margin-bottom: 3px; }
+  .outcome-label { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.4; }
+
+  /* ─── COMPETITOR CONTRAST ─── */
+  .contrast-section { background: var(--navy-deep); }
+  .contrast-table { margin-top: 44px; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; }
+  .contrast-header { display: grid; grid-template-columns: 1fr 1fr 1fr; background: rgba(255,255,255,0.03); }
+  .contrast-col-head { padding: 14px 20px; font-family: var(--sans); font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.25); border-right: 1px solid rgba(255,255,255,0.05); }
+  .contrast-col-head:last-child { border-right: none; }
+  .contrast-col-head.bmoney { color: var(--teal); }
+  .contrast-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid rgba(255,255,255,0.04); }
+  .contrast-row:hover { background: rgba(255,255,255,0.01); }
+  .contrast-cell { padding: 14px 20px; font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.3); border-right: 1px solid rgba(255,255,255,0.04); line-height: 1.5; }
+  .contrast-cell:last-child { border-right: none; }
+  .contrast-cell.label { color: rgba(255,255,255,0.5); font-weight: 600; }
+  .contrast-cell.bmoney { color: rgba(255,255,255,0.7); }
+  .contrast-cell.good { color: #4caf82; }
+  .contrast-cell.bad { color: rgba(255,255,255,0.2); text-decoration: line-through; }
+
+  /* ─── PRESENTER ─── */
+  .presenter-section { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.04); }
+  .presenter-inner { display: grid; grid-template-columns: auto 1fr; gap: 36px; align-items: center; max-width: 760px; }
+  .presenter-avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+    border: 1px solid rgba(95,195,219,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-size: 28px; font-weight: 800; color: var(--teal);
+    flex-shrink: 0;
+  }
+  .presenter-name { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--white); margin-bottom: 4px; }
+  .presenter-title { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--teal); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .presenter-bio { font-family: var(--sans); font-size: 14px; color: rgba(255,255,255,0.35); line-height: 1.75; }
+  .presenter-bio strong { color: rgba(255,255,255,0.6); }
+
+  /* ─── FAQ ─── */
+  .faq-section { background: var(--navy-deep); }
+  .faq-list { margin-top: 40px; display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; }
+  .faq-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    padding: 20px 24px; cursor: pointer;
+    font-family: var(--sans); font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.65);
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    transition: color 0.2s; user-select: none;
+  }
+  .faq-q:hover { color: var(--white); }
+  .faq-q .faq-icon { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; color: rgba(95,195,219,0.5); transition: transform 0.3s; }
+  .faq-item.open .faq-q { color: var(--white); }
+  .faq-item.open .faq-icon { transform: rotate(45deg); border-color: rgba(95,195,219,0.3); color: var(--teal); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease); }
+  .faq-item.open .faq-a { max-height: 200px; }
+  .faq-a-inner { padding: 0 24px 20px; font-family: var(--sans); font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.75; }
+  .faq-a-inner strong { color: rgba(255,255,255,0.6); }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta-section {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 80px 24px; text-align: center;
+  }
+  .final-cta-inner { max-width: 580px; margin: 0 auto; }
+  .final-eyebrow { font-family: var(--sans); font-size: 10px; letter-spacing: 2.5px; font-weight: 700; text-transform: uppercase; color: var(--teal); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .final-eyebrow::before, .final-eyebrow::after { content: ''; width: 20px; height: 1px; background: rgba(95,195,219,0.3); }
+  .final-title { font-family: var(--serif); font-size: clamp(26px, 4vw, 40px); font-weight: 300; line-height: 1.2; color: var(--white); margin-bottom: 14px; }
+  .final-title em { font-style: italic; color: var(--teal); }
+  .final-body { font-family: var(--sans); font-size: 14px; color: rgba(255,255,255,0.35); line-height: 1.75; margin-bottom: 32px; }
+  .final-cta-btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 18px 36px;
+    background: var(--teal); color: var(--navy);
+    font-family: var(--sans); font-size: 12px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase;
+    border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s var(--ease); text-decoration: none;
+  }
+  .final-cta-btn:hover { background: var(--white); transform: translateY(-2px); box-shadow: 0 10px 36px rgba(95,195,219,0.22); }
+  .final-cta-btn svg { width: 14px; height: 14px; transition: transform 0.3s; }
+  .final-cta-btn:hover svg { transform: translateX(3px); }
+  .final-fine { font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.18); margin-top: 14px; line-height: 1.6; }
+
+  /* ─── FOOTER ─── */
+  .footer { background: var(--navy-deep); border-top: 1px solid rgba(255,255,255,0.04); padding: 28px 24px; text-align: center; }
+  .footer-logo { font-family: var(--sans); font-size: 10px; letter-spacing: 3px; font-weight: 800; color: rgba(255,255,255,0.15); text-transform: uppercase; margin-bottom: 8px; }
+  .footer-text { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.1); line-height: 1.6; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+    .video-card { max-width: 520px; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .different-grid { grid-template-columns: 1fr; }
+    .contrast-header, .contrast-row { grid-template-columns: 1fr 1fr; }
+    .contrast-col-head:first-child, .contrast-cell:first-child { display: none; }
+    .outcome-box { grid-template-columns: 1fr; gap: 16px; }
+    .presenter-inner { grid-template-columns: 1fr; text-align: center; }
+    .presenter-avatar { margin: 0 auto; }
+  }
+  @media (max-width: 540px) {
+    .hero { padding: 90px 20px 60px; }
+    .hero h1 { font-size: 28px; }
+    .not-list { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo"><div class="nav-dot"></div>BMONEY Property</div>
+  <div class="nav-badge">Free · 15 min walkthrough</div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        Free walkthrough
+        <span class="hero-runtime">▶ 15 min</span>
+      </div>
+      <h1>Watch how we <em>actually</em><br>evaluate a property.<br><strong>Before we buy it.</strong></h1>
+      <p class="hero-sub">One real decision. Every step shown.</p>
+      <p class="hero-desc">
+        Every buyer's agency in Australia will tell you what they do.<br>
+        <strong>This 15 minutes shows you how.</strong> Market identification, data pull, the due diligence flag that nearly killed the deal — and the number we paid versus what the agent wanted.
+      </p>
+
+      <div class="diff-list">
+        <div class="diff-item"><div class="diff-check">✓</div><span>The <strong>exact data sources</strong> used to identify the market — before any inspection was booked</span></div>
+        <div class="diff-item"><div class="diff-check">✓</div><span>A <strong>real due diligence flag</strong> that changed the decision — visible before contract, invisible after</span></div>
+        <div class="diff-item"><div class="diff-check">✓</div><span>The <strong>pricing method</strong> that established true value independently of the agent's comparables</span></div>
+        <div class="diff-item"><div class="diff-check">✓</div><span>What the walkthrough <strong>cost the client to act on</strong> — and what waiting another 6 months would have cost</span></div>
+      </div>
+
+      <div class="not-list">
+        <div class="not-tag">No property offers</div>
+        <div class="not-tag">No sales pitch</div>
+        <div class="not-tag">No hot tip guarantees</div>
+      </div>
+    </div>
+
+    <!-- VIDEO CARD -->
+    <div class="video-card">
+      <div class="video-thumb">
+        <div class="video-bg-chart" id="bgChart"></div>
+        <div class="video-thumb-content">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+          </div>
+          <div class="video-label">Watch the walkthrough</div>
+        </div>
+        <div class="presenter-tag">Nick · BMONEY</div>
+        <div class="video-duration">15:00</div>
+      </div>
+      <div class="video-card-body">
+        <div class="video-card-title">How BMONEY evaluates a property — <em>one real decision, start to finish</em></div>
+        <div class="chapters">
+          <div class="chapter">
+            <div class="ch-time">0:00</div>
+            <div class="ch-text"><strong>The brief</strong> — budget, hold period, target yield, and which of our 13 LGAs matched</div>
+          </div>
+          <div class="chapter">
+            <div class="ch-time">3:30</div>
+            <div class="ch-text"><strong>The data pull</strong> — supply indicators, vacancy, days on market, comparable sales verified</div>
+          </div>
+          <div class="chapter">
+            <div class="ch-time">7:00</div>
+            <div class="ch-text"><strong>The flag</strong> — the due diligence issue found before inspection that 3 other buyers missed</div>
+          </div>
+          <div class="chapter">
+            <div class="ch-time">11:00</div>
+            <div class="ch-text"><strong>The offer</strong> — how we priced it, what we paid, and the gap versus the agent's ask</div>
+          </div>
+          <div class="chapter">
+            <div class="ch-time">13:30</div>
+            <div class="ch-text"><strong>12 months later</strong> — what the data said would happen, and what actually did</div>
+          </div>
+        </div>
+        <a href="#watch" class="video-cta">
+          Watch the free walkthrough
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="video-fine">Free · No registration required · 15 minutes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROBLEM SECTION ─── -->
+<section class="section problem-section">
+  <div class="section-inner">
+    <div class="section-label">Why most investors struggle</div>
+    <h2 class="section-title">The problem isn't<br><em>lack of information.</em></h2>
+    <p class="section-body">There's more property content available today than at any point in Australian history. Most investors who get it wrong weren't under-informed. They were looking at the wrong things — or had no way to tell the difference.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-num">Problem 01</div>
+        <div class="problem-title">Opinion is everywhere. Methodology is almost nowhere.</div>
+        <div class="problem-body">Every buyer's agent, mortgage broker, and YouTube channel will tell you what to buy. Almost none will show you how they actually made the decision — the data pulled, the flag identified, the option rejected and why.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 02</div>
+        <div class="problem-title">LGA data tells you where to start, not where to buy.</div>
+        <div class="problem-body">Maitland grew 15.2% in 2025. Ipswich units delivered 103% over 5 years. But within every LGA, specific pockets consistently outperform — and others consistently underperform. The headline number is the starting point, not the decision.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 03</div>
+        <div class="problem-title">The risks that cost investors most aren't in any listing.</div>
+        <div class="problem-body">Approved DAs on neighbouring sites, strata fund shortfalls, zoning changes, public housing concentration trends — all assessable before you inspect. Most buyers find these after they're emotionally committed, or not at all.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 04</div>
+        <div class="problem-title">Borrowing capacity and holding threshold are two different numbers.</div>
+        <div class="problem-body">Your broker gives you one. Your real ability to hold through a rate shift, vacancy period, or unexpected cost is the other. On a $700K property, these can differ by $400–$800 per month. Knowing this before you commit is what separates investors from forced sellers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHAT MAKES THIS DIFFERENT ─── -->
+<section class="section different-section">
+  <div class="section-inner">
+    <div class="section-label">What this walkthrough is</div>
+    <h2 class="section-title">The methodology, not<br><em>the marketing.</em></h2>
+    <p class="section-body">Every other buyer's agency in Australia will show you their results. This 15 minutes shows you the process that produces them — so you can evaluate it properly before deciding if it's right for you.</p>
+
+    <div class="different-grid">
+      <div class="different-cell">
+        <div class="dc-icon">📊</div>
+        <div class="dc-title">Real data, named sources</div>
+        <div class="dc-body">CoreLogic, HTAG, Archistar, Microburbs, council maps — every data point sourced and dated. <strong>No anonymous "our research shows."</strong></div>
+      </div>
+      <div class="different-cell">
+        <div class="dc-icon">🏘️</div>
+        <div class="dc-title">One real property, full detail</div>
+        <div class="dc-body">A genuine purchase from our active LGA list. Market, suburb, price paid, result 12 months later. <strong>No case studies with details removed.</strong></div>
+      </div>
+      <div class="different-cell">
+        <div class="dc-icon">🔍</div>
+        <div class="dc-title">The rejection shown, not just the purchase</div>
+        <div class="dc-body">Most agencies only show wins. This walkthrough shows a property that was <strong>identified and then rejected</strong> — and exactly why.</div>
+      </div>
+      <div class="different-cell">
+        <div class="dc-icon">📋</div>
+        <div class="dc-title">No outcome guarantees</div>
+        <div class="dc-body">No "24% in year one" claims. No beat-the-market guarantees designed to bypass scrutiny. <strong>Just the process — and the result it produced.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CASE STUDY PREVIEW ─── -->
+<section class="section case-section">
+  <div class="section-inner">
+    <div class="section-label">Inside the walkthrough</div>
+    <h2 class="section-title">What you'll watch<br><em>happen, step by step.</em></h2>
+    <p class="section-body">A single investor. A defined brief. Thirteen LGAs assessed. One decision made — shown end to end, the way BMONEY actually works.</p>
+
+    <div class="case-timeline">
+      <div class="case-step">
+        <div class="step-dot"><div class="step-dot-num">01</div></div>
+        <div class="step-body">
+          <div class="step-tag">The brief</div>
+          <div class="step-title">Budget, hold period, and which LGAs matched the investor's profile</div>
+          <div class="step-body-text">The investor had <strong>pre-approval confirmed, $80K deposit</strong>, and a 7-year hold horizon. Three of our 13 LGAs fit the brief. Two were eliminated in the first data screen.</div>
+        </div>
+      </div>
+      <div class="case-step">
+        <div class="step-dot"><div class="step-dot-num">02</div></div>
+        <div class="step-body">
+          <div class="step-tag">The data pull</div>
+          <div class="step-title">Supply indicators, vacancy, days on market, and verified comparables</div>
+          <div class="step-body-text">Stock on market at <strong>0.4%, vacancy below 1%</strong>, days on market trending down. Comparable sales pulled from CoreLogic — not from the agent's shortlist.</div>
+        </div>
+      </div>
+      <div class="case-step">
+        <div class="step-dot"><div class="step-dot-num">03</div></div>
+        <div class="step-body">
+          <div class="step-tag">The flag</div>
+          <div class="step-title">A due diligence issue that changed the shortlist</div>
+          <div class="step-body-text">An approved DA for a <strong>medium-density development</strong> on the adjoining block — not visible from the listing, not disclosed by the agent, found through council records before the first inspection.</div>
+        </div>
+      </div>
+      <div class="case-step">
+        <div class="step-dot"><div class="step-dot-num">04</div></div>
+        <div class="step-body">
+          <div class="step-tag">The offer</div>
+          <div class="step-title">Independently priced, negotiated off-market</div>
+          <div class="step-body-text">Comparable pricing established independently. Property purchased <strong>$31K below</strong> the agent's initial ask. Off-market — not listed on REA or Domain.</div>
+        </div>
+      </div>
+      <div class="case-step">
+        <div class="step-dot"><div class="step-dot-num">05</div></div>
+        <div class="step-body">
+          <div class="step-tag">12 months later</div>
+          <div class="step-title">What the data predicted and what actually happened</div>
+          <div class="step-body-text">The supply indicators signalled a 6–9 month lead time on price movement. The outcome is shown in the walkthrough — with current CoreLogic data, not projections.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="outcome-box">
+      <div class="outcome-stat">
+        <div class="outcome-val">$31K</div>
+        <div class="outcome-label">Below agent's ask — established through independent comparable pricing</div>
+      </div>
+      <div class="outcome-stat">
+        <div class="outcome-val">Off-market</div>
+        <div class="outcome-label">Not listed on REA or Domain — accessed through BMONEY's agent network</div>
+      </div>
+      <div class="outcome-stat">
+        <div class="outcome-val">Full detail</div>
+        <div class="outcome-label">Market, LGA, purchase price, and 12-month result shown in the walkthrough</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── COMPETITOR CONTRAST ─── -->
+<section class="section contrast-section" style="background: var(--navy-deep);">
+  <div class="section-inner">
+    <div class="section-label">How this compares</div>
+    <h2 class="section-title">What you'll hear elsewhere.<br><em>What you'll see here.</em></h2>
+    <p class="section-body">The Australian buyer's agency market is full of large growth claims and outcome guarantees. This walkthrough is built differently — and the difference is worth understanding before you watch anything from anyone.</p>
+
+    <div class="contrast-table">
+      <div class="contrast-header">
+        <div class="contrast-col-head">What to evaluate</div>
+        <div class="contrast-col-head">Most buyer's agencies</div>
+        <div class="contrast-col-head bmoney">BMONEY walkthrough</div>
+      </div>
+      <div class="contrast-row">
+        <div class="contrast-cell label">Methodology shown</div>
+        <div class="contrast-cell bad">Described, not demonstrated</div>
+        <div class="contrast-cell good">One full decision shown end to end</div>
+      </div>
+      <div class="contrast-row">
+        <div class="contrast-cell label">Data sources named</div>
+        <div class="contrast-cell bad">Anonymous "our research"</div>
+        <div class="contrast-cell good">CoreLogic, HTAG, council records — named and dated</div>
+      </div>
+      <div class="contrast-row">
+        <div class="contrast-cell label">Growth claims</div>
+        <div class="contrast-cell bad">"24% in year one," "74% in 18 months"</div>
+        <div class="contrast-cell good">One real result — verified, not projected</div>
+      </div>
+      <div class="contrast-row">
+        <div class="contrast-cell label">Rejections shown</div>
+        <div class="contrast-cell bad">Only wins presented</div>
+        <div class="contrast-cell good">Property rejected and the reason explained</div>
+      </div>
+      <div class="contrast-row">
+        <div class="contrast-cell label">Guarantees offered</div>
+        <div class="contrast-cell bad">"Beat the market or you don't pay"</div>
+        <div class="contrast-cell good">No guarantees — the process speaks for itself</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRESENTER ─── -->
+<section class="section presenter-section">
+  <div class="section-inner">
+    <div class="section-label">Who presents the walkthrough</div>
+    <div class="presenter-inner">
+      <div class="presenter-avatar">Nick</div>
+      <div>
+        <div class="presenter-name">Nick</div>
+        <div class="presenter-title">BMONEY Property · Buyer's Agent</div>
+        <p class="presenter-bio">
+          Nick works across BMONEY's active LGA list — VIC, NSW, and QLD. In this walkthrough, he takes you through a real purchase end to end: the brief, the data, the flag that nearly changed the decision, and the result 12 months later. <strong>No scripts, no projections.</strong> Just how BMONEY actually evaluates a property before committing a client's capital.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section class="section faq-section">
+  <div class="section-inner">
+    <div class="section-label">Common questions</div>
+    <h2 class="section-title">What people ask<br><em>before watching.</em></h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is this a sales pitch in disguise? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">No. The walkthrough is a genuine process demonstration — one property, evaluated from brief to settlement. <strong>There are no properties offered for sale, no upsells, and no pressure close.</strong> At the end, Nick explains what a discovery call covers for investors who want to take it further. That's optional, and clearly marked.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Do I need to register or give my email? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">No registration required to watch. If you'd like the supporting data sheet used in the walkthrough — the actual supply indicators, comparable sales, and due diligence checklist — you can request it after viewing. That's where your contact details are used.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">I'm just starting to look at property investment. Is this relevant to me? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Yes. The walkthrough is built around a first investment property purchase — <strong>$600K–$900K budget, 7-year hold</strong>, investor in full-time employment. The methodology applies across budget levels, but the example is deliberately entry-level so the decisions are as clear as possible.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Will you tell me which LGA or suburb to buy in? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">The walkthrough identifies the LGA used in the case study. It doesn't tell you to buy there — it shows you <strong>the framework used to decide</strong>, so you can apply it to your own brief. Markets change. Methodology transfers.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What happens after I watch? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">Nothing happens unless you choose it to. At the end of the walkthrough, Nick outlines what a 15-minute discovery call covers — your brief, your current position, and whether BMONEY is a genuine fit for your search. <strong>No follow-up if you'd prefer not.</strong></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section class="final-cta-section" id="watch">
+  <div class="final-cta-inner">
+    <div class="final-eyebrow">Free · 15 minutes</div>
+    <h2 class="final-title">Watch how a property decision<br><em>actually gets made.</em></h2>
+    <p class="final-body">One real purchase. Every step shown. The data, the flag, the negotiation, and the result 12 months later. No projections, no pitch, no guarantees.</p>
+    <a href="#" class="final-cta-btn">
+      Watch the free walkthrough
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <p class="final-fine">No registration required · On demand · VIC · NSW · QLD</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">BMONEY Property</div>
+  <p class="footer-text">Eastern Seaboard Buyer Advisory · VIC · NSW · QLD<br>nick@bmoney.com.au · 0457 177 550</p>
+</footer>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // Generate background chart bars
+  const chart = document.getElementById('bgChart');
+  if (chart) {
+    const heights = [30,45,35,55,40,65,50,70,45,80,60,75,55,85,65,78,60,90,72,85];
+    heights.forEach(h => {
+      const bar = document.createElement('div');
+      bar.className = 'chart-bar';
+      bar.style.height = h + '%';
+      chart.appendChild(bar);
+    });
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = '1'; });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.problem-card, .different-cell, .case-step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
